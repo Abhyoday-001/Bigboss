@@ -5,7 +5,7 @@ landing → login → dashboard → leaderboard → Round 1 → Round 2 captainc
 shared **Timer/Countdown** component (used by everyone, both apps, from the start).
 
 Read `PRD.md` and `DESIGN.md` fully before starting. Do not hardcode any team/round/score data —
-everything comes from the API contract agreed in the Shared Contracts step.
+everything comes from the API provided by the backend team.
 
 ## How to Use This File
 
@@ -18,12 +18,10 @@ implementations when they're ready.
 
 ## Shared Contracts (do first, with the whole team — 1 session)
 
-- [ ] Agree on API contract with backend team: auth endpoint, event-phase endpoint, leaderboard
-      endpoint, team-data endpoint (shapes, not just names)
 - [ ] Scaffold repo: Vite + Tailwind + React Router
 - [ ] Implement design tokens from `DESIGN.md` §2–3 as a shared Tailwind config / CSS variables file
 - [ ] Build the shared event **state machine** module (`PRD.md` §6) — single function/hook that
-      maps backend phase → what should render, used by both apps
+      maps API phase → what should render, used by both apps
 - [ ] Build shared `usePolling` hook (3–5s interval, configurable per screen)
 
 > These shared items are small, fast, and done once as a team. Everything below can start
@@ -98,7 +96,7 @@ implementations when they're ready.
 - [ ] Visual state changes as time runs low (e.g. color shift) per `DESIGN.md` accent rules
 
 **Interface contracts needed:**
-- Timer API shape: how the backend sends target end-time
+- Timer API shape: how the target end-time is received from the API
 - Server time endpoint (for resync)
 
 **Can build with:** A hardcoded future timestamp — no dependency on anyone else's screens.
@@ -155,7 +153,7 @@ implementations when they're ready.
 
 **Can build with:** Mock task data + a mock submission endpoint.
 
-**Acceptance:** Leaderboard updates without refresh when points change on the backend; Round 1
+**Acceptance:** Leaderboard updates without refresh when points change on the API; Round 1
 task screen correctly reflects submission status after a page reload.
 
 ---

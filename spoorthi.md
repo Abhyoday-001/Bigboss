@@ -18,9 +18,8 @@ implementations when they're ready.
 
 ## Shared Contracts (do first, with the whole team — 1 session)
 
-- [ ] Review the API contract Dilraj negotiates for round-control endpoints — flag early if
-      Round 2/3/4-specific data (secret task assignment, nomination list, vote tallies, judge
-      scores) isn't yet covered, so backend can add it before you're blocked
+- [ ] Review the API docs provided by the backend team for Round 2/3/4-specific endpoints:
+      secret task assignment, nomination list, vote tallies, judge scores
 
 > These shared items are small, fast, and done once as a team. Everything below can start
 > immediately after (or even during) this step by mocking the contracts.
@@ -222,7 +221,7 @@ secret mission assignment based on live leaderboard position.
       (these get used under real time pressure at the event)
 - [ ] Full responsive pass (desktop-first, verify tablet doesn't break)
 - [ ] Joint end-to-end run-through of Round 2 → Round 4 with Dilraj (admin) and Aryan/Anjishth
-      (participant) all connected to the real backend before the event date
+      (participant) all connected to the real API before the event date
 
 ## Coordination Notes
 

@@ -7,7 +7,7 @@ Aryan's `usePolling` hook) — making sure every screen actually stays in sync, 
 leaderboard.
 
 Read `PRD.md` and `DESIGN.md` fully before starting. Do not hardcode any team/round/score data —
-everything comes from the API contract agreed in the Shared Contracts step.
+everything comes from the API provided by the backend team.
 
 ## How to Use This File
 
@@ -20,9 +20,6 @@ implementations when they're ready.
 
 ## Shared Contracts (do first, with the whole team — 1 session)
 
-- [ ] Participate in API contract discussion with backend team — pay particular attention to
-      how the **secret task visibility** (only 3 teams see it) and **nomination status** will be
-      represented in the API (per-team flag vs. separate endpoint) — this affects your screens most
 - [ ] Review Aryan's state machine + polling hook once built; confirm it can express
       round sub-phases (e.g. "Round 3: voting open" vs "Round 3: results revealed")
 
@@ -35,9 +32,9 @@ implementations when they're ready.
 
 **What to build:**
 - [ ] Must be conditionally rendered/hidden for all teams except the 3 assigned (first/middle/last
-      on leaderboard) — this is a real access-control requirement, not just a UI nicety; confirm
-      with backend team whether hiding happens client-side (fed by an API flag) or the endpoint
-      itself 403s for non-assigned teams, and design the screen to handle both gracefully
+      on leaderboard) — this is a real access-control requirement, not just a UI nicety; design
+      the screen to handle both access-control patterns gracefully (API flag that hides it
+      client-side, or the endpoint returning 403 for non-assigned teams)
 - [ ] Suspenseful framing per `DESIGN.md` mood (dark reveal, not a plain form)
 
 **Interface contracts needed:**
@@ -110,7 +107,7 @@ task. Coordinate the **visual design** with Spoorthi early (share screenshots/mo
 code itself doesn't depend on her admin screen being built.
 
 **Acceptance:** A nominated team can see their immunity result and, if evicted, gets a clear and
-thematically consistent reveal screen — verify against a real backend-triggered eviction event,
+thematically consistent reveal screen — verify against a real API-triggered eviction event,
 not just a mocked state.
 
 ---
@@ -162,7 +159,7 @@ not just a mocked state.
 
 - [ ] Audit every screen you own for loading/error/empty states
 - [ ] Full responsive pass (mobile-first)
-- [ ] End-to-end test: run through Round 2 → Round 4 as a test "team" against the real backend,
+- [ ] End-to-end test: run through Round 2 → Round 4 as a test "team" against the real API,
       confirm nothing requires a manual refresh at any step
 - [ ] Confirm secret-mission access control actually blocks non-assigned teams in a real test,
       not just visually hides the link

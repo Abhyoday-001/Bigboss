@@ -20,12 +20,10 @@ implementations when they're ready.
 
 ## Shared Contracts (do first, with the whole team — 1 session)
 
-- [ ] Lead the API contract discussion for anything admin-privileged: how admin auth differs
-      from team auth, what round-control endpoints look like (start/pause/end/set-timer), and how
-      score adjustments are submitted
-- [ ] Confirm with backend whether round-control actions are synchronous (immediate effect) or
-      need a confirm-then-poll pattern — this affects how "loading" states are built on every
-      control button
+- [ ] Review the API docs provided by the backend team for admin-privileged endpoints: admin auth,
+      round-control (start/pause/end/set-timer), and score adjustment shapes
+- [ ] Decide how "loading" states are built on every control button (handle both sync and
+      confirm-then-poll response patterns gracefully)
 
 > These shared items are small, fast, and done once as a team. Everything below can start
 > immediately after (or even during) this step by mocking the contracts.
@@ -35,7 +33,7 @@ implementations when they're ready.
 ## Module: Admin Login
 
 **What to build:**
-- [ ] Separate auth flow/role from team login — confirm with backend how admin role is distinguished
+- [ ] Separate auth flow/role from team login — admin role is distinguished via the API response
 
 **Interface contracts needed:**
 - Admin auth endpoint shape (POST body, response shape, role field)
@@ -108,7 +106,7 @@ leaderboard data. The admin-specific score-edit overlay is your own independent 
 
 **What to build:**
 - [ ] Manual point entry/adjustment UI, with a visible audit trail (who changed what, when) if the
-      API supports it — flag to backend team if it doesn't yet
+      API supports it
 
 **Interface contracts needed:**
 - Score adjustment endpoint (POST adjustment, GET audit trail)
@@ -128,7 +126,6 @@ leaderboard data. The admin-specific score-edit overlay is your own independent 
 
 **Interface contracts needed:**
 - Round control endpoints (start/pause/end round, set/pause/extend timer)
-- Confirm with backend: synchronous vs. confirm-then-poll pattern
 - Aryan's Timer component props (for timer display, get the interface early)
 
 **Can build with:** Mock round-control endpoints that return success. The confirmation modals
