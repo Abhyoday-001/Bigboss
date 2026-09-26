@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import eyeHeroImg from '../../assets/eye-hero.png';
 
 export interface AmbientEyeBackgroundProps {
   className?: string;
@@ -41,7 +42,7 @@ export const AmbientEyeBackground: React.FC<AmbientEyeBackgroundProps> = ({
         }}
       >
         <img
-          src="/eye-hero.png"
+          src={eyeHeroImg || '/eye-hero.png'}
           alt=""
           className="w-full h-full object-cover filter contrast-125 brightness-110"
         />
