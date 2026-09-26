@@ -73,17 +73,17 @@ export const AdminHeader: React.FC<AdminHeaderProps> = () => {
           <span className="md:hidden">PORTAL</span>
         </Link>
 
-        {/* Superintendent Badge */}
-        <div className="hidden lg:flex items-center gap-2.5 pl-3 border-l border-accent-blue/20">
+        {/* Administrator Profile Pill (Dilraj & Admin Team) */}
+        <div className="flex items-center gap-2.5 pl-3 border-l border-accent-blue/20">
           <div className="w-8 h-8 rounded-full bg-accent-blue/20 border border-accent-blue/50 flex items-center justify-center text-accent-blue text-xs font-bold glow-blue-sm">
-            <Shield className="w-4 h-4 text-accent-blue" />
+            D
           </div>
-          <div className="text-left">
+          <div className="hidden md:block text-left">
             <div className="text-xs font-semibold text-text-primary leading-tight font-display tracking-wider">
-              SUPERINTENDENT
+              Dilraj (Admin)
             </div>
             <div className="text-[9px] font-mono text-accent-blue uppercase tracking-widest">
-              Live Control Grid
+              Live State Machine
             </div>
           </div>
         </div>

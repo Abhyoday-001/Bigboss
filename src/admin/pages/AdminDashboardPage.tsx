@@ -8,25 +8,85 @@ import { EventOverview } from '../components/EventOverview';
 import { RoundControls } from '../components/RoundControls';
 import { TeamsTable } from '../components/TeamsTable';
 import { TeamDetailModal } from '../components/TeamDetailModal';
+import { LiveLeaderboard } from '../../shared/components/LiveLeaderboard';
+
+// Spoorthi's Round 2 Modules
+// @ts-ignore
+import Round2Captaincy from '../rounds/Round2Captaincy';
+// @ts-ignore
+import Round2Nominations from '../rounds/Round2Nominations';
+// @ts-ignore
+import Round2SecretMission from '../rounds/Round2SecretMission';
+
+// Spoorthi's Round 3 Modules
+// @ts-ignore
+import Round3TeamPairing from '../rounds/Round3TeamPairing';
+// @ts-ignore
+import Round3ImmunityControl from '../rounds/Round3ImmunityControl';
+// @ts-ignore
+import Round3VotingControl from '../rounds/Round3VotingControl';
+// @ts-ignore
+import Round3EvictionReveal from '../rounds/Round3EvictionReveal';
+
+// Spoorthi's Round 4 Modules
+// @ts-ignore
+import Round4HiddenFeatures from '../rounds/Round4HiddenFeatures';
+// @ts-ignore
+import Round4Submissions from '../rounds/Round4Submissions';
+// @ts-ignore
+import Round4JudgeScoring from '../rounds/Round4JudgeScoring';
+// Spoorthi's Round 4 Modules
+// @ts-ignore
+import Round4PenaltyInterface from '../rounds/Round4PenaltyInterface';
+// @ts-ignore
+import Round4FinalScoreboard from '../rounds/Round4FinalScoreboard';
 // @ts-ignore
 import { RoundToolsContainer } from '../rounds/RoundToolsContainer';
-import { LiveLeaderboard } from '../../shared/components/LiveLeaderboard';
-import { LayoutDashboard, Users, Award, Sliders, ShieldCheck, Plus, AlertCircle, RotateCcw } from 'lucide-react';
+
+import {
+  LayoutDashboard,
+  Crown,
+  Swords,
+  Trophy,
+  Users,
+  Award,
+  ShieldCheck,
+  AlertCircle,
+  Eye,
+  Sliders,
+  UserMinus,
+  EyeOff,
+  Vote,
+  Skull,
+  FileCode,
+  Globe,
+  MinusCircle,
+  RotateCcw,
+} from 'lucide-react';
+
+type AdminTab = 'overview' | 'round-2' | 'round-3' | 'round-4' | 'round-tools' | 'teams' | 'scores';
 
 export const AdminDashboardPage: React.FC = () => {
   const [eventState, setEventState] = useState<EventState>(INITIAL_EVENT_STATE);
   const [teams, setTeams] = useState<TeamRecord[]>(INITIAL_MOCK_TEAMS);
   const [selectedTeam, setSelectedTeam] = useState<TeamRecord | null>(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<'overview' | 'teams' | 'scores' | 'round-tools'>('overview');
+  
+  // Active primary tab
+  const [activeTab, setActiveTab] = useState<AdminTab>('overview');
+
+  // Sub-tabs for each specific round
+  const [r2SubTab, setR2SubTab] = useState<'captaincy' | 'nominations' | 'secret-mission'>('captaincy');
+  const [r3SubTab, setR3SubTab] = useState<'pairings' | 'immunity' | 'voting' | 'eviction'>('pairings');
+  const [r4SubTab, setR4SubTab] = useState<'hidden' | 'submissions' | 'judging' | 'penalties' | 'scoreboard'>('hidden');
 
   // Audit log entries for score adjustments
   const [auditLogs, setAuditLogs] = useState<
     { timestamp: string; teamName: string; delta: number; reason: string }[]
   >([
-    { timestamp: '23:40:12', teamName: 'CyberNexus', delta: 50, reason: 'Round 1 First Solver Bonus' },
-    { timestamp: '23:35:00', teamName: 'NullPointers', delta: -10, reason: 'Late Submission Deduction' },
-    { timestamp: '23:30:15', teamName: 'ByteForce', delta: 25, reason: 'Speed Milestone Award' },
+    { timestamp: '23:40:12', teamName: 'CyberNexus', delta: 50, reason: 'Round 1 Algorithmic Winner' },
+    { timestamp: '23:35:00', teamName: 'NullPointers', delta: -10, reason: 'Out of Scope Deduction' },
+    { timestamp: '23:30:15', teamName: 'ByteForce', delta: 25, reason: 'Captaincy Challenge Bonus' },
   ]);
 
   // Keep team counts synchronized with actual teams roster
@@ -190,10 +250,11 @@ export const AdminDashboardPage: React.FC = () => {
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 space-y-6">
         {/* Unified Command Navigation Tabs */}
         <div className="flex items-center gap-2 border-b border-accent-blue/20 pb-3 overflow-x-auto">
+          {/* Tab 1: Command Center */}
           <button
             type="button"
             onClick={() => setActiveTab('overview')}
-            className={`px-4 py-2.5 rounded-lg text-xs font-mono uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer ${
+            className={`px-4 py-2.5 rounded-lg text-xs font-mono uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
               activeTab === 'overview'
                 ? 'bg-accent-blue/15 text-accent-blue-glow border border-accent-blue/40 shadow-glow-blue font-bold'
                 : 'text-text-secondary hover:text-text-primary hover:bg-bg-elevated border border-transparent'
@@ -203,52 +264,104 @@ export const AdminDashboardPage: React.FC = () => {
             <span>[ 01 · COMMAND CENTER ]</span>
           </button>
 
+          {/* Tab 2: Round 2 Operations */}
+          <button
+            type="button"
+            onClick={() => setActiveTab('round-2')}
+            className={`px-4 py-2.5 rounded-lg text-xs font-mono uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
+              activeTab === 'round-2'
+                ? 'bg-accent-blue/15 text-accent-blue-glow border border-accent-blue/40 shadow-glow-blue font-bold'
+                : 'text-text-secondary hover:text-text-primary hover:bg-bg-elevated border border-transparent'
+            }`}
+          >
+            <Crown className="w-4 h-4 text-accent-blue" />
+            <span>[ 02 · ROUND 2 (CAPTAINCY) ]</span>
+          </button>
+
+          {/* Tab 3: Round 3 Operations */}
+          <button
+            type="button"
+            onClick={() => setActiveTab('round-3')}
+            className={`px-4 py-2.5 rounded-lg text-xs font-mono uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
+              activeTab === 'round-3'
+                ? 'bg-accent-blue/15 text-accent-blue-glow border border-accent-blue/40 shadow-glow-blue font-bold'
+                : 'text-text-secondary hover:text-text-primary hover:bg-bg-elevated border border-transparent'
+            }`}
+          >
+            <Swords className="w-4 h-4 text-accent-blue" />
+            <span>[ 03 · ROUND 3 (EVICTIONS) ]</span>
+          </button>
+
+          {/* Tab 4: Round 4 Finale */}
+          <button
+            type="button"
+            onClick={() => setActiveTab('round-4')}
+            className={`px-4 py-2.5 rounded-lg text-xs font-mono uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
+              activeTab === 'round-4'
+                ? 'bg-accent-blue/15 text-accent-blue-glow border border-accent-blue/40 shadow-glow-blue font-bold'
+                : 'text-text-secondary hover:text-text-primary hover:bg-bg-elevated border border-transparent'
+            }`}
+          >
+            <Trophy className="w-4 h-4 text-accent-blue" />
+            <span>[ 04 · ROUND 4 (FINALE) ]</span>
+          </button>
+
+          {/* Tab 5: All Round Engines Matrix */}
           <button
             type="button"
             onClick={() => setActiveTab('round-tools')}
-            className={`px-4 py-2.5 rounded-lg text-xs font-mono uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer ${
+            className={`px-4 py-2.5 rounded-lg text-xs font-mono uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
               activeTab === 'round-tools'
                 ? 'bg-accent-blue/15 text-accent-blue-glow border border-accent-blue/40 shadow-glow-blue font-bold'
                 : 'text-text-secondary hover:text-text-primary hover:bg-bg-elevated border border-transparent'
             }`}
           >
             <Sliders className="w-4 h-4 text-accent-blue" />
-            <span>[ 02 · ROUND ENGINES (R2–R4) ]</span>
+            <span>[ 05 · ALL ROUND ENGINES ]</span>
           </button>
 
+          {/* Tab 6: House Roster */}
           <button
             type="button"
             onClick={() => setActiveTab('teams')}
-            className={`px-4 py-2.5 rounded-lg text-xs font-mono uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer ${
+            className={`px-4 py-2.5 rounded-lg text-xs font-mono uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
               activeTab === 'teams'
                 ? 'bg-accent-blue/15 text-accent-blue-glow border border-accent-blue/40 shadow-glow-blue font-bold'
                 : 'text-text-secondary hover:text-text-primary hover:bg-bg-elevated border border-transparent'
             }`}
           >
             <Users className="w-4 h-4 text-accent-blue" />
-            <span>[ 03 · HOUSE ROSTER ({teams.length}) ]</span>
+            <span>[ 06 · HOUSE ROSTER ({teams.length}) ]</span>
           </button>
 
+          {/* Tab 7: Scoring & Audit */}
           <button
             type="button"
             onClick={() => setActiveTab('scores')}
-            className={`px-4 py-2.5 rounded-lg text-xs font-mono uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer ${
+            className={`px-4 py-2.5 rounded-lg text-xs font-mono uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
               activeTab === 'scores'
                 ? 'bg-accent-blue/15 text-accent-blue-glow border border-accent-blue/40 shadow-glow-blue font-bold'
                 : 'text-text-secondary hover:text-text-primary hover:bg-bg-elevated border border-transparent'
             }`}
           >
             <Award className="w-4 h-4 text-accent-blue" />
-            <span>[ 04 · SCORING & AUDIT ]</span>
+            <span>[ 07 · SCORING & AUDIT ]</span>
           </button>
         </div>
 
-        {/* Tab 1: Event Command Center & Master Controls */}
+        {/* ========================================================= */}
+        {/* TAB 1: COMMAND CENTER (DILRAJ'S MASTER CONTROLS)          */}
+        {/* ========================================================= */}
         {activeTab === 'overview' && (
           <div className="space-y-8 animate-fadeIn">
             <EventOverview
               eventState={eventState}
-              onNavigateTab={(tab) => setActiveTab(tab as any)}
+              onNavigateTab={(tab) => {
+                if (tab === 'round-tools') setActiveTab('round-tools');
+                else if (tab === 'teams') setActiveTab('teams');
+                else if (tab === 'scores') setActiveTab('scores');
+                else setActiveTab(tab as any);
+              }}
             />
 
             <RoundControls
@@ -256,17 +369,317 @@ export const AdminDashboardPage: React.FC = () => {
               onUpdateState={handleUpdateState}
               onAdvancePhase={handleAdvancePhase}
             />
+
+            {/* Quick Access Matrix to All Operations */}
+            <div className="p-6 rounded-xl panel-card border border-accent-blue/25 bg-bg-elevated space-y-4">
+              <div className="flex items-center justify-between border-b border-accent-blue/15 pb-3">
+                <div className="flex items-center gap-2">
+                  <Sliders className="w-4 h-4 text-accent-blue" />
+                  <h3 className="font-display tracking-wider text-base uppercase text-text-primary">
+                    Round Specific Operations Dispatch
+                  </h3>
+                </div>
+                <span className="text-[10px] font-mono text-accent-blue uppercase tracking-widest">
+                  DIRECT ACCESS
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div
+                  onClick={() => setActiveTab('round-2')}
+                  className="p-4 rounded-lg bg-bg-primary/80 border border-accent-blue/20 hover:border-accent-blue hover:bg-accent-blue/10 cursor-pointer transition-all space-y-2 group"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono font-bold text-accent-blue">ROUND 2</span>
+                    <Crown className="w-4 h-4 text-accent-blue group-hover:scale-110 transition-transform" />
+                  </div>
+                  <h4 className="font-semibold text-sm text-text-primary">Captaincy & Intrigue</h4>
+                  <p className="text-[11px] text-text-secondary leading-relaxed">
+                    Captain nomination competition, reveal ceremonies, quota allocation, and secret missions.
+                  </p>
+                </div>
+
+                <div
+                  onClick={() => setActiveTab('round-3')}
+                  className="p-4 rounded-lg bg-bg-primary/80 border border-accent-blue/20 hover:border-accent-blue hover:bg-accent-blue/10 cursor-pointer transition-all space-y-2 group"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono font-bold text-accent-blue">ROUND 3</span>
+                    <Swords className="w-4 h-4 text-accent-blue group-hover:scale-110 transition-transform" />
+                  </div>
+                  <h4 className="font-semibold text-sm text-text-primary">Pairings & Evictions</h4>
+                  <p className="text-[11px] text-text-secondary leading-relaxed">
+                    Team pairings, immunity duels, real-time voting controls, and dramatic eviction reveals.
+                  </p>
+                </div>
+
+                <div
+                  onClick={() => setActiveTab('round-4')}
+                  className="p-4 rounded-lg bg-bg-primary/80 border border-accent-blue/20 hover:border-accent-blue hover:bg-accent-blue/10 cursor-pointer transition-all space-y-2 group"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono font-bold text-accent-blue">ROUND 4</span>
+                    <Trophy className="w-4 h-4 text-accent-blue group-hover:scale-110 transition-transform" />
+                  </div>
+                  <h4 className="font-semibold text-sm text-text-primary">Finale & Judging</h4>
+                  <p className="text-[11px] text-text-secondary leading-relaxed">
+                    Hidden feature unlocks, repository submissions, judge rubric scoring, and the final trophy ceremony.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         )}
 
-        {/* Tab 2: Round Operational Engines (Spoorthi's modules seamlessly integrated) */}
+        {/* ========================================================= */}
+        {/* TAB 2: ROUND 2 OPERATIONS (SPOORTHI'S ROUND 2 ENGINES)     */}
+        {/* ========================================================= */}
+        {activeTab === 'round-2' && (
+          <div className="space-y-6 animate-fadeIn">
+            {/* Header & Sub-navigation */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-xl panel-card border border-accent-blue/25 bg-bg-elevated">
+              <div>
+                <div className="flex items-center gap-2 text-xs font-mono text-accent-blue font-bold uppercase tracking-wider">
+                  <Crown className="w-4 h-4" />
+                  <span>ROUND 2 OPERATIONAL ENGINE</span>
+                </div>
+                <h2 className="text-xl font-display uppercase tracking-wider text-text-primary mt-1">
+                  Captaincy, Nominations & Secret Missions
+                </h2>
+                <p className="text-xs text-text-secondary">
+                  Manage the captain election duel, reveal the house leader, establish nomination quotas, and dispatch secret missions.
+                </p>
+              </div>
+
+              {/* Sub-tabs */}
+              <div className="flex items-center bg-bg-primary border border-accent-blue/20 rounded-lg p-1 text-xs font-mono shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setR2SubTab('captaincy')}
+                  className={`px-3 py-1.5 rounded transition-all cursor-pointer uppercase ${
+                    r2SubTab === 'captaincy'
+                      ? 'bg-accent-blue text-black font-bold glow-blue-sm shadow'
+                      : 'text-text-secondary hover:text-text-primary'
+                  }`}
+                >
+                  Captaincy & Reveal
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setR2SubTab('nominations')}
+                  className={`px-3 py-1.5 rounded transition-all cursor-pointer uppercase ${
+                    r2SubTab === 'nominations'
+                      ? 'bg-accent-blue text-black font-bold glow-blue-sm shadow'
+                      : 'text-text-secondary hover:text-text-primary'
+                  }`}
+                >
+                  Nominations
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setR2SubTab('secret-mission')}
+                  className={`px-3 py-1.5 rounded transition-all cursor-pointer uppercase ${
+                    r2SubTab === 'secret-mission'
+                      ? 'bg-accent-blue text-black font-bold glow-blue-sm shadow'
+                      : 'text-text-secondary hover:text-text-primary'
+                  }`}
+                >
+                  Secret Mission
+                </button>
+              </div>
+            </div>
+
+            {/* Active Sub-module */}
+            <div className="w-full">
+              {r2SubTab === 'captaincy' && <Round2Captaincy />}
+              {r2SubTab === 'nominations' && <Round2Nominations />}
+              {r2SubTab === 'secret-mission' && <Round2SecretMission />}
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================= */}
+        {/* TAB 3: ROUND 3 OPERATIONS (SPOORTHI'S ROUND 3 ENGINES)     */}
+        {/* ========================================================= */}
+        {activeTab === 'round-3' && (
+          <div className="space-y-6 animate-fadeIn">
+            {/* Header & Sub-navigation */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-xl panel-card border border-accent-blue/25 bg-bg-elevated">
+              <div>
+                <div className="flex items-center gap-2 text-xs font-mono text-accent-blue font-bold uppercase tracking-wider">
+                  <Swords className="w-4 h-4" />
+                  <span>ROUND 3 OPERATIONAL ENGINE</span>
+                </div>
+                <h2 className="text-xl font-display uppercase tracking-wider text-text-primary mt-1">
+                  Team Pairings, Immunity Duels & Eviction Ceremony
+                </h2>
+                <p className="text-xs text-text-secondary">
+                  Coordinate the head-to-head duels, grant immune protections, manage live voting sessions, and execute eviction reveals.
+                </p>
+              </div>
+
+              {/* Sub-tabs */}
+              <div className="flex items-center bg-bg-primary border border-accent-blue/20 rounded-lg p-1 text-xs font-mono shrink-0 overflow-x-auto">
+                <button
+                  type="button"
+                  onClick={() => setR3SubTab('pairings')}
+                  className={`px-3 py-1.5 rounded transition-all cursor-pointer uppercase whitespace-nowrap ${
+                    r3SubTab === 'pairings'
+                      ? 'bg-accent-blue text-black font-bold glow-blue-sm shadow'
+                      : 'text-text-secondary hover:text-text-primary'
+                  }`}
+                >
+                  Pairings
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setR3SubTab('immunity')}
+                  className={`px-3 py-1.5 rounded transition-all cursor-pointer uppercase whitespace-nowrap ${
+                    r3SubTab === 'immunity'
+                      ? 'bg-accent-blue text-black font-bold glow-blue-sm shadow'
+                      : 'text-text-secondary hover:text-text-primary'
+                  }`}
+                >
+                  Immunity
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setR3SubTab('voting')}
+                  className={`px-3 py-1.5 rounded transition-all cursor-pointer uppercase whitespace-nowrap ${
+                    r3SubTab === 'voting'
+                      ? 'bg-accent-blue text-black font-bold glow-blue-sm shadow'
+                      : 'text-text-secondary hover:text-text-primary'
+                  }`}
+                >
+                  Voting
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setR3SubTab('eviction')}
+                  className={`px-3 py-1.5 rounded transition-all cursor-pointer uppercase whitespace-nowrap ${
+                    r3SubTab === 'eviction'
+                      ? 'bg-accent-blue text-black font-bold glow-blue-sm shadow'
+                      : 'text-text-secondary hover:text-text-primary'
+                  }`}
+                >
+                  Eviction Reveal
+                </button>
+              </div>
+            </div>
+
+            {/* Active Sub-module */}
+            <div className="w-full">
+              {r3SubTab === 'pairings' && <Round3TeamPairing />}
+              {r3SubTab === 'immunity' && <Round3ImmunityControl />}
+              {r3SubTab === 'voting' && <Round3VotingControl />}
+              {r3SubTab === 'eviction' && <Round3EvictionReveal />}
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================= */}
+        {/* TAB 4: ROUND 4 FINALE (SPOORTHI'S ROUND 4 ENGINES)         */}
+        {/* ========================================================= */}
+        {activeTab === 'round-4' && (
+          <div className="space-y-6 animate-fadeIn">
+            {/* Header & Sub-navigation */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-xl panel-card border border-accent-blue/25 bg-bg-elevated">
+              <div>
+                <div className="flex items-center gap-2 text-xs font-mono text-accent-blue font-bold uppercase tracking-wider">
+                  <Trophy className="w-4 h-4" />
+                  <span>ROUND 4 FINALE & JUDGING ENGINE</span>
+                </div>
+                <h2 className="text-xl font-display uppercase tracking-wider text-text-primary mt-1">
+                  Hidden Features, Judge Scoring & Winner Podium
+                </h2>
+                <p className="text-xs text-text-secondary">
+                  Unlock hidden surprise specifications, audit repository commits, submit rubric judge evaluations, and crown the winner.
+                </p>
+              </div>
+
+              {/* Sub-tabs */}
+              <div className="flex items-center bg-bg-primary border border-accent-blue/20 rounded-lg p-1 text-xs font-mono shrink-0 overflow-x-auto">
+                <button
+                  type="button"
+                  onClick={() => setR4SubTab('hidden')}
+                  className={`px-3 py-1.5 rounded transition-all cursor-pointer uppercase whitespace-nowrap ${
+                    r4SubTab === 'hidden'
+                      ? 'bg-accent-blue text-black font-bold glow-blue-sm shadow'
+                      : 'text-text-secondary hover:text-text-primary'
+                  }`}
+                >
+                  Hidden Specs
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setR4SubTab('submissions')}
+                  className={`px-3 py-1.5 rounded transition-all cursor-pointer uppercase whitespace-nowrap ${
+                    r4SubTab === 'submissions'
+                      ? 'bg-accent-blue text-black font-bold glow-blue-sm shadow'
+                      : 'text-text-secondary hover:text-text-primary'
+                  }`}
+                >
+                  Submissions
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setR4SubTab('judging')}
+                  className={`px-3 py-1.5 rounded transition-all cursor-pointer uppercase whitespace-nowrap ${
+                    r4SubTab === 'judging'
+                      ? 'bg-accent-blue text-black font-bold glow-blue-sm shadow'
+                      : 'text-text-secondary hover:text-text-primary'
+                  }`}
+                >
+                  Judging
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setR4SubTab('penalties')}
+                  className={`px-3 py-1.5 rounded transition-all cursor-pointer uppercase whitespace-nowrap ${
+                    r4SubTab === 'penalties'
+                      ? 'bg-accent-blue text-black font-bold glow-blue-sm shadow'
+                      : 'text-text-secondary hover:text-text-primary'
+                  }`}
+                >
+                  Penalties
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setR4SubTab('scoreboard')}
+                  className={`px-3 py-1.5 rounded transition-all cursor-pointer uppercase whitespace-nowrap ${
+                    r4SubTab === 'scoreboard'
+                      ? 'bg-accent-blue text-black font-bold glow-blue-sm shadow'
+                      : 'text-text-secondary hover:text-text-primary'
+                  }`}
+                >
+                  Final Winner
+                </button>
+              </div>
+            </div>
+
+            {/* Active Sub-module */}
+            <div className="w-full">
+              {r4SubTab === 'hidden' && <Round4HiddenFeatures />}
+              {r4SubTab === 'submissions' && <Round4Submissions />}
+              {r4SubTab === 'judging' && <Round4JudgeScoring />}
+              {r4SubTab === 'penalties' && <Round4PenaltyInterface />}
+              {r4SubTab === 'scoreboard' && <Round4FinalScoreboard />}
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================= */}
+        {/* TAB 5: ALL ROUND ENGINES (SPOORTHI'S FULL MATRIX)         */}
+        {/* ========================================================= */}
         {activeTab === 'round-tools' && (
           <div className="space-y-6 animate-fadeIn">
             <RoundToolsContainer embedded={true} />
           </div>
         )}
 
-        {/* Tab 3: House Roster & Drill-down */}
+        {/* ========================================================= */}
+        {/* TAB 6: HOUSE ROSTER & DRILL-DOWN (DILRAJ'S TEAMS TABLE)    */}
+        {/* ========================================================= */}
         {activeTab === 'teams' && (
           <div className="space-y-6 animate-fadeIn">
             <TeamsTable
@@ -277,7 +690,9 @@ export const AdminDashboardPage: React.FC = () => {
           </div>
         )}
 
-        {/* Tab 4: Unified Scoring Console, Live Leaderboard & Audit Trail */}
+        {/* ========================================================= */}
+        {/* TAB 7: UNIFIED SCORING CONSOLE & AUDIT TRAIL              */}
+        {/* ========================================================= */}
         {activeTab === 'scores' && (
           <div className="space-y-6 animate-fadeIn">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 rounded-xl panel-card border border-accent-blue/25 bg-bg-elevated">
@@ -378,3 +793,5 @@ export const AdminDashboardPage: React.FC = () => {
     </div>
   );
 };
+
+export default AdminDashboardPage;
