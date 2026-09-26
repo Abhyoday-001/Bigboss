@@ -163,159 +163,48 @@ export const LoginPage: React.FC = () => {
           </button>
         </form>
 
-        {/* Demo Credentials Quick-Select Panel */}
-        <div className="mt-6 pt-5 border-t border-accent-blue/15">
-          <div className="text-[11px] font-mono text-text-secondary mb-3 flex items-center justify-between">
-            <div className="flex items-center gap-1.5">
-              <Key className="w-3.5 h-3.5 text-accent-blue" />
-              <span className="font-bold text-accent-blue-glow">DEMO CREDENTIALS (1-CLICK DIRECT ACCESS)</span>
-            </div>
-            <span className="text-[10px] text-text-secondary font-mono">Pass: devhouse</span>
+        {/* Demo Credentials Quick-Select */}
+        <div className="mt-6 pt-5 border-t border-accent-blue/15 text-center">
+          <div className="text-[11px] font-mono text-text-secondary mb-2.5 flex items-center justify-center gap-1.5">
+            <Key className="w-3.5 h-3.5 text-accent-blue" />
+            <span>DEMO LOGIN (1-CLICK DIRECT ACCESS):</span>
           </div>
-
           <div className="grid grid-cols-2 gap-2 text-left">
-            {/* Team 01 - Aryan */}
-            <div className="p-2 rounded bg-bg-primary border border-accent-blue/30 hover:border-accent-blue transition-all flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-xs text-text-primary">TEAM ALPHA</span>
-                  <span className="text-[9px] font-mono px-1 rounded bg-accent-blue/20 text-accent-blue">#1 CAPTAIN</span>
-                </div>
-                <div className="text-[10px] text-text-secondary font-mono">Aryan Sharma (CyberNexus)</div>
-                <div className="text-[9px] text-accent-cyan font-mono mt-0.5">Secret Mission: Active</div>
-              </div>
-              <div className="flex items-center gap-1.5 mt-2 pt-1.5 border-t border-accent-blue/15">
-                <button
-                  type="button"
-                  onClick={() => handleQuickLogin('team-01')}
-                  className="flex-1 py-1 rounded bg-accent-blue hover:bg-accent-blue-glow text-black font-mono text-[10px] font-bold uppercase transition-all"
-                >
-                  Login
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setDemoCredentials('team-01', 'devhouse')}
-                  className="px-2 py-1 rounded bg-bg-elevated hover:bg-bg-elevated-hover text-text-secondary hover:text-text-primary font-mono text-[10px] border border-accent-blue/20"
-                  title="Fill credentials into form"
-                >
-                  Fill
-                </button>
-              </div>
-            </div>
-
-            {/* Team 02 - Anjishth */}
-            <div className="p-2 rounded bg-bg-primary border border-accent-blue/30 hover:border-accent-blue transition-all flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-xs text-text-primary">TEAM BETA</span>
-                  <span className="text-[9px] font-mono px-1 rounded bg-accent-blue/20 text-accent-blue">#2 RANK</span>
-                </div>
-                <div className="text-[10px] text-text-secondary font-mono">Anjishth Kumar (NullPointers)</div>
-                <div className="text-[9px] text-text-secondary font-mono mt-0.5">Challenger Team</div>
-              </div>
-              <div className="flex items-center gap-1.5 mt-2 pt-1.5 border-t border-accent-blue/15">
-                <button
-                  type="button"
-                  onClick={() => handleQuickLogin('team-02')}
-                  className="flex-1 py-1 rounded bg-accent-blue hover:bg-accent-blue-glow text-black font-mono text-[10px] font-bold uppercase transition-all"
-                >
-                  Login
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setDemoCredentials('team-02', 'devhouse')}
-                  className="px-2 py-1 rounded bg-bg-elevated hover:bg-bg-elevated-hover text-text-secondary hover:text-text-primary font-mono text-[10px] border border-accent-blue/20"
-                  title="Fill credentials into form"
-                >
-                  Fill
-                </button>
-              </div>
-            </div>
-
-            {/* Team 03 - Dilraj */}
-            <div className="p-2 rounded bg-bg-primary border border-accent-blue/30 hover:border-accent-blue transition-all flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-xs text-text-primary">TEAM GAMMA</span>
-                  <span className="text-[9px] font-mono px-1 rounded bg-accent-blue/20 text-accent-blue">#3 RANK</span>
-                </div>
-                <div className="text-[10px] text-text-secondary font-mono">Dilraj Singh (ByteForce)</div>
-                <div className="text-[9px] text-text-secondary font-mono mt-0.5">Security / DevOps</div>
-              </div>
-              <div className="flex items-center gap-1.5 mt-2 pt-1.5 border-t border-accent-blue/15">
-                <button
-                  type="button"
-                  onClick={() => handleQuickLogin('team-03')}
-                  className="flex-1 py-1 rounded bg-accent-blue hover:bg-accent-blue-glow text-black font-mono text-[10px] font-bold uppercase transition-all"
-                >
-                  Login
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setDemoCredentials('team-03', 'devhouse')}
-                  className="px-2 py-1 rounded bg-bg-elevated hover:bg-bg-elevated-hover text-text-secondary hover:text-text-primary font-mono text-[10px] border border-accent-blue/20"
-                  title="Fill credentials into form"
-                >
-                  Fill
-                </button>
-              </div>
-            </div>
-
-            {/* Team 04 - Spoorthi */}
-            <div className="p-2 rounded bg-bg-primary border border-accent-blue/30 hover:border-accent-blue transition-all flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-xs text-text-primary">TEAM DELTA</span>
-                  <span className="text-[9px] font-mono px-1 rounded bg-accent-blue/20 text-accent-blue">#4 RANK</span>
-                </div>
-                <div className="text-[10px] text-text-secondary font-mono">Spoorthi Gowda (GlitchHunters)</div>
-                <div className="text-[9px] text-text-secondary font-mono mt-0.5">Squad Contestant</div>
-              </div>
-              <div className="flex items-center gap-1.5 mt-2 pt-1.5 border-t border-accent-blue/15">
-                <button
-                  type="button"
-                  onClick={() => handleQuickLogin('team-04')}
-                  className="flex-1 py-1 rounded bg-accent-blue hover:bg-accent-blue-glow text-black font-mono text-[10px] font-bold uppercase transition-all"
-                >
-                  Login
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setDemoCredentials('team-04', 'devhouse')}
-                  className="px-2 py-1 rounded bg-bg-elevated hover:bg-bg-elevated-hover text-text-secondary hover:text-text-primary font-mono text-[10px] border border-accent-blue/20"
-                  title="Fill credentials into form"
-                >
-                  Fill
-                </button>
-              </div>
-            </div>
+            <button
+              type="button"
+              onClick={() => handleQuickLogin('team-01')}
+              className="p-2 text-xs font-mono rounded bg-bg-primary border border-accent-blue/30 hover:border-accent-blue hover:bg-accent-blue/10 text-accent-blue-glow transition-all flex flex-col"
+            >
+              <span className="font-bold text-text-primary">TEAM ALPHA</span>
+              <span className="text-[10px] text-text-secondary">Aryan Sharma (#1 • Captain)</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleQuickLogin('team-02')}
+              className="p-2 text-xs font-mono rounded bg-bg-primary border border-accent-blue/30 hover:border-accent-blue hover:bg-accent-blue/10 text-accent-blue-glow transition-all flex flex-col"
+            >
+              <span className="font-bold text-text-primary">TEAM BETA</span>
+              <span className="text-[10px] text-text-secondary">Anjishth Kumar (#2)</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleQuickLogin('team-03')}
+              className="p-2 text-xs font-mono rounded bg-bg-primary border border-accent-blue/30 hover:border-accent-blue hover:bg-accent-blue/10 text-accent-blue-glow transition-all flex flex-col"
+            >
+              <span className="font-bold text-text-primary">TEAM GAMMA</span>
+              <span className="text-[10px] text-text-secondary">Dilraj Singh (#3)</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleQuickLogin('team-04')}
+              className="p-2 text-xs font-mono rounded bg-bg-primary border border-accent-blue/30 hover:border-accent-blue hover:bg-accent-blue/10 text-accent-blue-glow transition-all flex flex-col"
+            >
+              <span className="font-bold text-text-primary">TEAM DELTA</span>
+              <span className="text-[10px] text-text-secondary">Spoorthi Gowda (#4)</span>
+            </button>
           </div>
-
-          {/* Special Role Row: Secret Mission Middle Team & Admin */}
-          <div className="mt-2 grid grid-cols-2 gap-2 text-left">
-            <button
-              type="button"
-              onClick={() => handleQuickLogin('team-05')}
-              className="p-2 rounded bg-bg-primary border border-accent-cyan/30 hover:border-accent-cyan text-left transition-all"
-            >
-              <div className="flex items-center justify-between">
-                <span className="font-bold text-[11px] text-accent-cyan">TEAM ZERODAY (#5)</span>
-                <span className="text-[8px] font-mono text-accent-cyan">MISSION</span>
-              </div>
-              <div className="text-[9px] text-text-secondary font-mono">Middle Rank Secret Task</div>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleQuickLogin('admin')}
-              className="p-2 rounded bg-bg-primary border border-warning-yellow/30 hover:border-warning-yellow text-left transition-all"
-            >
-              <div className="flex items-center justify-between">
-                <span className="font-bold text-[11px] text-warning-yellow">CONTROL ROOM</span>
-                <span className="text-[8px] font-mono text-warning-yellow">ADMIN</span>
-              </div>
-              <div className="text-[9px] text-text-secondary font-mono">Pass: admin123</div>
-            </button>
+          <div className="mt-2 text-[10px] font-mono text-text-secondary">
+            Passcode: <code className="text-accent-blue">devhouse</code> (or any text)
           </div>
         </div>
 

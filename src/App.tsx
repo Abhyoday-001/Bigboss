@@ -10,8 +10,6 @@ import { ProfilePage } from './participant/pages/ProfilePage';
 import { Round1TaskPage } from './participant/pages/Round1TaskPage';
 import { Round2CaptaincyPage } from './participant/pages/Round2CaptaincyPage';
 
-import { DemoAccessDrawer } from './shared/components/DemoAccessDrawer';
-
 // Simple route guard for participant screens
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return <>{children}</>;
@@ -62,9 +60,6 @@ export const App: React.FC = () => {
             {/* Catch-all redirect to landing */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
-
-          {/* Global Demo Switcher & Credentials Drawer */}
-          <DemoAccessDrawer />
         </EventPhaseProvider>
       </AuthProvider>
     </BrowserRouter>
