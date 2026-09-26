@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg-primary: #050506;
+  --color-bg-elevated: #0d0f14;
+  --color-bg-elevated-hover: #131720;
+  --color-accent-blue: #1EA7FF;
+  --color-accent-blue-glow: #4FC3FF;
+  --color-text-primary: #F2F3F5;
+  --color-text-secondary: #9AA1AC;
+  --color-danger-red: #FF3B4E;
+  --color-success-green: #2ED67B;
+  --color-warning-amber: #FFB300;
+
+  --font-display: 'Bebas Neue', 'Anton', sans-serif;
+  --font-display-anton: 'Anton', sans-serif;
+  --font-sans: 'Space Grotesk', 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+@layer base {
+  * {
+    border-color: rgba(30, 167, 255, 0.15);
+  }
+
+  body {
+    background-color: #050506;
+    color: #F2F3F5;
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+  }
+}
+
+/* Custom Dev House utilities */
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.05em;
+}
+
+.font-anton {
+  font-family: var(--font-display-anton);
+}
+
+.font-mono-numbers {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Metal Silver Distressed Gradient for DEV HOUSE headlines */
+.metal-headline {
+  font-family: var(--font-display);
+  background: linear-gradient(180deg, #F2F3F5 0%, #C9CDD3 45%, #6E7278 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 8px rgba(30, 167, 255, 0.2));
+  text-transform: uppercase;
+}
+
+/* Neon Surveillance Glows */
+.glow-blue {
+  box-shadow: 0 0 20px -3px rgba(30, 167, 255, 0.45), 0 0 8px rgba(79, 195, 255, 0.3);
+}
+
+.glow-blue-sm {
+  box-shadow: 0 0 10px -2px rgba(30, 167, 255, 0.35);
+}
+
+.glow-blue-text {
+  text-shadow: 0 0 12px rgba(79, 195, 255, 0.6), 0 0 2px rgba(30, 167, 255, 0.9);
+}
+
+.glow-red {
+  box-shadow: 0 0 20px -3px rgba(255, 59, 78, 0.5), 0 0 8px rgba(255, 59, 78, 0.3);
+}
+
+.glow-red-text {
+  text-shadow: 0 0 12px rgba(255, 59, 78, 0.7);
+}
+
+.glow-green {
+  box-shadow: 0 0 20px -3px rgba(46, 214, 123, 0.4);
+}
+
+/* Control Panel Card Styling per DESIGN.md §6 */
+.panel-card {
+  background-color: #0d0f14;
+  border: 1px solid rgba(30, 167, 255, 0.18);
+  border-radius: 10px;
+  position: relative;
+  transition: all 0.2s ease-in-out;
+}
+
+.panel-card:hover {
+  border-color: rgba(30, 167, 255, 0.4);
+  box-shadow: 0 0 16px -4px rgba(30, 167, 255, 0.25);
+}
+
+/* Bracket motif per DESIGN.md §4 */
+.bracket-framed {
+  position: relative;
+}
+
+.bracket-framed::before {
+  content: '[';
+  color: #1EA7FF;
+  margin-right: 0.35em;
+  font-weight: 700;
+}
+
+.bracket-framed::after {
+  content: ']';
+  color: #1EA7FF;
+  margin-left: 0.35em;
+  font-weight: 700;
+}
+
+/* Scanline / CRT overlay effect for CCTV realism */
+.scanlines {
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.25) 50%
+  ), linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.03),
+    rgba(0, 255, 0, 0.01),
+    rgba(0, 0, 255, 0.03)
+  );
+  background-size: 100% 4px, 6px 100%;
+}
