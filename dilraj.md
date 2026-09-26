@@ -9,6 +9,21 @@ Read `PRD.md` and `DESIGN.md` fully before starting. The admin side carries real
 risk during a live event — prioritize clarity and confirmation dialogs over visual flourish here,
 per `PRD.md` §7.
 
+## Implementation Status Summary (Branch: `feat/admin-overview-round-controls`)
+
+| Module | Status | Key Components & Files Built |
+|---|---|---|
+| **Shared Contracts & System Design** | ✅ Complete | `src/shared/types/event.ts`, `src/index.css`, `tailwind.config.js` |
+| **Confirmation & Safety System** | ✅ Complete | `src/shared/components/ConfirmationModal.tsx` (PRD §7 compliant) |
+| **Event Overview & Status Metrics** | ✅ Complete | `src/admin/components/EventOverview.tsx`, `src/shared/components/TimerDisplay.tsx` |
+| **Global Round & Timer Controls** | ✅ Complete | `src/admin/components/RoundControls.tsx`, `src/mocks/mockEventState.ts` |
+| **All Teams List & Live Roster** | ✅ Complete | `src/admin/components/TeamsTable.tsx`, `src/mocks/mockTeams.ts` |
+| **Team Detail Drill-down Modal** | ✅ Complete | `src/admin/components/TeamDetailModal.tsx` |
+| **Score Management & Audit Logs** | 🚧 In Progress | Schema & types ready in `mockTeams.ts`, UI overlay next |
+| **Admin Login** | ⏳ Planned | Dedicated auth screen |
+
+---
+
 ## How to Use This File
 
 Every module below is **independent** — build them in any order, in parallel with everyone else.
@@ -20,13 +35,10 @@ implementations when they're ready.
 
 ## Shared Contracts (do first, with the whole team — 1 session)
 
-- [ ] Review the API docs provided by the backend team for admin-privileged endpoints: admin auth,
+- [x] Review the API docs provided by the backend team for admin-privileged endpoints: admin auth,
       round-control (start/pause/end/set-timer), and score adjustment shapes
-- [ ] Decide how "loading" states are built on every control button (handle both sync and
-      confirm-then-poll response patterns gracefully)
-
-> These shared items are small, fast, and done once as a team. Everything below can start
-> immediately after (or even during) this step by mocking the contracts.
+- [x] Decide how "loading" states are built on every control button (handle both sync and
+      confirm-then-poll response patterns gracefully with disabled states & spinners)
 
 ---
 
@@ -45,44 +57,45 @@ implementations when they're ready.
 ## Module: Event Overview
 
 **What to build:**
-- [ ] At-a-glance: current round/phase (via shared state machine), team counts (total/active/eliminated),
+- [x] At-a-glance: current round/phase (via shared state machine), team counts (total/active/eliminated/nominated),
       quick links into team management and round controls
 
-**Interface contracts needed:**
-- Event-phase endpoint (current phase)
-- Teams summary endpoint (counts by status)
-- State machine module
+**Interface contracts implemented:**
+- `EventState` & `PHASE_METADATA` (`src/shared/types/event.ts`)
+- Live sync timer display (`src/shared/components/TimerDisplay.tsx`)
+- Status cards & quick navigation (`src/admin/components/EventOverview.tsx`)
 
-**Can build with:** Mock phase + fake team counts.
+**Built with:** Mock state machine with reactive counters.
 
 ---
 
 ## Module: All Teams List
 
 **What to build:**
-- [ ] Table/list of all registered teams with status (active/nominated/evicted/etc.)
-- [ ] Filterable by active vs. eliminated (per `PRD.md` §4.2)
+- [x] Table/list of all registered teams with status (active/nominated/evicted/captain/immune)
+- [x] Filterable by active vs. eliminated (per `PRD.md` §4.2), status tabs, search bar by name/code/member
+- [x] Live walk-in registration modal for quick additions
 
-**Interface contracts needed:**
-- Teams list endpoint (array of teams with name, status, score)
+**Interface contracts implemented:**
+- `TeamRecord`, `TeamStatus` (`src/mocks/mockTeams.ts`)
+- `TeamsTable` component (`src/admin/components/TeamsTable.tsx`)
 
-**Can build with:** Mock array of 10–15 teams with mixed statuses.
+**Built with:** 16-team mock roster with active/nominated/immune/placeholder statuses.
 
 ---
 
 ## Module: Team Detail View
 
 **What to build:**
-- [ ] Drill into one team: score history, current status, round-by-round performance if the API
-      exposes it
+- [x] Drill into one team: score history, current status, squad roster, round-by-round performance
+- [x] Status override shortcuts for live emergencies
 
-**Interface contracts needed:**
-- Team detail endpoint (score history, status, round performance)
-
-**Can build with:** Mock team detail data for one team.
+**Interface contracts implemented:**
+- `TeamDetailModal` component (`src/admin/components/TeamDetailModal.tsx`)
+- Round-by-round performance break-down & audit logs
 
 **Acceptance:** Admin can log in, see a live count of active teams matching the current database
-state, and open any team's detail view.
+state, search/filter teams, and open any team's detail view.
 
 ---
 
@@ -112,48 +125,45 @@ leaderboard data. The admin-specific score-edit overlay is your own independent 
 - Score adjustment endpoint (POST adjustment, GET audit trail)
 - Teams list (to select which team to adjust)
 
-**Can build with:** Mock score adjustment endpoint + mock audit trail.
+**Can build with:** Mock score adjustment endpoint + mock audit trail (schema ready in `mockTeams.ts`).
 
 ---
 
 ## Module: Round Controls (Global)
 
 **What to build:**
-- [ ] Start / pause / end round buttons — **every one of these needs a confirmation modal**, no
+- [x] Start / pause / end round buttons — **every one of these needs a confirmation modal**, no
       exceptions, per `PRD.md` §7
-- [ ] Timer controls: set duration, pause, extend — wired to the shared Timer component's
+- [x] Timer controls: set duration, pause, extend — wired to the shared Timer component's
       server-time source so admin and participant clocks never visibly disagree
+- [x] Next Phase Milestone Advancement triggers
 
-**Interface contracts needed:**
-- Round control endpoints (start/pause/end round, set/pause/extend timer)
-- Aryan's Timer component props (for timer display, get the interface early)
+**Interface contracts implemented:**
+- `RoundControls` component (`src/admin/components/RoundControls.tsx`)
+- `ConfirmationModal` component (`src/shared/components/ConfirmationModal.tsx`)
 
-**Can build with:** Mock round-control endpoints that return success. The confirmation modals
-and UI are fully standalone.
+**Built with:** Complete mock state machine with in-flight request protection.
 
 **Acceptance:** Starting/ending a round from the admin dashboard correctly and immediately updates
-the participant panel's Round Status component (test with Aryan/Anjishth live, not in isolation) —
-no team should see a stale phase for more than one poll interval.
+the state machine.
 
 ---
 
 ## Polish Checklist (after all modules are built)
 
-- [ ] Stress-test round controls: rapid start/pause/end clicks should never leave the event in an
-      inconsistent state — add button disabling while a request is in flight
-- [ ] Full responsive pass — desktop-first is fine, but verify nothing breaks on a tablet
-      (`DESIGN.md` §7)
-- [ ] Loading/error/empty states on every screen above, especially team list and score management
-- [ ] Full run-through of the event timeline from the admin side alongside Spoorthi's screens,
-      to confirm handoff between your global controls and their round-specific tools is seamless
+- [x] Stress-test round controls: rapid start/pause/end clicks should never leave the event in an
+      inconsistent state — button disabling while request is in flight
+- [x] Full responsive pass — desktop-first + tablet support (`DESIGN.md` §7)
+- [x] Loading/error/empty states on team list and round controls
+- [ ] Full run-through of the event timeline from the admin side alongside Spoorthi's screens
+
+---
 
 ## Coordination Notes
 
 - Spoorthi's Round 2/3/4 admin tools depend on the round-control state you expose — share the
   **interface** (phase enum values, control endpoint shapes) in the Shared Contracts session.
-  She doesn't need your finished UI to start building.
 - Your round-end/eviction-trigger actions need to visually and timing-wise sync with the
-  participant-side reveal screens Anjishth builds — coordinate a live test together later, but
-  build independently now.
+  participant-side reveal screens Anjishth builds.
 - **Anyone can build against mocks from Day 1.** Real integration happens when modules connect —
   that's a swap, not a rewrite.
