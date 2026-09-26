@@ -32,7 +32,7 @@ export const AmbientEyeBackground: React.FC<AmbientEyeBackgroundProps> = ({
       className="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none"
     >
       <div
-        className={`absolute aspect-[16/9] ${positionClasses} opacity-[0.05] transition-opacity duration-1000 ${
+        className={`absolute aspect-video ${positionClasses} opacity-[0.05] transition-opacity duration-1000 ${
           prefersReducedMotion ? '' : 'animate-[pulse_10s_ease-in-out_infinite]'
         } ${className}`}
         style={{
@@ -49,7 +49,7 @@ export const AmbientEyeBackground: React.FC<AmbientEyeBackgroundProps> = ({
 
       {/* Very faint cyan ambient gradient highlight in corner */}
       <div
-        className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full pointer-events-none bg-accent-blue/[0.02] blur-[120px]"
+        className="absolute bottom-0 right-0 w-125 h-125 rounded-full pointer-events-none bg-accent-blue/2 blur-[120px]"
       />
     </div>
   );

@@ -130,7 +130,7 @@ export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({ onLoginSuccess }) => {
         <NeuronNetworkBackground className="fixed inset-0 pointer-events-none z-0 opacity-80" />
 
         {/* Ambient radial glow behind login card */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] rounded-full bg-accent-blue/15 blur-[120px] pointer-events-none z-0" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-137.5 h-137.5 rounded-full bg-accent-blue/15 blur-[120px] pointer-events-none z-0" />
 
         {/* Resolved Login Card */}
         <motion.div
@@ -276,7 +276,7 @@ export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({ onLoginSuccess }) => {
               transformOrigin: '50.98% 46.88%',
               willChange: 'transform',
             }}
-            className="relative w-full max-w-[960px] aspect-[16/9] flex items-center justify-center select-none translate-z-0"
+            className="relative w-full max-w-240 aspect-video flex items-center justify-center select-none translate-z-0"
           >
             <img
               src={eyeHeroImg}
@@ -349,14 +349,14 @@ export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({ onLoginSuccess }) => {
           {/* Black Vignette Overlay (Fades in during last 15% of zoom) */}
           <motion.div
             style={{ opacity: blackOverlayOpacity }}
-            className="absolute inset-0 bg-[#050506]/94 pointer-events-none z-40 backdrop-blur-[2px]"
+            className="absolute inset-0 bg-bg-primary/94 pointer-events-none z-40 backdrop-blur-[2px]"
           />
 
           {/* Persistent Neuron Network Background Layer (Placed above black overlay at z-45!) */}
           <NeuronNetworkBackground className="fixed inset-0 pointer-events-none z-45 opacity-80" />
 
           {/* Ambient Blue Radial Glow directly behind the login card */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] rounded-full bg-accent-blue/15 blur-[120px] pointer-events-none z-46" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-137.5 h-137.5 rounded-full bg-accent-blue/15 blur-[120px] pointer-events-none z-46" />
 
           {/* Resolved Login Form Container (Crossfades in as screen resolves) */}
           <motion.div

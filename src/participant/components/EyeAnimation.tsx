@@ -43,7 +43,7 @@ export const EyeAnimation: React.FC<EyeAnimationProps> = ({
         transition={{ duration: 0.6 }}
       >
         {/* Subtle camera lens vignette & scanlines */}
-        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_transparent_40%,_black_100%)] z-10" />
+        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,transparent_40%,black_100%)] z-10" />
 
         {/* Skip button for accessibility / quick dev testing */}
         {isIntro && (
