@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../shared/hooks/useAuth';
 import { NeuralNetworkOverlay } from './NeuralNetworkOverlay';
 import { NeuronNetworkBackground } from './NeuronNetworkBackground';
+import { AmbientEyeBackground } from '../../shared/components/AmbientEyeBackground';
 import eyeHeroImg from '../../assets/eye-hero.png';
 import { AlertCircle, ArrowRight, ShieldCheck, Key, Lock, Users } from 'lucide-react';
 
@@ -312,11 +313,17 @@ export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({
     </div>
   );
 
-  // If directly opened as resolved (e.g. /login route) or prefers-reduced-motion:
-  if (prefersReducedMotion || (initialResolved && hasEntered)) {
+  // When resolved (after zoom completes, via same-session revisit, or prefers-reduced-motion):
+  if (prefersReducedMotion || hasEntered) {
     return (
       <div className="relative w-full h-screen bg-[#050506] text-text-primary flex flex-col justify-center items-center px-4 overflow-hidden selection:bg-accent-blue/30 selection:text-accent-blue-glow">
+        {/* Full-Screen Distributed Animated Neuron Network */}
         <NeuronNetworkBackground className="fixed inset-0 pointer-events-none z-0 opacity-80" />
+
+        {/* Persistent Ambient Eye Background in bottom-right corner */}
+        <AmbientEyeBackground position="bottom-right" />
+
+        {/* Ambient Blue Radial Glow behind login card */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-140 h-140 rounded-full bg-accent-blue/15 blur-[120px] pointer-events-none z-0" />
 
         <motion.div

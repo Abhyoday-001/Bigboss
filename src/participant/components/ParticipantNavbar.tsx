@@ -23,7 +23,7 @@ export const ParticipantNavbar: React.FC = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate('/');
   };
 
   const navLinks = [

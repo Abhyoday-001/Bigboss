@@ -19,7 +19,7 @@ export const PHASE_CONFIG: Record<EventPhase, PhaseMetadata> = {
     description: 'Enter your house access credentials issued by the control room.',
     nextPhase: 'ROUND_1_ACTIVE',
     isTimed: false,
-    participantRoute: '/login',
+    participantRoute: '/',
   },
   ROUND_1_ACTIVE: {
     id: 'ROUND_1_ACTIVE',
