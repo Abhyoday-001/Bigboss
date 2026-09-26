@@ -1,12 +1,25 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../shared/hooks/useAuth';
-import { Eye, User, LogOut, Terminal, Crown, Home } from 'lucide-react';
+import { MOCK_TEAMS } from '../../shared/mocks/mockData';
+import { Eye, User, LogOut, Terminal, Crown, Home, ChevronDown, Check, Shield } from 'lucide-react';
 
 export const ParticipantNavbar: React.FC = () => {
-  const { team, logout } = useAuth();
+  const { team, logout, switchActiveTeam, role } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -60,19 +73,63 @@ export const ParticipantNavbar: React.FC = () => {
           })}
         </nav>
 
-        {/* Team Pill & Logout */}
+        {/* Team Pill & Quick Persona Switcher */}
         <div className="flex items-center gap-3">
           {team && (
-            <div className="flex items-center gap-2 px-3 py-1 rounded bg-bg-elevated border border-accent-blue/25">
-              <div className="w-2 h-2 rounded-full bg-success-green animate-pulse" />
-              <div className="text-right">
-                <div className="text-xs font-bold text-text-primary line-clamp-1">
-                  {team.teamName}
+            <div className="relative" ref={dropdownRef}>
+              <button
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className="flex items-center gap-2 px-3 py-1 rounded bg-bg-elevated hover:bg-bg-elevated-hover border border-accent-blue/30 transition-all text-left group"
+                title="Switch Demo Persona"
+              >
+                <div className="w-2 h-2 rounded-full bg-success-green animate-pulse" />
+                <div className="text-right">
+                  <div className="text-xs font-bold text-text-primary line-clamp-1 group-hover:text-accent-blue-glow">
+                    {team.teamName}
+                  </div>
+                  <div className="text-[10px] font-mono text-accent-blue">
+                    {team.score} PTS • #{team.rank}
+                  </div>
                 </div>
-                <div className="text-[10px] font-mono text-accent-blue">
-                  {team.score} PTS • #{team.rank}
+                <ChevronDown className="w-3.5 h-3.5 text-text-secondary group-hover:text-accent-blue" />
+              </button>
+
+              {/* Persona Switcher Dropdown */}
+              {dropdownOpen && (
+                <div className="absolute right-0 mt-2 w-64 panel-card p-2 border border-accent-blue/40 bg-bg-elevated/95 backdrop-blur-xl shadow-2xl rounded-lg z-50 animate-in fade-in zoom-in-95 duration-100">
+                  <div className="px-2 py-1 text-[10px] font-mono uppercase tracking-wider text-text-secondary border-b border-accent-blue/15 mb-1.5 flex items-center justify-between">
+                    <span>SWITCH ACTIVE PERSONA</span>
+                    <span className="text-accent-blue">DEMO</span>
+                  </div>
+                  <div className="space-y-1">
+                    {MOCK_TEAMS.slice(0, 5).map((t) => {
+                      const isSelected = team.id === t.id;
+                      return (
+                        <button
+                          key={t.id}
+                          onClick={() => {
+                            switchActiveTeam(t.id);
+                            setDropdownOpen(false);
+                          }}
+                          className={`w-full text-left p-2 rounded flex items-center justify-between text-xs transition-colors ${
+                            isSelected
+                              ? 'bg-accent-blue/20 text-accent-blue font-bold border border-accent-blue/40'
+                              : 'hover:bg-bg-primary text-text-primary'
+                          }`}
+                        >
+                          <div>
+                            <div className="font-semibold">{t.teamName}</div>
+                            <div className="text-[10px] font-mono text-text-secondary">
+                              {t.members[0]?.name} • #{t.rank} ({t.score} pts)
+                            </div>
+                          </div>
+                          {isSelected && <Check className="w-3.5 h-3.5 text-accent-blue" />}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           )}
 

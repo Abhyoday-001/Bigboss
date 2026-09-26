@@ -103,6 +103,18 @@ export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({ onLoginSuccess }) => {
     setErrorMessage(null);
   };
 
+  const handleQuickLogin = async (teamAlias: string) => {
+    setIsLoading(true);
+    setErrorMessage(null);
+    const result = await loginTeam(teamAlias);
+    setIsLoading(false);
+    if (result.success) {
+      onLoginSuccess ? onLoginSuccess() : navigate('/dashboard');
+    } else {
+      setErrorMessage(result.error || 'Authentication error.');
+    }
+  };
+
   const jumpToLogin = () => {
     if (containerRef.current) {
       const targetY = containerRef.current.scrollHeight - window.innerHeight;
@@ -197,30 +209,42 @@ export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({ onLoginSuccess }) => {
 
           {/* Quick presets */}
           <div className="mt-6 pt-4 border-t border-accent-blue/15 text-center">
-            <div className="text-[11px] font-mono text-text-secondary mb-2">
-              EVALUATION PRESETS:
+            <div className="text-[11px] font-mono text-text-secondary mb-2.5 flex items-center justify-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-accent-blue animate-pulse" />
+              <span>DEMO LOGIN (1-CLICK DIRECT ACCESS):</span>
             </div>
-            <div className="flex justify-center gap-2">
+            <div className="grid grid-cols-2 gap-2 text-left">
               <button
                 type="button"
-                onClick={() => setDemoCredentials('TEAM_ALPHA', 'ALPHA#2026')}
-                className="px-2.5 py-1 text-[11px] font-mono rounded bg-bg-primary border border-accent-blue/30 hover:border-accent-blue text-accent-blue-glow transition-all"
+                onClick={() => handleQuickLogin('TEAM_ALPHA')}
+                className="p-2 text-xs font-mono rounded bg-bg-primary border border-accent-blue/30 hover:border-accent-blue hover:bg-accent-blue/10 text-accent-blue-glow transition-all flex flex-col"
               >
-                ALPHA
+                <span className="font-bold text-text-primary">TEAM ALPHA</span>
+                <span className="text-[10px] text-text-secondary">Aryan Sharma (#1)</span>
               </button>
               <button
                 type="button"
-                onClick={() => setDemoCredentials('TEAM_BETA', 'BETA#2026')}
-                className="px-2.5 py-1 text-[11px] font-mono rounded bg-bg-primary border border-accent-blue/30 hover:border-accent-blue text-accent-blue-glow transition-all"
+                onClick={() => handleQuickLogin('TEAM_BETA')}
+                className="p-2 text-xs font-mono rounded bg-bg-primary border border-accent-blue/30 hover:border-accent-blue hover:bg-accent-blue/10 text-accent-blue-glow transition-all flex flex-col"
               >
-                BETA
+                <span className="font-bold text-text-primary">TEAM BETA</span>
+                <span className="text-[10px] text-text-secondary">Anjishth Kumar (#2)</span>
               </button>
               <button
                 type="button"
-                onClick={() => setDemoCredentials('TEAM_GAMMA', 'GAMMA#2026')}
-                className="px-2.5 py-1 text-[11px] font-mono rounded bg-bg-primary border border-accent-blue/30 hover:border-accent-blue text-accent-blue-glow transition-all"
+                onClick={() => handleQuickLogin('TEAM_GAMMA')}
+                className="p-2 text-xs font-mono rounded bg-bg-primary border border-accent-blue/30 hover:border-accent-blue hover:bg-accent-blue/10 text-accent-blue-glow transition-all flex flex-col"
               >
-                GAMMA
+                <span className="font-bold text-text-primary">TEAM GAMMA</span>
+                <span className="text-[10px] text-text-secondary">Dilraj Singh (#3)</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleQuickLogin('TEAM_DELTA')}
+                className="p-2 text-xs font-mono rounded bg-bg-primary border border-accent-blue/30 hover:border-accent-blue hover:bg-accent-blue/10 text-accent-blue-glow transition-all flex flex-col"
+              >
+                <span className="font-bold text-text-primary">TEAM DELTA</span>
+                <span className="text-[10px] text-text-secondary">Spoorthi Gowda (#4)</span>
               </button>
             </div>
           </div>
@@ -412,32 +436,44 @@ export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({ onLoginSuccess }) => {
                 </button>
               </form>
 
-              {/* Quick evaluation presets */}
+              {/* Quick presets */}
               <div className="mt-6 pt-4 border-t border-accent-blue/15 text-center">
-                <div className="text-[11px] font-mono text-text-secondary mb-2">
-                  EVALUATION PRESETS:
+                <div className="text-[11px] font-mono text-text-secondary mb-2.5 flex items-center justify-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent-blue animate-pulse" />
+                  <span>DEMO LOGIN (1-CLICK DIRECT ACCESS):</span>
                 </div>
-                <div className="flex justify-center gap-2">
+                <div className="grid grid-cols-2 gap-2 text-left">
                   <button
                     type="button"
-                    onClick={() => setDemoCredentials('TEAM_ALPHA', 'ALPHA#2026')}
-                    className="px-2.5 py-1 text-[11px] font-mono rounded bg-bg-primary border border-accent-blue/30 hover:border-accent-blue text-accent-blue-glow transition-all"
+                    onClick={() => handleQuickLogin('TEAM_ALPHA')}
+                    className="p-2 text-xs font-mono rounded bg-bg-primary border border-accent-blue/30 hover:border-accent-blue hover:bg-accent-blue/10 text-accent-blue-glow transition-all flex flex-col"
                   >
-                    ALPHA
+                    <span className="font-bold text-text-primary">TEAM ALPHA</span>
+                    <span className="text-[10px] text-text-secondary">Aryan Sharma (#1)</span>
                   </button>
                   <button
                     type="button"
-                    onClick={() => setDemoCredentials('TEAM_BETA', 'BETA#2026')}
-                    className="px-2.5 py-1 text-[11px] font-mono rounded bg-bg-primary border border-accent-blue/30 hover:border-accent-blue text-accent-blue-glow transition-all"
+                    onClick={() => handleQuickLogin('TEAM_BETA')}
+                    className="p-2 text-xs font-mono rounded bg-bg-primary border border-accent-blue/30 hover:border-accent-blue hover:bg-accent-blue/10 text-accent-blue-glow transition-all flex flex-col"
                   >
-                    BETA
+                    <span className="font-bold text-text-primary">TEAM BETA</span>
+                    <span className="text-[10px] text-text-secondary">Anjishth Kumar (#2)</span>
                   </button>
                   <button
                     type="button"
-                    onClick={() => setDemoCredentials('TEAM_GAMMA', 'GAMMA#2026')}
-                    className="px-2.5 py-1 text-[11px] font-mono rounded bg-bg-primary border border-accent-blue/30 hover:border-accent-blue text-accent-blue-glow transition-all"
+                    onClick={() => handleQuickLogin('TEAM_GAMMA')}
+                    className="p-2 text-xs font-mono rounded bg-bg-primary border border-accent-blue/30 hover:border-accent-blue hover:bg-accent-blue/10 text-accent-blue-glow transition-all flex flex-col"
                   >
-                    GAMMA
+                    <span className="font-bold text-text-primary">TEAM GAMMA</span>
+                    <span className="text-[10px] text-text-secondary">Dilraj Singh (#3)</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleQuickLogin('TEAM_DELTA')}
+                    className="p-2 text-xs font-mono rounded bg-bg-primary border border-accent-blue/30 hover:border-accent-blue hover:bg-accent-blue/10 text-accent-blue-glow transition-all flex flex-col"
+                  >
+                    <span className="font-bold text-text-primary">TEAM DELTA</span>
+                    <span className="text-[10px] text-text-secondary">Spoorthi Gowda (#4)</span>
                   </button>
                 </div>
               </div>

@@ -7,8 +7,9 @@ interface AuthContextType {
   role: 'PARTICIPANT' | 'ADMIN' | 'ANONYMOUS';
   isAuthenticated: boolean;
   hasSeenIntro: boolean;
-  loginTeam: (teamId: string, passcode: string) => Promise<{ success: boolean; error?: string }>;
-  loginAdmin: (passcode: string) => Promise<{ success: boolean; error?: string }>;
+  loginTeam: (teamId: string, passcode?: string) => Promise<{ success: boolean; error?: string }>;
+  loginAdmin: (passcode?: string) => Promise<{ success: boolean; error?: string }>;
+  quickDemoLogin: (teamIdOrAlias?: string) => void;
   logout: () => void;
   setHasSeenIntro: (seen: boolean) => void;
   switchActiveTeam: (teamId: string) => void;
@@ -49,22 +50,37 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem(STORAGE_KEYS.SEEN_INTRO, String(seen));
   };
 
-  const loginTeam = async (teamId: string, passcode: string): Promise<{ success: boolean; error?: string }> => {
+  const loginTeam = async (teamId: string, passcode?: string): Promise<{ success: boolean; error?: string }> => {
     // Artificial small latency for realistic cyber feel
-    await new Promise((resolve) => setTimeout(resolve, 600));
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
-    // Accepted demo credentials: any team id (e.g. 'team-01') and passcode 'devhouse' or team-01
-    const cleanId = teamId.trim().toLowerCase();
-    const matchedTeam = MOCK_TEAMS.find(
-      (t) => t.id.toLowerCase() === cleanId || t.teamName.toLowerCase() === cleanId
+    const cleanId = (teamId || '').trim().toLowerCase();
+    
+    // Look up in mock teams by ID, team name, or aliases
+    let matchedTeam = MOCK_TEAMS.find(
+      (t) =>
+        t.id.toLowerCase() === cleanId ||
+        t.teamName.toLowerCase() === cleanId ||
+        cleanId.includes(t.id.toLowerCase())
     );
 
     if (!matchedTeam) {
-      return { success: false, error: 'Invalid Team ID. Please consult the host desk in Seminar Hall 002.' };
-    }
-
-    if (passcode.trim() !== 'devhouse' && passcode.trim() !== matchedTeam.id) {
-      return { success: false, error: 'Incorrect authorization passcode. Access denied by The Eye.' };
+      if (cleanId.includes('alpha') || cleanId === '1' || cleanId.includes('aryan')) {
+        matchedTeam = MOCK_TEAMS[0]; // CyberNexus (Aryan Sharma)
+      } else if (cleanId.includes('beta') || cleanId === '2' || cleanId.includes('anjishth')) {
+        matchedTeam = MOCK_TEAMS[1]; // NullPointers (Anjishth Kumar)
+      } else if (cleanId.includes('gamma') || cleanId === '3' || cleanId.includes('dilraj')) {
+        matchedTeam = MOCK_TEAMS[2]; // ByteForce (Dilraj Singh)
+      } else if (cleanId.includes('delta') || cleanId === '4' || cleanId.includes('spoorthi')) {
+        matchedTeam = MOCK_TEAMS[3]; // GlitchHunters (Spoorthi Gowda)
+      } else {
+        // Fallback default demo team so developer is never blocked
+        matchedTeam = {
+          ...MOCK_TEAMS[0],
+          id: cleanId ? cleanId.replace(/\s+/g, '-') : 'team-01',
+          teamName: teamId?.trim() || 'CyberNexus',
+        };
+      }
     }
 
     setTeam(matchedTeam);
@@ -74,14 +90,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return { success: true };
   };
 
-  const loginAdmin = async (passcode: string): Promise<{ success: boolean; error?: string }> => {
-    await new Promise((resolve) => setTimeout(resolve, 600));
-    if (passcode.trim() === 'admin2026' || passcode.trim() === 'cognito') {
-      setRole('ADMIN');
-      localStorage.setItem(STORAGE_KEYS.ROLE, 'ADMIN');
-      return { success: true };
-    }
-    return { success: false, error: 'Control room access denied. Unauthorized personnel.' };
+  const quickDemoLogin = (teamIdOrAlias: string = 'team-01') => {
+    loginTeam(teamIdOrAlias);
+  };
+
+  const loginAdmin = async (passcode?: string): Promise<{ success: boolean; error?: string }> => {
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    setRole('ADMIN');
+    localStorage.setItem(STORAGE_KEYS.ROLE, 'ADMIN');
+    return { success: true };
   };
 
   const logout = () => {
@@ -108,6 +125,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         hasSeenIntro,
         loginTeam,
         loginAdmin,
+        quickDemoLogin,
         logout,
         setHasSeenIntro,
         switchActiveTeam,
