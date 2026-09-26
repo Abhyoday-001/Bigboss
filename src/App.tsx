@@ -9,6 +9,7 @@ import { DashboardPage } from './participant/pages/DashboardPage';
 import { ProfilePage } from './participant/pages/ProfilePage';
 import { Round1TaskPage } from './participant/pages/Round1TaskPage';
 import { Round2CaptaincyPage } from './participant/pages/Round2CaptaincyPage';
+import { AdminDashboardPage } from './admin/pages/AdminDashboardPage';
 // @ts-ignore
 import { RoundToolsContainer } from './admin/rounds/RoundToolsContainer';
 
@@ -25,6 +26,8 @@ export const App: React.FC = () => {
           <Routes>
             {/* Participant Routes (Aryan & Anjishth) */}
             <Route path="/" element={<LandingPage />} />
+            <Route path="/landing" element={<LandingPage />} />
+            <Route path="/home" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route
               path="/dashboard"
@@ -59,9 +62,10 @@ export const App: React.FC = () => {
               }
             />
 
-            {/* Admin Tools (Spoorthi) */}
-            <Route path="/admin" element={<RoundToolsContainer />} />
-            <Route path="/admin/*" element={<RoundToolsContainer />} />
+            {/* Admin Routes (Dilraj & Spoorthi) */}
+            <Route path="/admin" element={<AdminDashboardPage />} />
+            <Route path="/admin/rounds" element={<RoundToolsContainer />} />
+            <Route path="/admin/*" element={<AdminDashboardPage />} />
 
             {/* Catch-all redirect to landing */}
             <Route path="*" element={<Navigate to="/" replace />} />
