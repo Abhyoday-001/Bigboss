@@ -43,31 +43,31 @@ export const TeamsTable: React.FC<TeamsTableProps> = ({
     switch (status) {
       case 'CAPTAIN':
         return (
-          <span className="px-2.5 py-1 text-xs font-bold rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/30 flex items-center gap-1.5 inline-flex">
+          <span className="px-2.5 py-1 text-xs font-bold rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/30 inline-flex items-center gap-1.5">
             <Shield className="w-3 h-3" /> CAPTAIN
           </span>
         );
       case 'IMMUNE':
         return (
-          <span className="px-2.5 py-1 text-xs font-bold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5 inline-flex">
+          <span className="px-2.5 py-1 text-xs font-bold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 inline-flex items-center gap-1.5">
             <Shield className="w-3 h-3" /> IMMUNE
           </span>
         );
       case 'NOMINATED':
         return (
-          <span className="px-2.5 py-1 text-xs font-bold rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30 flex items-center gap-1.5 inline-flex">
+          <span className="px-2.5 py-1 text-xs font-bold rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30 inline-flex items-center gap-1.5">
             <AlertTriangle className="w-3 h-3" /> NOMINATED
           </span>
         );
       case 'EVICTED':
         return (
-          <span className="px-2.5 py-1 text-xs font-bold rounded-full bg-danger-red/10 text-danger-red border border-danger-red/30 flex items-center gap-1.5 inline-flex">
+          <span className="px-2.5 py-1 text-xs font-bold rounded-full bg-danger-red/10 text-danger-red border border-danger-red/30 inline-flex items-center gap-1.5">
             EVICTED
           </span>
         );
       default:
         return (
-          <span className="px-2.5 py-1 text-xs font-bold rounded-full bg-accent-blue/10 text-accent-blue border border-accent-blue/30 flex items-center gap-1.5 inline-flex">
+          <span className="px-2.5 py-1 text-xs font-bold rounded-full bg-accent-blue/10 text-accent-blue border border-accent-blue/30 inline-flex items-center gap-1.5">
             ACTIVE
           </span>
         );
