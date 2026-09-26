@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  background-color: #050506;
+  color: #F2F3F5;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Surveillance scanline and subtle grid texture */
+.surveillance-grid {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(30, 167, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(30, 167, 255, 0.03) 1px, transparent 1px);
+}
+
+.scanline {
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0),
+    rgba(255,255,255,0) 50%,
+    rgba(30, 167, 255, 0.04) 50%,
+    rgba(30, 167, 255, 0.04)
+  );
+  background-size: 100% 4px;
+}
+
+/* Bracket styling per DESIGN.md §4 */
+.bracket-frame::before {
+  content: "[";
+  color: #1EA7FF;
+  margin-right: 0.25rem;
+  font-weight: 700;
+}
+.bracket-frame::after {
+  content: "]";
+  color: #1EA7FF;
+  margin-left: 0.25rem;
+  font-weight: 700;
+}
