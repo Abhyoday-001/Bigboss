@@ -31,8 +31,7 @@ import Round4FinalScoreboard from './Round4FinalScoreboard';
 import SurveillanceEye from '../components/SurveillanceEye';
 import adminRoundService from '../services/adminRoundService';
 
-export function RoundToolsContainer({ activeRound = null, onSelectTool = null }) {
-  // Navigation tabs for Spoorthi's modules
+export function RoundToolsContainer({ activeRound = null, onSelectTool = null, embedded = false }) {
   const [activeTab, setActiveTab] = useState('r2-captaincy');
   const [selectedRoundFilter, setSelectedRoundFilter] = useState('all');
 
@@ -156,75 +155,96 @@ export function RoundToolsContainer({ activeRound = null, onSelectTool = null })
       : tools.filter((t) => t.round.toLowerCase() === selectedRoundFilter.toLowerCase());
 
   return (
-    <div className="min-h-screen bg-[#050506] text-[#F2F3F5] flex flex-col">
-      {/* Top Header Bar */}
-      <header className="bg-[#0d0f14] border-b border-gray-800/80 px-4 sm:px-8 py-4 sticky top-0 z-30 shadow-lg">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <SurveillanceEye size="sm" />
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-lg font-black tracking-wider uppercase font-display-metal">
-                  THE DEV HOUSE
-                </h1>
-                <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-blue-950/70 border border-[#1EA7FF]/40 text-[#1EA7FF]">
-                  Admin Round Tools (Spoorthi)
-                </span>
+    <div className={`w-full flex flex-col ${embedded ? '' : 'min-h-screen bg-bg-primary text-text-primary'}`}>
+      {/* Top Header Bar only if rendered standalone */}
+      {!embedded && (
+        <header className="bg-bg-elevated border-b border-accent-blue/20 px-4 sm:px-8 py-3.5 sticky top-0 z-30 shadow-lg backdrop-blur-md">
+          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <SurveillanceEye size="sm" />
+              <div>
+                <div className="flex items-center gap-2">
+                  <h1 className="text-lg font-black tracking-wider uppercase metal-headline">
+                    THE DEV HOUSE
+                  </h1>
+                  <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-accent-blue/15 border border-accent-blue/40 text-accent-blue-glow font-bold">
+                    ROUND OPERATIONS
+                  </span>
+                </div>
+                <p className="text-[11px] text-text-secondary font-mono">
+                  Cognito Club · JAIN FET · Live Round Control Matrix
+                </p>
               </div>
-              <p className="text-[11px] text-gray-400 font-mono">
-                Cognito Club · JAIN FET · Round 2, 3, & 4 Live Control Matrix
-              </p>
+            </div>
+
+            <div className="flex items-center gap-2.5">
+              <a
+                href="/admin"
+                className="px-3 py-1.5 rounded-lg bg-bg-primary hover:bg-accent-blue/15 border border-accent-blue/30 text-accent-blue-glow transition-all text-xs font-mono font-bold uppercase glow-blue-sm"
+              >
+                ← Master Command
+              </a>
+              <a
+                href="/dashboard"
+                className="px-3 py-1.5 rounded-lg bg-accent-blue hover:bg-accent-blue-glow text-black transition-all text-xs font-mono font-bold uppercase"
+              >
+                Participant View ➔
+              </a>
             </div>
           </div>
+        </header>
+      )}
 
-          {/* Quick Round Filter & Reset */}
-          <div className="flex items-center gap-2 self-start sm:self-auto">
-            <div className="flex items-center bg-[#050506] border border-gray-800 rounded-lg p-1 text-xs font-mono">
-              {['all', 'Round 2', 'Round 3', 'Round 4'].map((rf) => (
-                <button
-                  key={rf}
-                  onClick={() => setSelectedRoundFilter(rf)}
-                  className={`px-2.5 py-1 rounded transition-colors uppercase ${
-                    selectedRoundFilter === rf
-                      ? 'bg-[#1EA7FF] text-[#050506] font-bold'
-                      : 'text-gray-400 hover:text-white'
-                  }`}
-                >
-                  {rf}
-                </button>
-              ))}
-            </div>
-
-            <button
-              onClick={handleResetData}
-              title="Reset Demo Data"
-              className="p-2 text-gray-500 hover:text-gray-300 border border-gray-800 rounded-lg hover:bg-gray-800/60 transition-colors"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-            </button>
-
-            <a
-              href="/"
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-950/60 border border-[#1EA7FF]/40 text-[#1EA7FF] hover:bg-[#1EA7FF] hover:text-[#050506] transition-colors text-xs font-mono font-bold uppercase"
-            >
-              Participant Portal ➔
-            </a>
+      {/* Round Sub-filter Bar */}
+      <div className="w-full flex flex-wrap items-center justify-between gap-3 p-4 rounded-xl panel-card border border-accent-blue/25 bg-bg-elevated/95 mb-6">
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-mono uppercase tracking-wider text-text-secondary font-bold mr-1">
+            Filter Round:
+          </span>
+          <div className="flex items-center bg-bg-primary border border-accent-blue/20 rounded-lg p-1 text-xs font-mono">
+            {['all', 'Round 2', 'Round 3', 'Round 4'].map((rf) => (
+              <button
+                key={rf}
+                onClick={() => setSelectedRoundFilter(rf)}
+                className={`px-3 py-1 rounded transition-all uppercase text-[11px] font-semibold cursor-pointer ${
+                  selectedRoundFilter === rf
+                    ? 'bg-accent-blue text-black font-bold glow-blue-sm shadow'
+                    : 'text-text-secondary hover:text-text-primary'
+                }`}
+              >
+                {rf}
+              </button>
+            ))}
           </div>
         </div>
-      </header>
+
+        <div className="flex items-center gap-2">
+          <span className="text-[11px] font-mono text-text-secondary">
+            Current Module: <strong className="text-accent-blue-glow">{currentTool.title}</strong>
+          </span>
+          <button
+            onClick={handleResetData}
+            title="Reset Demo Round Data"
+            className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-mono text-text-secondary hover:text-danger-red border border-accent-blue/20 hover:border-danger-red/40 rounded-lg hover:bg-danger-red/10 transition-all cursor-pointer"
+          >
+            <RotateCcw className="w-3 h-3" />
+            <span className="text-[10px]">RESET</span>
+          </button>
+        </div>
+      </div>
 
       {/* Main Body with Sidebar Navigation */}
-      <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col lg:flex-row p-4 sm:p-8 gap-8">
+      <div className="w-full flex flex-col lg:flex-row gap-6">
         {/* Sidebar Tool Navigation */}
-        <aside className="w-full lg:w-72 shrink-0 space-y-6">
-          <div className="bg-[#0d0f14] border border-gray-800/80 rounded-xl p-4 shadow-md">
-            <div className="flex items-center justify-between pb-3 border-b border-gray-800 mb-3">
-              <span className="text-xs font-mono uppercase tracking-wider text-gray-400 flex items-center gap-1.5 font-bold">
-                <SlidersHorizontal className="w-3.5 h-3.5 text-[#1EA7FF]" />
-                Assigned Tool Modules
+        <aside className="w-full lg:w-72 shrink-0 space-y-4">
+          <div className="panel-card border border-accent-blue/25 bg-bg-elevated/95 p-4 shadow-xl">
+            <div className="flex items-center justify-between pb-3 border-b border-accent-blue/15 mb-3">
+              <span className="text-xs font-mono uppercase tracking-wider text-text-secondary flex items-center gap-1.5 font-bold">
+                <SlidersHorizontal className="w-3.5 h-3.5 text-accent-blue" />
+                Operational Engines
               </span>
-              <span className="text-[10px] font-mono text-[#1EA7FF] font-bold">
-                {filteredTools.length} Tools
+              <span className="text-[10px] font-mono text-accent-blue font-bold px-2 py-0.5 rounded bg-accent-blue/10 border border-accent-blue/30">
+                {filteredTools.length} Modules
               </span>
             </div>
 
@@ -237,17 +257,17 @@ export function RoundToolsContainer({ activeRound = null, onSelectTool = null })
                   <button
                     key={t.id}
                     onClick={() => setActiveTab(t.id)}
-                    className={`w-full flex items-center justify-between p-2.5 rounded-lg text-xs font-medium transition-all text-left ${
+                    className={`w-full flex items-center justify-between p-2.5 rounded-lg text-xs font-mono uppercase tracking-wider transition-all text-left cursor-pointer ${
                       isActive
-                        ? 'bg-[#1EA7FF]/15 text-[#1EA7FF] font-bold border border-[#1EA7FF]/40 shadow-[0_0_12px_rgba(30,167,255,0.2)]'
-                        : 'text-gray-400 hover:text-white hover:bg-gray-800/40 border border-transparent'
+                        ? 'bg-accent-blue/20 text-accent-blue-glow font-bold border border-accent-blue/50 glow-blue-sm'
+                        : 'text-text-secondary hover:text-text-primary hover:bg-bg-elevated-hover border border-transparent'
                     }`}
                   >
                     <div className="flex items-center gap-2.5 truncate">
-                      <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-[#1EA7FF]' : 'text-gray-400'}`} />
+                      <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-accent-blue' : 'text-text-secondary'}`} />
                       <span className="truncate">{t.title}</span>
                     </div>
-                    <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-black/40 text-gray-400 shrink-0 ml-1">
+                    <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-bg-primary border border-accent-blue/20 text-accent-blue shrink-0 ml-1">
                       {t.badge}
                     </span>
                   </button>
@@ -256,13 +276,14 @@ export function RoundToolsContainer({ activeRound = null, onSelectTool = null })
             </nav>
           </div>
 
-          {/* Integration Specs Box */}
-          <div className="p-4 bg-[#0d0f14]/60 border border-gray-800/60 rounded-xl text-xs text-gray-400 space-y-2">
-            <span className="text-[10px] font-mono uppercase tracking-widest text-[#1EA7FF] block font-bold">
-              // Modular Integration Info
-            </span>
-            <p className="text-[11px] leading-relaxed text-gray-400">
-              Each module is completely self-contained and imports cleanly into Dilraj's main admin navigation shell or can be mounted individually.
+          {/* Quick Surveillance Badge */}
+          <div className="p-3.5 panel-card border border-accent-blue/15 bg-bg-elevated/60 text-xs text-text-secondary space-y-1.5">
+            <div className="flex items-center gap-1.5 text-[10px] font-mono uppercase text-accent-blue font-bold">
+              <span className="w-1.5 h-1.5 rounded-full bg-accent-blue animate-pulse" />
+              <span>LIVE CONTROL INTEGRATION</span>
+            </div>
+            <p className="text-[11px] leading-relaxed text-text-secondary/70">
+              State updates in these engines synchronize across the central control grid and live participant screens.
             </p>
           </div>
         </aside>
