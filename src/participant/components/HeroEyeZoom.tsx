@@ -299,48 +299,35 @@ export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({ onTap, onLoginSuccess 
         hasEntered ? '' : 'cursor-pointer'
       }`}
     >
+      {/* Persistent Neuron Network Background on Landing & Login */}
+      <NeuronNetworkBackground className="fixed inset-0 pointer-events-none z-0 opacity-75" />
+
       {/* Eye Pop-In Container: Opacity 0 -> 1, Scale 0.9 -> 1 on mount in ~0.4s */}
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.4, ease: 'easeOut' }}
-        className="relative w-full h-full flex items-center justify-center overflow-hidden"
+        className="relative z-10 w-full h-full flex items-center justify-center overflow-hidden"
       >
-        {/* Zooming Eye Image */}
+        {/* Zooming Eye Image with hardware acceleration */}
         <motion.div
           style={{
             scale,
             // Fixed origin on pupil's measured coordinate: X=50.98%, Y=46.88%
             transformOrigin: '50.98% 46.88%',
             willChange: willChangeActive ? 'transform, opacity' : 'auto',
+            transform: 'translateZ(0)',
+            backfaceVisibility: 'hidden',
           }}
-          className="relative w-full max-w-240 aspect-video flex items-center justify-center translate-z-0 shrink-0"
+          className="relative w-full max-w-240 aspect-video flex items-center justify-center shrink-0"
         >
-          {/* Subtle slow idle breathing on eye when waiting for tap (~3s loop) */}
-          <motion.div
-            animate={
-              isAnimating || hasEntered
-                ? { scale: 1, filter: 'brightness(1.05) contrast(1.2)' }
-                : {
-                    scale: [1, 1.02, 1],
-                    filter: [
-                      'brightness(1.02) contrast(1.2)',
-                      'brightness(1.15) contrast(1.28)',
-                      'brightness(1.02) contrast(1.2)',
-                    ],
-                  }
-            }
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
-            className="w-full h-full relative"
-          >
+          {/* Eye Image */}
+          <div className="w-full h-full relative">
             <img
               src={eyeHeroImg}
               alt="The Dev House Surveillance Eye"
-              className="w-full h-full object-cover filter pointer-events-none"
+              className="w-full h-full object-cover pointer-events-none"
+              style={{ transform: 'translateZ(0)' }}
             />
 
             {/* Seamless edge blend into page background */}
@@ -352,12 +339,16 @@ export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({ onTap, onLoginSuccess 
               }}
             />
 
-            {/* Subtle center pupil light pulse */}
-            <div
-              className="absolute pointer-events-none w-36 h-36 rounded-full bg-accent-blue/30 blur-2xl animate-pulse"
-              style={{ left: 'calc(50.98% - 72px)', top: 'calc(46.88% - 72px)' }}
+            {/* Center pupil glow - fades immediately on zoom to avoid scaling huge blur samples */}
+            <motion.div
+              className="absolute pointer-events-none w-28 h-28 rounded-full bg-accent-blue/30 blur-xl animate-pulse"
+              style={{
+                left: 'calc(50.98% - 56px)',
+                top: 'calc(46.88% - 56px)',
+                opacity: brandingOpacity as any,
+              }}
             />
-          </motion.div>
+          </div>
         </motion.div>
 
         {/* Neural Network Travel Overlay: Canvas particle system driven by SAME progress value */}
@@ -381,7 +372,7 @@ export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({ onTap, onLoginSuccess 
             <button
               type="button"
               onClick={handleSkipToLogin}
-              className="pointer-events-auto font-mono text-[11px] text-text-secondary hover:text-accent-blue-glow border border-accent-blue/20 hover:border-accent-blue/50 px-3 py-1.5 rounded bg-bg-elevated/80 backdrop-blur transition-all uppercase tracking-wider"
+              className="pointer-events-auto font-mono text-[11px] text-text-secondary hover:text-accent-blue-glow border border-accent-blue/20 hover:border-accent-blue/50 px-3 py-1.5 rounded bg-bg-elevated/80 backdrop-blur transition-all uppercase tracking-wider cursor-pointer"
             >
               SKIP TO LOGIN ➔
             </button>
@@ -415,20 +406,20 @@ export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({ onTap, onLoginSuccess 
           </div>
         </motion.div>
 
-        {/* Full-Screen Black Overlay across last ~15% of timeline */}
+        {/* Full-Screen Black Overlay across last ~15% of timeline (no backdrop-blur for max fps) */}
         <motion.div
           style={{
             opacity: blackOverlayOpacity,
             willChange: willChangeActive ? 'opacity' : 'auto',
           }}
-          className="absolute inset-0 bg-bg-primary pointer-events-none z-40 backdrop-blur-[2px]"
+          className="absolute inset-0 bg-[#050506] pointer-events-none z-40"
         />
 
         {/* Neuron Network Background behind resolved login form */}
         <NeuronNetworkBackground className="fixed inset-0 pointer-events-none z-45 opacity-80" />
 
         {/* Ambient Blue Radial Glow behind login card */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-140 h-140 rounded-full bg-accent-blue/15 blur-[120px] pointer-events-none z-46" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-140 h-140 rounded-full bg-accent-blue/15 blur-[100px] pointer-events-none z-46" />
 
         {/* Resolved Login Form Container (Crossfades in as screen goes black) */}
         <motion.div

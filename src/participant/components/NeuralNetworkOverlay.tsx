@@ -3,7 +3,6 @@ import { MotionValue } from 'framer-motion';
 
 interface Particle {
   radius: number;
-  alpha: number;
   distance: number;
   angle: number;
   speed: number;
@@ -26,7 +25,7 @@ export const NeuralNetworkOverlay: React.FC<NeuralNetworkOverlayProps> = ({
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
     let animationFrameId: number;
@@ -34,9 +33,11 @@ export const NeuralNetworkOverlay: React.FC<NeuralNetworkOverlayProps> = ({
     let height = 0;
 
     const isMobile = window.innerWidth < 768;
-    const maxParticles = isMobile ? 45 : 85;
+    // Tightly capped particle counts for guaranteed 60fps performance
+    const maxParticles = isMobile ? 30 : 54;
     const minParticles = isMobile ? 8 : 14;
-    const connectionMaxDist = isMobile ? 65 : 85;
+    const connectionMaxDist = isMobile ? 60 : 78;
+    const connectionMaxDistSq = connectionMaxDist * connectionMaxDist;
 
     let particles: Particle[] = [];
 
@@ -44,9 +45,10 @@ export const NeuralNetworkOverlay: React.FC<NeuralNetworkOverlayProps> = ({
       if (!canvas) return;
       width = window.innerWidth;
       height = window.innerHeight;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
+      // Cap DPR to 1.25 to prevent 4K GPU fill-rate throttling
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.scale(dpr, dpr);
     };
@@ -66,13 +68,12 @@ export const NeuralNetworkOverlay: React.FC<NeuralNetworkOverlayProps> = ({
 
     const createParticle = (): Particle => {
       const angle = Math.random() * Math.PI * 2;
-      const maxRadius = Math.hypot(width, height) / 2;
+      const maxRadius = Math.hypot(width, height) * 0.45;
       return {
-        radius: 1.2 + Math.random() * 1.8,
-        alpha: 0.3 + Math.random() * 0.7,
+        radius: 1.1 + Math.random() * 1.5,
         distance: Math.random() * maxRadius,
         angle,
-        speed: 0.8 + Math.random() * 1.4,
+        speed: 0.9 + Math.random() * 1.3,
       };
     };
 
@@ -86,78 +87,89 @@ export const NeuralNetworkOverlay: React.FC<NeuralNetworkOverlayProps> = ({
 
       ctx.clearRect(0, 0, width, height);
 
-      // Read current smoothly interpolated progress value directly from MotionValue
+      // Read current progress value directly from MotionValue (0 -> 1)
       const rawP = typeof progress === 'number' ? progress : progress.get();
       const p = Math.max(0, Math.min(1, rawP));
 
-      const targetCount = Math.floor(minParticles + (maxParticles - minParticles) * Math.pow(p, 1.2));
-      const speedMultiplier = 1 + p * 7.5;
+      const targetCount = Math.floor(minParticles + (maxParticles - minParticles) * Math.pow(p, 1.1));
+      const speedMultiplier = 1 + p * 8.0;
 
       const originX = (width * pupilCenter.xPercent) / 100;
       const originY = (height * pupilCenter.yPercent) / 100;
       const maxDistance = Math.hypot(width, height);
 
-      const activeNodes: { x: number; y: number; alpha: number }[] = [];
+      const activeNodes: { x: number; y: number; r: number; alpha: number }[] = [];
 
       for (let i = 0; i < targetCount; i++) {
         const pt = particles[i];
         if (!pt) continue;
 
         pt.distance += pt.speed * speedMultiplier;
-        if (pt.distance > maxDistance * 0.8) {
-          pt.distance = Math.random() * 25 + 5;
+        if (pt.distance > maxDistance * 0.75) {
+          pt.distance = Math.random() * 20 + 5;
           pt.angle = Math.random() * Math.PI * 2;
         }
 
         const px = originX + Math.cos(pt.angle) * pt.distance;
         const py = originY + Math.sin(pt.angle) * pt.distance;
 
-        // Skip particles outside viewport bounds
-        if (px < -20 || px > width + 20 || py < -20 || py > height + 20) {
+        // Skip particles outside viewport
+        if (px < -15 || px > width + 15 || py < -15 || py > height + 15) {
           continue;
         }
 
         const travelRatio = pt.distance / (maxDistance * 0.65);
         const dynamicAlpha = Math.min(1, Math.sin(travelRatio * Math.PI)) * (0.35 + p * 0.65);
 
-        // Halo
-        ctx.beginPath();
-        ctx.arc(px, py, pt.radius * 2.2, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(30, 167, 255, ${dynamicAlpha * 0.35})`;
-        ctx.fill();
-
-        // Node core
-        ctx.beginPath();
-        ctx.arc(px, py, pt.radius * (1 + p * 0.4), 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(180, 230, 255, ${dynamicAlpha})`;
-        ctx.fill();
-
-        activeNodes.push({ x: px, y: py, alpha: dynamicAlpha });
+        activeNodes.push({
+          x: px,
+          y: py,
+          r: pt.radius * (1 + p * 0.3),
+          alpha: dynamicAlpha,
+        });
       }
 
-      // Draw connection threads with fast distance thresholding
       const nodeLen = activeNodes.length;
+
+      // 1. Batch draw all connection lines in a single stroke call
+      ctx.beginPath();
       for (let i = 0; i < nodeLen; i++) {
         const n1 = activeNodes[i];
         for (let j = i + 1; j < nodeLen; j++) {
           const n2 = activeNodes[j];
           const dx = n1.x - n2.x;
-          if (dx > connectionMaxDist || dx < -connectionMaxDist) continue;
           const dy = n1.y - n2.y;
-          if (dy > connectionMaxDist || dy < -connectionMaxDist) continue;
+          const distSq = dx * dx + dy * dy;
 
-          const dist = Math.hypot(dx, dy);
-          if (dist < connectionMaxDist) {
-            const lineAlpha = (1 - dist / connectionMaxDist) * 0.38 * Math.min(n1.alpha, n2.alpha);
-            ctx.beginPath();
+          if (distSq < connectionMaxDistSq) {
             ctx.moveTo(n1.x, n1.y);
             ctx.lineTo(n2.x, n2.y);
-            ctx.strokeStyle = `rgba(30, 167, 255, ${lineAlpha})`;
-            ctx.lineWidth = 0.9 + p * 0.6;
-            ctx.stroke();
           }
         }
       }
+      ctx.strokeStyle = `rgba(30, 167, 255, ${0.22 + p * 0.35})`;
+      ctx.lineWidth = 0.8 + p * 0.5;
+      ctx.stroke();
+
+      // 2. Batch draw glowing node halos
+      ctx.beginPath();
+      for (let i = 0; i < nodeLen; i++) {
+        const n = activeNodes[i];
+        ctx.moveTo(n.x + n.r * 2.2, n.y);
+        ctx.arc(n.x, n.y, n.r * 2.2, 0, Math.PI * 2);
+      }
+      ctx.fillStyle = `rgba(30, 167, 255, ${0.15 + p * 0.25})`;
+      ctx.fill();
+
+      // 3. Batch draw node cores
+      ctx.beginPath();
+      for (let i = 0; i < nodeLen; i++) {
+        const n = activeNodes[i];
+        ctx.moveTo(n.x + n.r, n.y);
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+      }
+      ctx.fillStyle = 'rgba(210, 240, 255, 0.9)';
+      ctx.fill();
 
       animationFrameId = requestAnimationFrame(render);
     };
@@ -178,3 +190,5 @@ export const NeuralNetworkOverlay: React.FC<NeuralNetworkOverlayProps> = ({
     />
   );
 };
+
+export default NeuralNetworkOverlay;
