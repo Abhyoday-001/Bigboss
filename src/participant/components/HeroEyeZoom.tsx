@@ -1,10 +1,9 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../shared/hooks/useAuth';
 import { NeuralNetworkOverlay } from './NeuralNetworkOverlay';
 import { NeuronNetworkBackground } from './NeuronNetworkBackground';
-import { AmbientEyeBackground } from '../../shared/components/AmbientEyeBackground';
 import eyeHeroImg from '../../assets/eye-hero.png';
 import { AlertCircle, ArrowRight, ShieldCheck, Key, Lock, Users } from 'lucide-react';
 
@@ -16,6 +15,8 @@ export interface HeroEyeZoomProps {
 
 const SESSION_STORAGE_KEY = 'the_dev_house_intro_played';
 
+type Phase = 'idle' | 'animating' | 'login';
+
 export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({
   onTap,
   onLoginSuccess,
@@ -24,14 +25,23 @@ export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({
   const navigate = useNavigate();
   const { loginTeam, isAuthenticated } = useAuth();
 
-  // Track prefers-reduced-motion
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  // Synchronous session check — zero delay on revisit
+  const isInitiallyEntered = (() => {
+    if (initialResolved) return true;
+    try {
+      return typeof window !== 'undefined' && sessionStorage.getItem(SESSION_STORAGE_KEY) === 'true';
+    } catch {
+      return false;
+    }
+  })();
 
-  // Animation & session state
+  // Phase drives which canvas is active — only ONE canvas runs per phase
+  const [phase, setPhase] = useState<Phase>(isInitiallyEntered ? 'login' : 'idle');
   const isAnimatingRef = useRef(false);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [hasEntered, setHasEntered] = useState(initialResolved);
-  const [willChangeActive, setWillChangeActive] = useState(false);
+  // showLoginBg pre-mounts the login canvas while hidden behind the black overlay
+  // so it's already warm/rendering when animation ends — eliminates cold-start delay
+  const loginBgMountedRef = useRef(isInitiallyEntered);
+  const [showLoginBg, setShowLoginBg] = useState(isInitiallyEntered);
 
   // Form State
   const [teamId, setTeamId] = useState('');
@@ -39,125 +49,113 @@ export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Check prefers-reduced-motion
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setPrefersReducedMotion(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
-  }, []);
-
-  // Preload eye hero asset to prevent decode-stall
+  // Preload eye image to prevent decode stall
   useEffect(() => {
     const img = new Image();
     img.src = eyeHeroImg;
-    if ('decode' in img) {
-      img.decode().catch(() => {});
-    }
+    if ('decode' in img) img.decode().catch(() => {});
   }, []);
 
-  // If already authenticated, redirect straight to participant dashboard
+  // Redirect if already authenticated
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/dashboard', { replace: true });
-    }
+    if (isAuthenticated) navigate('/dashboard', { replace: true });
   }, [isAuthenticated, navigate]);
 
-  // Single source of truth: 0 -> 1 progress value
-  const progress = useMotionValue(initialResolved ? 1 : 0);
+  // Single progress MotionValue — drives all visual transforms
+  const progress = useMotionValue(isInitiallyEntered ? 1 : 0);
+  // Separate overlay for the "Return to Eye" transition — covers the screen while state resets
+  const returnBlackOpacity = useMotionValue(0);
+  const [isReturning, setIsReturning] = useState(false);
 
-  // Check sessionStorage on mount: if already played this session, skip straight to login
+  // All visual states are pure derived transforms — no React state involved
+  const eyeScale     = useTransform(progress, [0, 0.45, 0.78, 1], [1, 3.8, 16, 40]);
+  const brandOpacity = useTransform(progress, [0, 0.18], [1, 0]);
+  const brandY       = useTransform(progress, [0, 0.18], [0, -30]);
+  const blackOpacity = useTransform(progress, [0.60, 0.88, 1], [0, 0.97, 1]);
+  const loginOpacity = useTransform(progress, [0.65, 0.92, 1], [0, 1, 1]);
+  const loginScale   = useTransform(progress, [0.65, 0.92, 1], [0.96, 1, 1]);
+  const loginEvents  = useTransform(progress, (p) => (p >= 0.80 ? 'auto' : 'none'));
+  const eyeEvents    = useTransform(progress, (p) => (p > 0 ? 'none' : 'auto'));
+
+  // Pre-mount login canvas when black overlay reaches ~55% opacity (p=0.55)
+  // Canvas initializes hidden behind solid black — eliminates 1s cold-start flash
   useEffect(() => {
-    if (initialResolved) {
-      progress.set(1);
-      setHasEntered(true);
-      return;
-    }
-    try {
-      const alreadyPlayed = sessionStorage.getItem(SESSION_STORAGE_KEY) === 'true';
-      if (alreadyPlayed) {
-        progress.set(1);
-        setHasEntered(true);
+    const unsub = progress.on('change', (p) => {
+      if (p >= 0.55 && !loginBgMountedRef.current) {
+        loginBgMountedRef.current = true;
+        setShowLoginBg(true);
       }
-    } catch {
-      // Ignore sessionStorage exceptions
-    }
-  }, [initialResolved, progress]);
+    });
+    return unsub;
+  }, [progress]);
 
-  // Derived transforms strictly driven by the single progress value
-  const scale = useTransform(progress, [0, 0.4, 0.72, 0.9, 1], [1, 3.6, 14, 32, 40]);
-  const brandingOpacity = useTransform(progress, [0, 0.12], [1, 0]);
-  const brandingY = useTransform(progress, [0, 0.12], [0, -28]);
-  const blackOverlayOpacity = useTransform(progress, [0.85, 0.98, 1], [0, 0.96, 1]);
-  const loginFormOpacity = useTransform(progress, [0.94, 1], [0, 1]);
-  const loginFormScale = useTransform(progress, [0.94, 1], [0.96, 1]);
-  const loginPointerEvents = useTransform(progress, (p) => (p >= 0.95 ? 'auto' : 'none'));
-
-  // Trigger the single timed animation sequence on tap/click
-  const handleTap = () => {
-    if (isAnimatingRef.current || hasEntered) return;
+  // ─── Handlers ────────────────────────────────────────────────────────────
+  const handleTap = useCallback(() => {
+    if (isAnimatingRef.current || phase !== 'idle') return;
 
     isAnimatingRef.current = true;
-    setIsAnimating(true);
-    setWillChangeActive(true);
+    // Kill idle neuron background BEFORE animation starts — frees GPU budget for smooth zoom
+    setPhase('animating');
     onTap?.();
 
-    // 5.0-second fixed duration timeline driven by single progress value
     animate(progress, 1, {
-      duration: 5.0,
-      ease: [0.35, 0.0, 0.25, 1.0],
+      duration: 3.5,
+      ease: [0.25, 0.1, 0.25, 1.0],
       onComplete: () => {
-        setHasEntered(true);
-        setIsAnimating(false);
-        setWillChangeActive(false);
-        try {
-          sessionStorage.setItem(SESSION_STORAGE_KEY, 'true');
-        } catch {
-          // Ignore storage restrictions
-        }
+        isAnimatingRef.current = false;
+        // Mount login background AFTER animation ends — no canvas competition
+        setPhase('login');
+        try { sessionStorage.setItem(SESSION_STORAGE_KEY, 'true'); } catch { /* ignore */ }
       },
     });
-  };
+  }, [progress, phase, onTap]);
 
-  // Skip straight to login without waiting for animation
-  const handleSkipToLogin = (e: React.MouseEvent) => {
+  const handleSkipToLogin = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
+    // Pre-mount login bg immediately before jumping to login
+    loginBgMountedRef.current = true;
+    setShowLoginBg(true);
     progress.set(1);
-    setHasEntered(true);
-    setIsAnimating(false);
-    setWillChangeActive(false);
-    try {
-      sessionStorage.setItem(SESSION_STORAGE_KEY, 'true');
-    } catch {
-      // Ignore storage restrictions
-    }
-  };
+    isAnimatingRef.current = false;
+    setPhase('login');
+    try { sessionStorage.setItem(SESSION_STORAGE_KEY, 'true'); } catch { /* ignore */ }
+  }, [progress]);
 
-  // Reset sequence to return to eye
-  const handleReturnToEye = () => {
-    try {
-      sessionStorage.removeItem(SESSION_STORAGE_KEY);
-    } catch {
-      // Ignore storage restrictions
-    }
-    window.location.href = '/';
-  };
+  const handleReturnToEye = useCallback(() => {
+    try { sessionStorage.removeItem(SESSION_STORAGE_KEY); } catch { /* ignore */ }
+    if (isReturning) return;
+    setIsReturning(true);
+    // Step 1: instantly cover screen with black (0.2s)
+    animate(returnBlackOpacity, 1, {
+      duration: 0.2,
+      ease: 'easeOut',
+      onComplete: () => {
+        // Step 2: reset all state while hidden — zero glitch visible to user
+        loginBgMountedRef.current = false;
+        setShowLoginBg(false);
+        setPhase('idle');
+        progress.set(0);
+        isAnimatingRef.current = false;
+        // Step 3: fade black out to reveal the eye (0.35s)
+        animate(returnBlackOpacity, 0, {
+          duration: 0.35,
+          ease: 'easeIn',
+          onComplete: () => setIsReturning(false),
+        });
+      },
+    });
+  }, [progress, returnBlackOpacity, isReturning]);
 
-  // Form submission handler
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!teamId.trim() || !passcode.trim()) {
       setErrorMessage('Please provide both House Team ID and Passcode.');
       return;
     }
-
     setIsLoading(true);
     setErrorMessage(null);
-
     const result = await loginTeam(teamId, passcode);
     setIsLoading(false);
-
     if (result.success) {
       onLoginSuccess ? onLoginSuccess() : navigate('/dashboard');
     } else {
@@ -165,7 +163,6 @@ export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({
     }
   };
 
-  // 1-Click direct demo login presets
   const handleQuickLogin = async (teamAlias: string) => {
     setIsLoading(true);
     setErrorMessage(null);
@@ -178,8 +175,8 @@ export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({
     }
   };
 
-  // Reusable Single Login Card Component
-  const renderLoginCard = () => (
+  // ─── Login Card ──────────────────────────────────────────────────────────
+  const loginCard = (
     <div className="w-full max-w-md panel-card p-6 sm:p-8 border border-accent-blue/40 glow-blue shadow-2xl bg-bg-elevated/95 backdrop-blur-xl">
       <div className="flex items-center justify-between pb-5 border-b border-accent-blue/20">
         <div className="flex items-center gap-2.5">
@@ -256,45 +253,28 @@ export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({
         </button>
       </form>
 
-      {/* 1-Click Demo Login Presets */}
       <div className="mt-5 pt-4 border-t border-accent-blue/15 text-center">
         <div className="text-[11px] font-mono text-text-secondary mb-2 flex items-center justify-center gap-1.5">
           <Key className="w-3.5 h-3.5 text-accent-blue" />
           <span>DEMO LOGIN (1-CLICK DIRECT ACCESS):</span>
         </div>
         <div className="grid grid-cols-2 gap-2 text-left">
-          <button
-            type="button"
-            onClick={() => handleQuickLogin('TEAM_ALPHA')}
-            className="p-2 text-xs font-mono rounded bg-bg-primary border border-accent-blue/30 hover:border-accent-blue hover:bg-accent-blue/10 text-accent-blue-glow transition-all flex flex-col cursor-pointer"
-          >
-            <span className="font-bold text-text-primary">TEAM ALPHA</span>
-            <span className="text-[10px] text-text-secondary">Aryan Sharma (#1)</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => handleQuickLogin('TEAM_BETA')}
-            className="p-2 text-xs font-mono rounded bg-bg-primary border border-accent-blue/30 hover:border-accent-blue hover:bg-accent-blue/10 text-accent-blue-glow transition-all flex flex-col cursor-pointer"
-          >
-            <span className="font-bold text-text-primary">TEAM BETA</span>
-            <span className="text-[10px] text-text-secondary">Anjishth Kumar (#2)</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => handleQuickLogin('TEAM_GAMMA')}
-            className="p-2 text-xs font-mono rounded bg-bg-primary border border-accent-blue/30 hover:border-accent-blue hover:bg-accent-blue/10 text-accent-blue-glow transition-all flex flex-col cursor-pointer"
-          >
-            <span className="font-bold text-text-primary">TEAM GAMMA</span>
-            <span className="text-[10px] text-text-secondary">Dilraj Singh (#3)</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => handleQuickLogin('TEAM_DELTA')}
-            className="p-2 text-xs font-mono rounded bg-bg-primary border border-accent-blue/30 hover:border-accent-blue hover:bg-accent-blue/10 text-accent-blue-glow transition-all flex flex-col cursor-pointer"
-          >
-            <span className="font-bold text-text-primary">TEAM DELTA</span>
-            <span className="text-[10px] text-text-secondary">Spoorthi Gowda (#4)</span>
-          </button>
+          {[
+            { alias: 'TEAM_ALPHA', label: 'TEAM ALPHA', sub: 'Aryan Sharma (#1)' },
+            { alias: 'TEAM_BETA',  label: 'TEAM BETA',  sub: 'Anjishth Kumar (#2)' },
+            { alias: 'TEAM_GAMMA', label: 'TEAM GAMMA', sub: 'Dilraj Singh (#3)' },
+            { alias: 'TEAM_DELTA', label: 'TEAM DELTA', sub: 'Spoorthi Gowda (#4)' },
+          ].map(({ alias, label, sub }) => (
+            <button
+              key={alias}
+              type="button"
+              onClick={() => handleQuickLogin(alias)}
+              className="p-2 text-xs font-mono rounded bg-bg-primary border border-accent-blue/30 hover:border-accent-blue hover:bg-accent-blue/10 text-accent-blue-glow transition-all flex flex-col cursor-pointer"
+            >
+              <span className="font-bold text-text-primary">{label}</span>
+              <span className="text-[10px] text-text-secondary">{sub}</span>
+            </button>
+          ))}
         </div>
         <div className="mt-2 text-[10px] font-mono text-text-secondary">
           Passcode: <code className="text-accent-blue">devhouse</code> (or any text)
@@ -313,54 +293,27 @@ export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({
     </div>
   );
 
-  // When resolved (after zoom completes, via same-session revisit, or prefers-reduced-motion):
-  if (prefersReducedMotion || hasEntered) {
-    return (
-      <div className="relative w-full h-screen bg-[#050506] text-text-primary flex flex-col justify-center items-center px-4 overflow-hidden selection:bg-accent-blue/30 selection:text-accent-blue-glow">
-        {/* Full-Screen Distributed Animated Neuron Network */}
-        <NeuronNetworkBackground className="fixed inset-0 pointer-events-none z-0 opacity-80" />
-
-        {/* Persistent Ambient Eye Background in bottom-right corner */}
-        <AmbientEyeBackground position="bottom-right" />
-
-        {/* Ambient Blue Radial Glow behind login card */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-140 h-140 rounded-full bg-accent-blue/15 blur-[120px] pointer-events-none z-0" />
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.98 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.35, ease: 'easeOut' }}
-          className="relative z-10 w-full max-w-md flex items-center justify-center"
-        >
-          {renderLoginCard()}
-        </motion.div>
-      </div>
-    );
-  }
-
+  // ─── RENDER ──────────────────────────────────────────────────────────────
   return (
-    <div
-      onClick={handleTap}
-      className={`relative w-full h-screen overflow-hidden bg-[#050506] select-none flex items-center justify-center ${
-        hasEntered ? '' : 'cursor-pointer'
-      }`}
-    >
-      {/* Persistent Neuron Network Background on Landing & Login */}
-      <NeuronNetworkBackground className="fixed inset-0 pointer-events-none z-0 opacity-75" />
+    <div className="relative w-full h-screen overflow-hidden bg-[#050506] select-none flex items-center justify-center">
 
-      {/* Eye Pop-In Container: Opacity 0 -> 1, Scale 0.9 -> 1 on mount in ~0.4s */}
+      {/* ── IDLE PHASE: Eye neuron ambient — only renders when not animating or returning ── */}
+      {phase === 'idle' && !isReturning && (
+        <NeuronNetworkBackground className="fixed inset-0 pointer-events-none z-0 opacity-75" />
+      )}
+
+      {/* ── Eye & Zoom layer ── */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.4, ease: 'easeOut' }}
-        className="relative z-10 w-full h-full flex items-center justify-center overflow-hidden"
+        style={{ pointerEvents: eyeEvents as any }}
+        onClick={handleTap}
+        className="absolute inset-0 z-10 flex items-center justify-center overflow-hidden cursor-pointer"
       >
-        {/* Zooming Eye Image with hardware acceleration */}
+        {/* Zooming eye — GPU composited, no layout, no paint */}
         <motion.div
           style={{
-            scale,
+            scale: eyeScale,
             transformOrigin: '50.98% 46.88%',
-            willChange: willChangeActive ? 'transform, opacity' : 'auto',
+            willChange: phase === 'animating' ? 'transform' : 'auto',
             transform: 'translateZ(0)',
             backfaceVisibility: 'hidden',
           }}
@@ -373,44 +326,41 @@ export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({
               className="w-full h-full object-cover pointer-events-none"
               style={{ transform: 'translateZ(0)' }}
             />
-
             <div
               className="absolute inset-0 pointer-events-none"
               style={{
-                background:
-                  'radial-gradient(ellipse 70% 60% at 51% 47%, transparent 40%, #050506 95%)',
+                background: 'radial-gradient(ellipse 70% 60% at 51% 47%, transparent 40%, #050506 95%)',
               }}
             />
-
             <motion.div
               style={{
                 left: 'calc(50.98% - 56px)',
                 top: 'calc(46.88% - 56px)',
-                opacity: brandingOpacity as any,
+                opacity: brandOpacity as any,
               }}
               className="absolute pointer-events-none w-28 h-28 rounded-full bg-accent-blue/30 blur-xl animate-pulse"
             />
           </div>
         </motion.div>
 
-        {/* Neural Network Travel Overlay: Canvas particle system driven by SAME progress value */}
-        <NeuralNetworkOverlay
-          progress={progress}
-          pupilCenter={{ xPercent: 50.98, yPercent: 46.88 }}
-        />
+        {/* ANIMATING PHASE: Neural particle system — only renders during zoom */}
+        {phase === 'animating' && (
+          <NeuralNetworkOverlay
+            progress={progress}
+            pupilCenter={{ xPercent: 50.98, yPercent: 46.88 }}
+          />
+        )}
 
-        {/* Initial Resting State Branding & Tap-To-Enter Prompt */}
+        {/* Landing branding + tap prompt */}
         <motion.div
-          style={{ opacity: brandingOpacity, y: brandingY }}
+          style={{ opacity: brandOpacity, y: brandY }}
           className="absolute inset-0 pointer-events-none z-30 flex flex-col justify-between items-center p-6 sm:p-10"
         >
-          {/* Top Brand Banner & Skip to Login Button */}
           <div className="w-full flex items-center justify-between">
             <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-accent-blue/30 bg-bg-elevated/80 backdrop-blur text-xs font-mono text-accent-blue tracking-widest uppercase glow-blue-sm">
               <span className="w-2 h-2 rounded-full bg-accent-blue animate-pulse" />
               <span>COGNITO CLUB • JAIN FET</span>
             </div>
-
             <button
               type="button"
               onClick={handleSkipToLogin}
@@ -420,7 +370,6 @@ export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({
             </button>
           </div>
 
-          {/* Bottom Title & Pulsing Tap to Enter Prompt */}
           <div className="flex flex-col items-center text-center pb-6 sm:pb-8">
             <h1 className="metal-headline text-5xl sm:text-7xl md:text-8xl font-display tracking-wider uppercase mb-2">
               THE DEV HOUSE
@@ -428,17 +377,9 @@ export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({
             <p className="font-mono text-xs sm:text-sm text-text-secondary tracking-widest uppercase mb-6 sm:mb-8 bracket-framed">
               13 STAGES • 30 CODERS • 1 ULTIMATE SURVIVOR
             </p>
-
             <motion.div
-              animate={{
-                scale: [1, 1.04, 1],
-                opacity: [0.85, 1, 0.85],
-              }}
-              transition={{
-                duration: 2.2,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
+              animate={{ scale: [1, 1.04, 1], opacity: [0.85, 1, 0.85] }}
+              transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
               className="flex items-center gap-2.5 px-6 py-3 rounded-full border border-accent-blue/60 bg-bg-elevated/95 text-accent-blue-glow font-mono text-xs sm:text-sm tracking-widest uppercase glow-blue shadow-2xl backdrop-blur-md"
             >
               <span className="w-2 h-2 rounded-full bg-accent-blue animate-ping" />
@@ -446,34 +387,60 @@ export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({
             </motion.div>
           </div>
         </motion.div>
-
-        {/* Full-Screen Black Overlay across last ~15% of timeline */}
-        <motion.div
-          style={{
-            opacity: blackOverlayOpacity,
-            willChange: willChangeActive ? 'opacity' : 'auto',
-          }}
-          className="absolute inset-0 bg-[#050506] pointer-events-none z-40"
-        />
-
-        {/* Neuron Network Background behind resolved login form */}
-        <NeuronNetworkBackground className="fixed inset-0 pointer-events-none z-45 opacity-80" />
-
-        {/* Ambient Blue Radial Glow behind login card */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-140 h-140 rounded-full bg-accent-blue/15 blur-[100px] pointer-events-none z-46" />
-
-        {/* Resolved Login Form Container (Crossfades in as screen goes black) */}
-        <motion.div
-          style={{
-            opacity: loginFormOpacity,
-            scale: loginFormScale,
-            pointerEvents: loginPointerEvents,
-          }}
-          className="absolute inset-0 z-50 flex items-center justify-center p-4"
-        >
-          {renderLoginCard()}
-        </motion.div>
       </motion.div>
+
+      {/* ── Black fade overlay — motion value, no re-render ── */}
+      <motion.div
+        style={{ opacity: blackOpacity, willChange: phase === 'animating' ? 'opacity' : 'auto' }}
+        className="absolute inset-0 bg-[#050506] pointer-events-none z-[40]"
+      />
+
+      {/* ── LOGIN BACKGROUND: mounts at p>=0.55, hidden behind black overlay while warming up ── */}
+      {/* Rendering early (hidden) means canvas is already running when animation ends            */}
+      {showLoginBg && (
+        <>
+          {/* Animated neuron network */}
+          <NeuronNetworkBackground className="fixed inset-0 pointer-events-none z-[41] opacity-80" />
+
+          {/* Ambient eye — bottom-right corner, all edges masked to avoid hard borders */}
+          <div
+            className="absolute bottom-0 right-0 z-[42] pointer-events-none w-[480px] h-[480px]"
+            style={{
+              WebkitMaskImage: 'radial-gradient(ellipse 70% 70% at 95% 95%, black 0%, black 30%, transparent 70%)',
+              maskImage: 'radial-gradient(ellipse 70% 70% at 95% 95%, black 0%, black 30%, transparent 70%)',
+            }}
+          >
+            <img
+              src={eyeHeroImg}
+              alt=""
+              aria-hidden="true"
+              className="w-full h-full object-cover opacity-25"
+              style={{ transform: 'translateZ(0)' }}
+            />
+          </div>
+
+          {/* Blue glow behind login card */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-accent-blue/10 blur-[130px] pointer-events-none z-[43]" />
+        </>
+      )}
+
+      {/* ── Login card — motion value driven, no remount ── */}
+      <motion.div
+        style={{
+          opacity: loginOpacity,
+          scale: loginScale,
+          pointerEvents: loginEvents as any,
+        }}
+        className="absolute inset-0 z-[50] flex items-center justify-center p-4"
+      >
+        {loginCard}
+      </motion.div>
+
+      {/* ── Return-to-eye black cover — top of stack, hides all state swaps ── */}
+      <motion.div
+        style={{ opacity: returnBlackOpacity }}
+        className="absolute inset-0 bg-[#050506] pointer-events-none z-[99]"
+      />
     </div>
   );
 };

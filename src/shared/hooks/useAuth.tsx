@@ -51,8 +51,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const loginTeam = async (teamId: string, passcode?: string): Promise<{ success: boolean; error?: string }> => {
-    // Artificial small latency for realistic cyber feel
-    await new Promise((resolve) => setTimeout(resolve, 300));
+    // Ultra-snappy authentication response
+    await new Promise((resolve) => setTimeout(resolve, 50));
 
     const cleanId = (teamId || '').trim().toLowerCase();
     
@@ -95,7 +95,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const loginAdmin = async (passcode?: string): Promise<{ success: boolean; error?: string }> => {
-    await new Promise((resolve) => setTimeout(resolve, 300));
+    await new Promise((resolve) => setTimeout(resolve, 50));
     setRole('ADMIN');
     localStorage.setItem(STORAGE_KEYS.ROLE, 'ADMIN');
     return { success: true };
