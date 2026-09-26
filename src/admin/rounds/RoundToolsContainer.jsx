@@ -202,6 +202,13 @@ export function RoundToolsContainer({ activeRound = null, onSelectTool = null })
             >
               <RotateCcw className="w-3.5 h-3.5" />
             </button>
+
+            <a
+              href="/"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-950/60 border border-[#1EA7FF]/40 text-[#1EA7FF] hover:bg-[#1EA7FF] hover:text-[#050506] transition-colors text-xs font-mono font-bold uppercase"
+            >
+              Participant Portal ➔
+            </a>
           </div>
         </div>
       </header>

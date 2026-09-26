@@ -31,6 +31,7 @@ export const ParticipantNavbar: React.FC = () => {
     { name: 'Round 1 Task', path: '/round-1', icon: Terminal },
     { name: 'Round 2 Captaincy', path: '/round-2-captaincy', icon: Crown },
     { name: 'Team Profile', path: '/profile', icon: User },
+    { name: 'Admin Console', path: '/admin', icon: Shield },
   ];
 
   return (
