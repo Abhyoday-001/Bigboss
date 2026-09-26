@@ -48,10 +48,6 @@ export const AmbientEyeBackground: React.FC<AmbientEyeBackgroundProps> = ({
         />
       </div>
 
-      {/* Very faint cyan ambient gradient highlight in corner */}
-      <div
-        className="absolute bottom-0 right-0 w-125 h-125 rounded-full pointer-events-none bg-accent-blue/2 blur-[120px]"
-      />
     </div>
   );
 };

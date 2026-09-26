@@ -3,6 +3,7 @@ import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../shared/hooks/useAuth';
 import { NeuralNetworkOverlay } from './NeuralNetworkOverlay';
+import { AmbientEyeBackground } from '../../shared/components/AmbientEyeBackground';
 import { NeuronNetworkBackground } from './NeuronNetworkBackground';
 import eyeHeroImg from '../../assets/eye-hero.png';
 import { AlertCircle, ArrowRight, ShieldCheck, Key, Lock, Users } from 'lucide-react';
@@ -399,28 +400,14 @@ export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({
       {/* Rendering early (hidden) means canvas is already running when animation ends            */}
       {showLoginBg && (
         <>
-          {/* Animated neuron network */}
-          <NeuronNetworkBackground className="fixed inset-0 pointer-events-none z-[41] opacity-80" />
+          {/* Neuron canvas — reduced node count (28) to cut GPU load during login phase */}
+          <NeuronNetworkBackground className="fixed inset-0 pointer-events-none z-[41] opacity-80" nodeCount={28} />
 
-          {/* Ambient eye — bottom-right corner, all edges masked to avoid hard borders */}
-          <div
-            className="absolute bottom-0 right-0 z-[42] pointer-events-none w-[480px] h-[480px]"
-            style={{
-              WebkitMaskImage: 'radial-gradient(ellipse 70% 70% at 95% 95%, black 0%, black 30%, transparent 70%)',
-              maskImage: 'radial-gradient(ellipse 70% 70% at 95% 95%, black 0%, black 30%, transparent 70%)',
-            }}
-          >
-            <img
-              src={eyeHeroImg}
-              alt=""
-              aria-hidden="true"
-              className="w-full h-full object-cover opacity-25"
-              style={{ transform: 'translateZ(0)' }}
-            />
+          {/* Ambient eye — same component as the dashboard bottom-right eye */}
+          {/* AmbientEyeBackground already includes its own corner glow, no extra blur needed */}
+          <div className="z-[42] pointer-events-none">
+            <AmbientEyeBackground position="bottom-right" />
           </div>
-
-          {/* Blue glow behind login card */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-accent-blue/10 blur-[130px] pointer-events-none z-[43]" />
         </>
       )}
 
