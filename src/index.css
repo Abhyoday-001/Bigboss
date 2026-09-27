@@ -1,0 +1,82 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+@theme {
+  --color-bg-primary: #050506;
+  --color-bg-elevated: #0d0f14;
+  --color-accent-blue: #1EA7FF;
+  --color-accent-blue-glow: #4FC3FF;
+  --color-text-primary: #F2F3F5;
+  --color-text-secondary: #9AA1AC;
+  --color-danger-red: #FF3B4E;
+  --color-success-green: #2ED67B;
+  
+  --font-display: "Bebas Neue", Staatliches, Anton, sans-serif;
+  --font-body: Inter, "Space Grotesk", sans-serif;
+  
+  --shadow-glow: 0 0 10px #4FC3FF;
+  --shadow-glow-red: 0 0 10px #FF3B4E;
+}
+
+@layer base {
+  body {
+    @apply bg-bg-primary text-text-primary font-body antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display tracking-wide uppercase;
+  }
+}
+
+@layer components {
+  /* Common UI Elements */
+  .panel {
+    @apply bg-bg-elevated border border-accent-blue/20 rounded-lg p-6 transition-all duration-300;
+  }
+  .panel:hover {
+    @apply shadow-glow border-accent-blue/50;
+  }
+  
+  .btn-primary {
+    @apply bg-accent-blue text-text-primary font-bold py-3 px-6 rounded transition-all duration-300 uppercase tracking-widest text-sm hover:shadow-glow hover:bg-accent-blue-glow;
+  }
+  
+  .btn-destructive {
+    @apply border-2 border-danger-red text-danger-red font-bold py-3 px-6 rounded transition-all duration-300 uppercase tracking-widest text-sm hover:bg-danger-red/10;
+  }
+  
+  .badge {
+    @apply inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider;
+  }
+  .badge-safe { @apply bg-success-green/20 text-success-green border border-success-green/50; }
+  .badge-nominated { @apply bg-danger-red/20 text-danger-red border border-danger-red/50; }
+  .badge-evicted { @apply bg-gray-500/20 text-gray-400 border border-gray-500/50; }
+  .badge-immune { @apply bg-accent-blue/20 text-accent-blue border border-accent-blue/50; }
+  
+  /* Motif - Bracket Frame */
+  .bracket-frame {
+    position: relative;
+    padding: 0 1rem;
+    display: inline-block;
+  }
+  .bracket-frame::before {
+    content: '[';
+    position: absolute;
+    left: 0;
+    color: theme('colors.accent-blue');
+  }
+  .bracket-frame::after {
+    content: ']';
+    position: absolute;
+    right: 0;
+    color: theme('colors.accent-blue');
+  }
+
+  /* Distressed text effect for specific headlines */
+  .distressed-text {
+    background: linear-gradient(to bottom, #C9CDD3, #6E7278);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    /* Normally you would use a mix-blend-mode texture here, keeping it simpler for now */
+  }
+}
