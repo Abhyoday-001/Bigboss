@@ -25,3 +25,6 @@ dist-ssr
 
 # TypeScript build info
 *.tsbuildinfo
+
+# Vite temp timestamp files
+*.timestamp-*.mjs

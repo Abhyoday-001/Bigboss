@@ -59,7 +59,7 @@ export const PHASE_CONFIG: Record<EventPhase, PhaseMetadata> = {
     description: 'Nominated teams are designated for risk of eviction.',
     nextPhase: 'ROUND_2_SECRET_TASK',
     isTimed: false,
-    participantRoute: '/dashboard',
+    participantRoute: '/nomination-status',
   },
   ROUND_2_SECRET_TASK: {
     id: 'ROUND_2_SECRET_TASK',
@@ -69,7 +69,7 @@ export const PHASE_CONFIG: Record<EventPhase, PhaseMetadata> = {
     description: 'Special missions issued to first, middle, and last ranked teams.',
     nextPhase: 'ROUND_3_IMMUNITY',
     isTimed: true,
-    participantRoute: '/dashboard',
+    participantRoute: '/secret-mission',
   },
   ROUND_3_IMMUNITY: {
     id: 'ROUND_3_IMMUNITY',
@@ -79,7 +79,7 @@ export const PHASE_CONFIG: Record<EventPhase, PhaseMetadata> = {
     description: 'Nominated teams paired with safe allies clash for survival.',
     nextPhase: 'ROUND_3_VOTING',
     isTimed: true,
-    participantRoute: '/dashboard',
+    participantRoute: '/immunity-challenge',
   },
   ROUND_3_VOTING: {
     id: 'ROUND_3_VOTING',
@@ -89,7 +89,7 @@ export const PHASE_CONFIG: Record<EventPhase, PhaseMetadata> = {
     description: 'Voting window is open. Cast your verdict.',
     nextPhase: 'ROUND_3_EVICTION_REVEAL',
     isTimed: true,
-    participantRoute: '/dashboard',
+    participantRoute: '/voting',
   },
   ROUND_3_EVICTION_REVEAL: {
     id: 'ROUND_3_EVICTION_REVEAL',
@@ -99,7 +99,7 @@ export const PHASE_CONFIG: Record<EventPhase, PhaseMetadata> = {
     description: 'Live dramatic eviction reveal. Eliminated teams leave the house.',
     nextPhase: 'ROUND_4_FEATURES_REVEALED',
     isTimed: false,
-    participantRoute: '/dashboard',
+    participantRoute: '/eviction-reveal',
   },
   ROUND_4_FEATURES_REVEALED: {
     id: 'ROUND_4_FEATURES_REVEALED',
@@ -109,7 +109,7 @@ export const PHASE_CONFIG: Record<EventPhase, PhaseMetadata> = {
     description: 'Surviving teams build against live hidden feature requirements.',
     nextPhase: 'ROUND_4_SUBMISSION',
     isTimed: true,
-    participantRoute: '/dashboard',
+    participantRoute: '/round-4-features',
   },
   ROUND_4_SUBMISSION: {
     id: 'ROUND_4_SUBMISSION',
@@ -119,7 +119,7 @@ export const PHASE_CONFIG: Record<EventPhase, PhaseMetadata> = {
     description: 'Submit your live deployment URL and repository link for jury inspection.',
     nextPhase: 'ROUND_4_JUDGING',
     isTimed: true,
-    participantRoute: '/dashboard',
+    participantRoute: '/round-4-submission',
   },
   ROUND_4_JUDGING: {
     id: 'ROUND_4_JUDGING',
@@ -139,7 +139,7 @@ export const PHASE_CONFIG: Record<EventPhase, PhaseMetadata> = {
     description: 'The final surviving champion of The Dev House is revealed.',
     nextPhase: null,
     isTimed: false,
-    participantRoute: '/dashboard',
+    participantRoute: '/final-results',
   },
 };
 

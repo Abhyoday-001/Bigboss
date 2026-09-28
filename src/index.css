@@ -186,3 +186,57 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #1EA7FF;
 }
+
+/* Participant Panel UI components */
+@layer components {
+  .panel {
+    @apply bg-bg-elevated border border-accent-blue/20 rounded-lg p-6 transition-all duration-300;
+  }
+  .panel:hover {
+    @apply shadow-glow border-accent-blue/50;
+  }
+  
+  .btn-primary {
+    @apply bg-accent-blue text-text-primary font-bold py-3 px-6 rounded transition-all duration-300 uppercase tracking-widest text-sm hover:shadow-glow hover:bg-accent-blue-glow;
+  }
+  
+  .btn-destructive {
+    @apply border-2 border-danger-red text-danger-red font-bold py-3 px-6 rounded transition-all duration-300 uppercase tracking-widest text-sm hover:bg-danger-red/10;
+  }
+  
+  .badge {
+    @apply inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider;
+  }
+  .badge-safe { @apply bg-success-green/20 text-success-green border border-success-green/50; }
+  .badge-nominated { @apply bg-danger-red/20 text-danger-red border border-danger-red/50; }
+  .badge-evicted { @apply bg-gray-500/20 text-gray-400 border border-gray-500/50; }
+  .badge-immune { @apply bg-accent-blue/20 text-accent-blue border border-accent-blue/50; }
+  
+  /* Motif - Bracket Frame */
+  .bracket-frame {
+    position: relative;
+    padding: 0 1rem;
+    display: inline-block;
+  }
+  .bracket-frame::before {
+    content: '[';
+    position: absolute;
+    left: 0;
+    color: #1EA7FF;
+  }
+  .bracket-frame::after {
+    content: ']';
+    position: absolute;
+    right: 0;
+    color: #1EA7FF;
+  }
+
+  /* Distressed text effect for specific headlines */
+  .distressed-text {
+    background: linear-gradient(to bottom, #C9CDD3, #6E7278);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+

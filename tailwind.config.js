@@ -60,6 +60,7 @@ export default {
         mono: ['JetBrains Mono', 'monospace'],
       },
       boxShadow: {
+        'glow': '0 0 10px #4FC3FF',
         'glow-blue': '0 0 20px -3px rgba(30, 167, 255, 0.45), 0 0 8px rgba(79, 195, 255, 0.3)',
         'glow-blue-sm': '0 0 10px -2px rgba(30, 167, 255, 0.35)',
         'glow-blue-lg': '0 0 35px 2px rgba(30, 167, 255, 0.45)',
