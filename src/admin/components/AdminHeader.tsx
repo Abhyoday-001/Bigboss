@@ -32,7 +32,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/admin/login', { replace: true });
+    navigate('/', { replace: true });
   };
 
   return (

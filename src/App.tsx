@@ -11,7 +11,6 @@ import { Round2Page } from './participant/pages/Round2Page';
 import { Round3Page } from './participant/pages/Round3Page';
 import { Round4Page } from './participant/pages/Round4Page';
 import { AdminDashboardPage } from './admin/pages/AdminDashboardPage';
-import { AdminLoginPage } from './admin/pages/AdminLoginPage';
 // @ts-ignore
 import { RoundToolsContainer } from './admin/rounds/RoundToolsContainer';
 
@@ -34,12 +33,8 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
   return <>{children}</>;
 };
 
-// Route guard for Admin dashboard
+// Route guard for Admin dashboard (direct access while auth is being rebuilt)
 const AdminProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { role } = useAuth();
-  if (role !== 'ADMIN') {
-    return <Navigate to="/admin/login" replace />;
-  }
   return <>{children}</>;
 };
 
@@ -271,7 +266,7 @@ export const App: React.FC = () => {
                 />
 
                 {/* Admin Routes (Dilraj & Spoorthi) */}
-                <Route path="/admin/login" element={<AdminLoginPage />} />
+                <Route path="/admin/login" element={<Navigate to="/admin" replace />} />
                 <Route
                   path="/admin"
                   element={
