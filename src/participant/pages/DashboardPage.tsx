@@ -11,7 +11,10 @@ import { RoundStatusBadge } from '../../shared/components/RoundStatusBadge';
 import { TimerCountdown } from '../../shared/components/TimerCountdown';
 import { LiveLeaderboard } from '../../shared/components/LiveLeaderboard';
 import { AmbientEyeBackground } from '../../shared/components/AmbientEyeBackground';
-import { Crown, ShieldAlert, ShieldCheck, Trophy, ArrowRight, UserCheck, RefreshCw, Zap } from 'lucide-react';
+import { 
+  Crown, ShieldAlert, ShieldCheck, Trophy, ArrowRight, UserCheck, RefreshCw, Zap, 
+  Terminal, KeyRound, Vote, Skull, Layers, Send, ChevronRight, Shield 
+} from 'lucide-react';
 
 export const DashboardPage: React.FC = () => {
   const { team } = useAuth();
@@ -162,6 +165,179 @@ export const DashboardPage: React.FC = () => {
               >
                 View House Roster
               </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Competition Stages & Respective Operations Areas */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <h2 className="text-2xl font-display uppercase tracking-wider text-text-primary flex items-center gap-2">
+              <Shield className="w-5 h-5 text-accent-blue" />
+              <span>Event Operations & Round Protocols</span>
+            </h2>
+            <span className="text-[10px] font-mono text-text-secondary uppercase">
+              Phase Connected • All Modules Live
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Round 1 Card */}
+            <div className="panel-card p-5 border-t-2 border-t-accent-blue flex flex-col justify-between hover:border-accent-blue/60 transition-all group">
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] font-mono uppercase text-accent-blue tracking-widest flex items-center gap-1.5 font-bold">
+                    <Terminal className="w-3.5 h-3.5" /> ROUND 01
+                  </span>
+                  <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-accent-blue/15 text-accent-blue uppercase">
+                    Task Arena
+                  </span>
+                </div>
+                <h3 className="text-lg font-display uppercase tracking-wider text-text-primary group-hover:text-accent-blue-glow transition-all">
+                  Rapid Task Challenge
+                </h3>
+                <p className="text-xs text-text-secondary mt-1 line-clamp-2">
+                  Algorithmic system challenges and initial scoreboard telemetry.
+                </p>
+              </div>
+              <div className="mt-4 pt-3 border-t border-accent-blue/10">
+                <Link
+                  to="/round-1"
+                  className="w-full py-2 rounded bg-bg-elevated hover:bg-accent-blue/20 border border-accent-blue/30 text-xs font-mono text-accent-blue uppercase flex items-center justify-center gap-1.5 transition-all"
+                >
+                  <span>Launch Task Brief</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Round 2 Card */}
+            <div className="panel-card p-5 border-t-2 border-t-warning-amber flex flex-col justify-between hover:border-warning-amber/60 transition-all group">
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] font-mono uppercase text-warning-amber tracking-widest flex items-center gap-1.5 font-bold">
+                    <Crown className="w-3.5 h-3.5" /> ROUND 02
+                  </span>
+                  <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-warning-amber/15 text-warning-amber uppercase">
+                    Leadership
+                  </span>
+                </div>
+                <h3 className="text-lg font-display uppercase tracking-wider text-text-primary group-hover:text-warning-amber transition-all">
+                  Captaincy & Classified Ops
+                </h3>
+                <p className="text-xs text-text-secondary mt-1">
+                  Duel for immunity, classified team directives, and eviction risk.
+                </p>
+              </div>
+              <div className="mt-4 pt-3 border-t border-warning-amber/15 space-y-1.5">
+                <div className="grid grid-cols-2 gap-1.5">
+                  <Link
+                    to="/round-2-captaincy"
+                    className="py-1.5 px-2 rounded bg-bg-elevated hover:bg-warning-amber/20 border border-warning-amber/30 text-[10px] font-mono text-warning-amber uppercase text-center truncate transition-all"
+                  >
+                    Captaincy Duel
+                  </Link>
+                  <Link
+                    to="/secret-mission"
+                    className="py-1.5 px-2 rounded bg-bg-elevated hover:bg-accent-blue/20 border border-accent-blue/30 text-[10px] font-mono text-accent-blue uppercase text-center truncate transition-all"
+                  >
+                    Secret Task
+                  </Link>
+                </div>
+                <Link
+                  to="/nomination-status"
+                  className="w-full py-1.5 rounded bg-bg-elevated hover:bg-danger-red/20 border border-danger-red/30 text-[10px] font-mono text-danger-red uppercase flex items-center justify-center gap-1 transition-all"
+                >
+                  <ShieldAlert className="w-3 h-3" />
+                  <span>Nomination Status</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* Round 3 Card */}
+            <div className="panel-card p-5 border-t-2 border-t-danger-red flex flex-col justify-between hover:border-danger-red/60 transition-all group">
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] font-mono uppercase text-danger-red tracking-widest flex items-center gap-1.5 font-bold">
+                    <Skull className="w-3.5 h-3.5" /> ROUND 03
+                  </span>
+                  <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-danger-red/15 text-danger-red uppercase">
+                    Survival
+                  </span>
+                </div>
+                <h3 className="text-lg font-display uppercase tracking-wider text-text-primary group-hover:text-danger-red transition-all">
+                  Immunity, Vote & Eviction
+                </h3>
+                <p className="text-xs text-text-secondary mt-1">
+                  Survive the cut, cast confidential ballots, and face the eye.
+                </p>
+              </div>
+              <div className="mt-4 pt-3 border-t border-danger-red/15 space-y-1.5">
+                <div className="grid grid-cols-2 gap-1.5">
+                  <Link
+                    to="/immunity-challenge"
+                    className="py-1.5 px-2 rounded bg-bg-elevated hover:bg-success-green/20 border border-success-green/30 text-[10px] font-mono text-success-green uppercase text-center truncate transition-all"
+                  >
+                    Immunity
+                  </Link>
+                  <Link
+                    to="/voting"
+                    className="py-1.5 px-2 rounded bg-bg-elevated hover:bg-accent-blue/20 border border-accent-blue/30 text-[10px] font-mono text-accent-blue uppercase text-center truncate transition-all"
+                  >
+                    House Vote
+                  </Link>
+                </div>
+                <Link
+                  to="/eviction-reveal"
+                  className="w-full py-1.5 rounded bg-bg-elevated hover:bg-danger-red/20 border border-danger-red/30 text-[10px] font-mono text-danger-red uppercase flex items-center justify-center gap-1 transition-all"
+                >
+                  <Skull className="w-3 h-3" />
+                  <span>Eviction Ceremony</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* Round 4 Card */}
+            <div className="panel-card p-5 border-t-2 border-t-success-green flex flex-col justify-between hover:border-success-green/60 transition-all group">
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] font-mono uppercase text-success-green tracking-widest flex items-center gap-1.5 font-bold">
+                    <Trophy className="w-3.5 h-3.5" /> ROUND 04
+                  </span>
+                  <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-success-green/15 text-success-green uppercase">
+                    Grand Finale
+                  </span>
+                </div>
+                <h3 className="text-lg font-display uppercase tracking-wider text-text-primary group-hover:text-success-green transition-all">
+                  Finale Build & Champions
+                </h3>
+                <p className="text-xs text-text-secondary mt-1">
+                  Live hidden specifications, deployment link submission, and crown reveal.
+                </p>
+              </div>
+              <div className="mt-4 pt-3 border-t border-success-green/15 space-y-1.5">
+                <div className="grid grid-cols-2 gap-1.5">
+                  <Link
+                    to="/round-4-features"
+                    className="py-1.5 px-2 rounded bg-bg-elevated hover:bg-accent-blue/20 border border-accent-blue/30 text-[10px] font-mono text-accent-blue uppercase text-center truncate transition-all"
+                  >
+                    Hidden Specs
+                  </Link>
+                  <Link
+                    to="/round-4-submission"
+                    className="py-1.5 px-2 rounded bg-bg-elevated hover:bg-warning-amber/20 border border-warning-amber/30 text-[10px] font-mono text-warning-amber uppercase text-center truncate transition-all"
+                  >
+                    Submit Build
+                  </Link>
+                </div>
+                <Link
+                  to="/final-results"
+                  className="w-full py-1.5 rounded bg-bg-elevated hover:bg-success-green/20 border border-success-green/30 text-[10px] font-mono text-success-green uppercase flex items-center justify-center gap-1 transition-all"
+                >
+                  <Trophy className="w-3 h-3" />
+                  <span>Grand Champions Reveal</span>
+                </Link>
+              </div>
             </div>
           </div>
         </div>

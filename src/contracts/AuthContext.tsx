@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { VoterRole, Team } from './types';
+import { useAuth as usePrimaryAuth } from '../shared/hooks/useAuth';
 
 interface AuthContextType {
   team: Team | null;
@@ -11,11 +12,39 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [team, setTeam] = useState<Team | null>({
-    id: 'team-1',
-    name: 'Byte Me',
-    members: ['Anjishth', 'Aryan']
+  let primaryTeam: any = null;
+  try {
+    const auth = usePrimaryAuth();
+    primaryTeam = auth?.team;
+  } catch (e) {
+    // In case used outside primary AuthProvider
+  }
+
+  const [team, setTeam] = useState<Team | null>(() => {
+    if (primaryTeam) {
+      return {
+        id: primaryTeam.id,
+        name: primaryTeam.teamName,
+        members: primaryTeam.members?.map((m: any) => m.name) || ['Anjishth', 'Aryan'],
+      };
+    }
+    return {
+      id: 'team-1',
+      name: 'Cyber Sentinel',
+      members: ['Anjishth', 'Aryan'],
+    };
   });
+
+  useEffect(() => {
+    if (primaryTeam) {
+      setTeam({
+        id: primaryTeam.id,
+        name: primaryTeam.teamName,
+        members: primaryTeam.members?.map((m: any) => m.name) || ['Anjishth', 'Aryan'],
+      });
+    }
+  }, [primaryTeam]);
+
   const [voterRole, setVoterRole] = useState<VoterRole>('PARTICIPANT');
 
   return (

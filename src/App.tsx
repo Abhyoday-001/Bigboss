@@ -7,13 +7,15 @@ import { LandingPage } from './participant/pages/LandingPage';
 import { DashboardPage } from './participant/pages/DashboardPage';
 import { ProfilePage } from './participant/pages/ProfilePage';
 import { Round1TaskPage } from './participant/pages/Round1TaskPage';
-import { Round2CaptaincyPage } from './participant/pages/Round2CaptaincyPage';
+import { Round2Page } from './participant/pages/Round2Page';
+import { Round3Page } from './participant/pages/Round3Page';
+import { Round4Page } from './participant/pages/Round4Page';
 import { AdminDashboardPage } from './admin/pages/AdminDashboardPage';
 import { AdminLoginPage } from './admin/pages/AdminLoginPage';
 // @ts-ignore
 import { RoundToolsContainer } from './admin/rounds/RoundToolsContainer';
 
-// Anjishth's Participant Panel Modules & Contracts
+// Anjishth's Participant Panel Contracts & Modules
 import { EventProvider, useEventContext } from './contracts/EventContext';
 import { AuthProvider as ContractsAuthProvider } from './contracts/AuthContext';
 import { Shell } from './components/Shell';
@@ -41,20 +43,7 @@ const AdminProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children
   return <>{children}</>;
 };
 
-// Shell wrapper for Anjishth's standalone participant modules
-const ParticipantModuleShell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return (
-    <ContractsAuthProvider>
-      <EventProvider>
-        <Shell>
-          {children}
-        </Shell>
-      </EventProvider>
-    </ContractsAuthProvider>
-  );
-};
-
-// Active module switcher for the live participant flow
+// Active module switcher for the interactive participant panel harness
 const ActiveParticipantModule: React.FC = () => {
   const { phase } = useEventContext();
 
@@ -90,149 +79,229 @@ export const App: React.FC = () => {
     <BrowserRouter>
       <AuthProvider>
         <EventPhaseProvider>
-          <Routes>
-            {/* Participant Primary Flow (Aryan & Anjishth) */}
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/landing" element={<LandingPage />} />
-            <Route path="/home" element={<LandingPage />} />
-            <Route path="/login" element={<Navigate to="/" replace />} />
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <DashboardPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <ProfilePage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/round-1"
-              element={
-                <ProtectedRoute>
-                  <Round1TaskPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/round-2-captaincy"
-              element={
-                <ProtectedRoute>
-                  <Round2CaptaincyPage />
-                </ProtectedRoute>
-              }
-            />
+          <ContractsAuthProvider>
+            <EventProvider>
+              <Routes>
+                {/* Landing & Authentication */}
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/landing" element={<LandingPage />} />
+                <Route path="/home" element={<LandingPage />} />
+                <Route path="/login" element={<Navigate to="/" replace />} />
 
-            {/* Anjishth's Mid/Late Event Modules */}
-            <Route
-              path="/secret-mission"
-              element={
-                <ParticipantModuleShell>
-                  <SecretMission />
-                </ParticipantModuleShell>
-              }
-            />
-            <Route
-              path="/nomination-status"
-              element={
-                <ParticipantModuleShell>
-                  <NominationStatus />
-                </ParticipantModuleShell>
-              }
-            />
-            <Route
-              path="/immunity-challenge"
-              element={
-                <ParticipantModuleShell>
-                  <ImmunityChallenge />
-                </ParticipantModuleShell>
-              }
-            />
-            <Route
-              path="/voting"
-              element={
-                <ParticipantModuleShell>
-                  <Voting />
-                </ParticipantModuleShell>
-              }
-            />
-            <Route
-              path="/eviction-reveal"
-              element={
-                <ParticipantModuleShell>
-                  <EvictionReveal />
-                </ParticipantModuleShell>
-              }
-            />
-            <Route
-              path="/round-4-features"
-              element={
-                <ParticipantModuleShell>
-                  <Round4Features />
-                </ParticipantModuleShell>
-              }
-            />
-            <Route
-              path="/round-4-submission"
-              element={
-                <ParticipantModuleShell>
-                  <Round4Submission />
-                </ParticipantModuleShell>
-              }
-            />
-            <Route
-              path="/final-results"
-              element={
-                <ParticipantModuleShell>
-                  <FinalResults />
-                </ParticipantModuleShell>
-              }
-            />
-            <Route
-              path="/participant-panel"
-              element={
-                <ParticipantModuleShell>
-                  <ActiveParticipantModule />
-                </ParticipantModuleShell>
-              }
-            />
+                {/* Participant Core Space */}
+                <Route
+                  path="/dashboard"
+                  element={
+                    <ProtectedRoute>
+                      <DashboardPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/profile"
+                  element={
+                    <ProtectedRoute>
+                      <ProfilePage />
+                    </ProtectedRoute>
+                  }
+                />
 
-            {/* Admin Routes (Dilraj & Spoorthi) */}
-            <Route path="/admin/login" element={<AdminLoginPage />} />
-            <Route
-              path="/admin"
-              element={
-                <AdminProtectedRoute>
-                  <AdminDashboardPage />
-                </AdminProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/rounds"
-              element={
-                <AdminProtectedRoute>
-                  <RoundToolsContainer />
-                </AdminProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/*"
-              element={
-                <AdminProtectedRoute>
-                  <AdminDashboardPage />
-                </AdminProtectedRoute>
-              }
-            />
+                {/* Round 1 Area */}
+                <Route
+                  path="/round-1"
+                  element={
+                    <ProtectedRoute>
+                      <Round1TaskPage />
+                    </ProtectedRoute>
+                  }
+                />
 
-            {/* Catch-all redirect to landing */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
+                {/* Round 2 Area (Captaincy, Secret Task, Nominations) */}
+                <Route
+                  path="/round-2"
+                  element={
+                    <ProtectedRoute>
+                      <Round2Page />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/round-2-captaincy"
+                  element={
+                    <ProtectedRoute>
+                      <Round2Page initialTab="captaincy" />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/round-2-secret-task"
+                  element={
+                    <ProtectedRoute>
+                      <Round2Page initialTab="secret-mission" />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/secret-mission"
+                  element={
+                    <ProtectedRoute>
+                      <Round2Page initialTab="secret-mission" />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/round-2-nominations"
+                  element={
+                    <ProtectedRoute>
+                      <Round2Page initialTab="nominations" />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/nomination-status"
+                  element={
+                    <ProtectedRoute>
+                      <Round2Page initialTab="nominations" />
+                    </ProtectedRoute>
+                  }
+                />
+
+                {/* Round 3 Area (Immunity, Voting, Eviction Reveal) */}
+                <Route
+                  path="/round-3"
+                  element={
+                    <ProtectedRoute>
+                      <Round3Page />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/round-3-immunity"
+                  element={
+                    <ProtectedRoute>
+                      <Round3Page initialTab="immunity" />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/immunity-challenge"
+                  element={
+                    <ProtectedRoute>
+                      <Round3Page initialTab="immunity" />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/round-3-voting"
+                  element={
+                    <ProtectedRoute>
+                      <Round3Page initialTab="voting" />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/voting"
+                  element={
+                    <ProtectedRoute>
+                      <Round3Page initialTab="voting" />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/round-3-eviction"
+                  element={
+                    <ProtectedRoute>
+                      <Round3Page initialTab="eviction" />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/eviction-reveal"
+                  element={
+                    <ProtectedRoute>
+                      <Round3Page initialTab="eviction" />
+                    </ProtectedRoute>
+                  }
+                />
+
+                {/* Round 4 Area (Specs, Submission, Champions Standings) */}
+                <Route
+                  path="/round-4"
+                  element={
+                    <ProtectedRoute>
+                      <Round4Page />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/round-4-features"
+                  element={
+                    <ProtectedRoute>
+                      <Round4Page initialTab="features" />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/round-4-submission"
+                  element={
+                    <ProtectedRoute>
+                      <Round4Page initialTab="submission" />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/final-results"
+                  element={
+                    <ProtectedRoute>
+                      <Round4Page initialTab="results" />
+                    </ProtectedRoute>
+                  }
+                />
+
+                {/* Anjishth's Standalone Interactive Shell Harness */}
+                <Route
+                  path="/participant-panel"
+                  element={
+                    <ProtectedRoute>
+                      <Shell>
+                        <ActiveParticipantModule />
+                      </Shell>
+                    </ProtectedRoute>
+                  }
+                />
+
+                {/* Admin Routes (Dilraj & Spoorthi) */}
+                <Route path="/admin/login" element={<AdminLoginPage />} />
+                <Route
+                  path="/admin"
+                  element={
+                    <AdminProtectedRoute>
+                      <AdminDashboardPage />
+                    </AdminProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/rounds"
+                  element={
+                    <AdminProtectedRoute>
+                      <RoundToolsContainer />
+                    </AdminProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/*"
+                  element={
+                    <AdminProtectedRoute>
+                      <AdminDashboardPage />
+                    </AdminProtectedRoute>
+                  }
+                />
+
+                {/* Catch-all redirect to landing */}
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            </EventProvider>
+          </ContractsAuthProvider>
         </EventPhaseProvider>
       </AuthProvider>
     </BrowserRouter>

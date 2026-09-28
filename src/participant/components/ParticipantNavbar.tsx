@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../shared/hooks/useAuth';
 import { MOCK_TEAMS } from '../../shared/mocks/mockData';
-import { Eye, User, LogOut, Terminal, Crown, Home, ChevronDown, Check, Shield } from 'lucide-react';
+import { Eye, User, LogOut, Terminal, Crown, Home, ChevronDown, Check, Shield, Trophy } from 'lucide-react';
 
 export const ParticipantNavbar: React.FC = () => {
   const { team, logout, switchActiveTeam, role } = useAuth();
@@ -28,10 +28,12 @@ export const ParticipantNavbar: React.FC = () => {
 
   const navLinks = [
     { name: 'Dashboard', path: '/dashboard', icon: Home },
-    { name: 'Round 1 Task', path: '/round-1', icon: Terminal },
-    { name: 'Round 2 Captaincy', path: '/round-2-captaincy', icon: Crown },
-    { name: 'Team Profile', path: '/profile', icon: User },
-    { name: 'Admin Console', path: '/admin', icon: Shield },
+    { name: 'Round 1', path: '/round-1', icon: Terminal },
+    { name: 'Round 2', path: '/round-2', icon: Crown },
+    { name: 'Round 3', path: '/round-3', icon: Shield },
+    { name: 'Round 4', path: '/round-4', icon: Trophy },
+    { name: 'Profile', path: '/profile', icon: User },
+    { name: 'Admin', path: '/admin', icon: Shield },
   ];
 
   return (
@@ -56,7 +58,10 @@ export const ParticipantNavbar: React.FC = () => {
         <nav className="hidden md:flex items-center gap-1 font-mono text-xs uppercase tracking-wider">
           {navLinks.map((link) => {
             const Icon = link.icon;
-            const isActive = location.pathname === link.path;
+            const isRound2 = link.path === '/round-2' && (location.pathname.startsWith('/round-2') || location.pathname === '/secret-mission' || location.pathname === '/nomination-status');
+            const isRound3 = link.path === '/round-3' && (location.pathname.startsWith('/round-3') || location.pathname === '/immunity-challenge' || location.pathname === '/voting' || location.pathname === '/eviction-reveal');
+            const isRound4 = link.path === '/round-4' && (location.pathname.startsWith('/round-4') || location.pathname === '/final-results');
+            const isActive = location.pathname === link.path || isRound2 || isRound3 || isRound4;
             return (
               <Link
                 key={link.path}
@@ -148,7 +153,10 @@ export const ParticipantNavbar: React.FC = () => {
       <div className="md:hidden flex items-center justify-around border-t border-accent-blue/10 py-2 px-3 font-mono text-[11px] bg-bg-elevated/60">
         {navLinks.map((link) => {
           const Icon = link.icon;
-          const isActive = location.pathname === link.path;
+          const isRound2 = link.path === '/round-2' && (location.pathname.startsWith('/round-2') || location.pathname === '/secret-mission' || location.pathname === '/nomination-status');
+          const isRound3 = link.path === '/round-3' && (location.pathname.startsWith('/round-3') || location.pathname === '/immunity-challenge' || location.pathname === '/voting' || location.pathname === '/eviction-reveal');
+          const isRound4 = link.path === '/round-4' && (location.pathname.startsWith('/round-4') || location.pathname === '/final-results');
+          const isActive = location.pathname === link.path || isRound2 || isRound3 || isRound4;
           return (
             <Link
               key={link.path}
