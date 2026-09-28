@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './shared/hooks/useAuth';
+import { AuthProvider, useAuth } from './shared/hooks/useAuth';
 import { EventPhaseProvider } from './shared/hooks/useEventPhase';
 
 import { LandingPage } from './participant/pages/LandingPage';
@@ -10,11 +10,21 @@ import { ProfilePage } from './participant/pages/ProfilePage';
 import { Round1TaskPage } from './participant/pages/Round1TaskPage';
 import { Round2CaptaincyPage } from './participant/pages/Round2CaptaincyPage';
 import { AdminDashboardPage } from './admin/pages/AdminDashboardPage';
+import { AdminLoginPage } from './admin/pages/AdminLoginPage';
 // @ts-ignore
 import { RoundToolsContainer } from './admin/rounds/RoundToolsContainer';
 
-// Simple route guard for participant screens
+// Route guard for participant screens
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return <>{children}</>;
+};
+
+// Route guard for Admin dashboard
+const AdminProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { role } = useAuth();
+  if (role !== 'ADMIN') {
+    return <Navigate to="/admin/login" replace />;
+  }
   return <>{children}</>;
 };
 
@@ -63,9 +73,31 @@ export const App: React.FC = () => {
             />
 
             {/* Admin Routes (Dilraj & Spoorthi) */}
-            <Route path="/admin" element={<AdminDashboardPage />} />
-            <Route path="/admin/rounds" element={<RoundToolsContainer />} />
-            <Route path="/admin/*" element={<AdminDashboardPage />} />
+            <Route path="/admin/login" element={<AdminLoginPage />} />
+            <Route
+              path="/admin"
+              element={
+                <AdminProtectedRoute>
+                  <AdminDashboardPage />
+                </AdminProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/rounds"
+              element={
+                <AdminProtectedRoute>
+                  <RoundToolsContainer />
+                </AdminProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/*"
+              element={
+                <AdminProtectedRoute>
+                  <AdminDashboardPage />
+                </AdminProtectedRoute>
+              }
+            />
 
             {/* Catch-all redirect to landing */}
             <Route path="*" element={<Navigate to="/" replace />} />

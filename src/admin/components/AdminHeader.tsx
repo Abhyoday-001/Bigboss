@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Eye, Radio, Clock, ArrowLeft, Shield } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Eye, Radio, Clock, ArrowLeft, LogOut } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { EventPhase } from '../../shared/types/event';
+import { useAuth } from '../../shared/hooks/useAuth';
 
 interface AdminHeaderProps {
   currentPhase: EventPhase;
@@ -9,6 +10,8 @@ interface AdminHeaderProps {
 
 export const AdminHeader: React.FC<AdminHeaderProps> = () => {
   const [timeStr, setTimeStr] = useState('');
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const updateTime = () => {
@@ -26,6 +29,11 @@ export const AdminHeader: React.FC<AdminHeaderProps> = () => {
     const interval = setInterval(updateTime, 1000);
     return () => clearInterval(interval);
   }, []);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/admin/login', { replace: true });
+  };
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-accent-blue/20 bg-bg-primary/95 backdrop-blur-md px-4 md:px-8 py-3 flex items-center justify-between">
@@ -86,8 +94,20 @@ export const AdminHeader: React.FC<AdminHeaderProps> = () => {
               Live State Machine
             </div>
           </div>
+
+          {/* Logout Button */}
+          <button
+            type="button"
+            onClick={handleLogout}
+            title="Lock Control Room & Logout"
+            className="p-1.5 rounded-lg bg-[#161a23] hover:bg-danger-red/20 text-text-secondary hover:text-danger-red border border-bg-border transition-colors ml-1 cursor-pointer"
+          >
+            <LogOut className="w-4 h-4" />
+          </button>
         </div>
       </div>
     </header>
   );
 };
+
+export default AdminHeader;

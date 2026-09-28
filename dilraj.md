@@ -19,8 +19,9 @@ per `PRD.md` §7.
 | **Global Round & Timer Controls** | ✅ Complete | `src/admin/components/RoundControls.tsx`, `src/mocks/mockEventState.ts` |
 | **All Teams List & Live Roster** | ✅ Complete | `src/admin/components/TeamsTable.tsx`, `src/mocks/mockTeams.ts` |
 | **Team Detail Drill-down Modal** | ✅ Complete | `src/admin/components/TeamDetailModal.tsx` |
-| **Score Management & Audit Logs** | 🚧 In Progress | Schema & types ready in `mockTeams.ts`, UI overlay next |
-| **Admin Login** | ⏳ Planned | Dedicated auth screen |
+| **Score Management & Audit Logs** | ✅ Complete | `src/admin/components/ScoreManager.tsx`, `mockTeams.ts` |
+| **Live Leaderboard (Admin View)** | ✅ Complete | Embedded in `ScoreManager.tsx` with inline score editor |
+| **Admin Login & Auth Clearance** | ✅ Complete | `src/admin/pages/AdminLoginPage.tsx`, route guard in `App.tsx` |
 
 ---
 
@@ -45,10 +46,14 @@ implementations when they're ready.
 ## Module: Admin Login
 
 **What to build:**
-- [ ] Separate auth flow/role from team login — admin role is distinguished via the API response
+- [x] Separate auth flow/role from team login (`/admin/login` with `ADMIN` role distinguish)
+- [x] Surveillance theme visual parity with participant login: `AmbientEyeBackground` + `NeuronNetworkBackground`
+- [x] Quick role selectors: Dilraj (Core Admin), Spoorthi (Tools Admin), Judge Desk
 
-**Interface contracts needed:**
-- Admin auth endpoint shape (POST body, response shape, role field)
+**Interface contracts implemented:**
+- `AdminLoginPage` component (`src/admin/pages/AdminLoginPage.tsx`)
+- `useAuth` hook with `loginAdmin` and `role === 'ADMIN'`
+- Protected routing via `AdminProtectedRoute` in `App.tsx`
 
 **Can build with:** Mock auth endpoint returning an admin token/role.
 
@@ -102,30 +107,26 @@ state, search/filter teams, and open any team's detail view.
 ## Module: Live Leaderboard (Admin View)
 
 **What to build:**
-- [ ] Reuse Aryan's shared leaderboard component — admin view may add inline score-edit affordance,
-      but do not rebuild the component from scratch
+- [x] Reuse Aryan's shared leaderboard component — admin view adds inline score-edit affordance
+- [x] Integrated seamlessly inside `ScoreManager.tsx` sub-navigation
 
-**Interface contracts needed:**
-- Aryan's Leaderboard component props interface (get this from Shared Contracts, not from his
-  finished code)
-- Leaderboard endpoint
-
-**Can build with:** Import the shared component (or stub it with a placeholder) + mock
-leaderboard data. The admin-specific score-edit overlay is your own independent work.
+**Interface contracts implemented:**
+- `LiveLeaderboard` component props interface with `isAdmin={true}` and `onUpdateScore`
 
 ---
 
 ## Module: Score Management
 
 **What to build:**
-- [ ] Manual point entry/adjustment UI, with a visible audit trail (who changed what, when) if the
-      API supports it
+- [x] Manual point entry/adjustment UI with quick preset chips (`+10`, `+25`, `+50`, `+100`, `-10`, `-25`, `-50`)
+- [x] Round/Category assignment selector & reason input
+- [x] Safety Confirmation Modal before points are committed
+- [x] Visible, searchable, filterable audit trail ledger (filter by team, round, bonuses vs penalties)
+- [x] Export Audit Ledger to JSON for post-event verification
 
-**Interface contracts needed:**
-- Score adjustment endpoint (POST adjustment, GET audit trail)
-- Teams list (to select which team to adjust)
-
-**Can build with:** Mock score adjustment endpoint + mock audit trail (schema ready in `mockTeams.ts`).
+**Interface contracts implemented:**
+- `ScoreManager` component (`src/admin/components/ScoreManager.tsx`)
+- `ScoreAuditEntry` data shape & immutable state updates in `AdminDashboardPage.tsx`
 
 ---
 
@@ -154,8 +155,8 @@ the state machine.
 - [x] Stress-test round controls: rapid start/pause/end clicks should never leave the event in an
       inconsistent state — button disabling while request is in flight
 - [x] Full responsive pass — desktop-first + tablet support (`DESIGN.md` §7)
-- [x] Loading/error/empty states on team list and round controls
-- [ ] Full run-through of the event timeline from the admin side alongside Spoorthi's screens
+- [x] Loading/error/empty states on team list, score management, and round controls
+- [x] Full run-through of the event timeline from the admin side alongside Spoorthi's screens
 
 ---
 

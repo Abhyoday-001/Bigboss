@@ -8,6 +8,7 @@ import { EventOverview } from '../components/EventOverview';
 import { RoundControls } from '../components/RoundControls';
 import { TeamsTable } from '../components/TeamsTable';
 import { TeamDetailModal } from '../components/TeamDetailModal';
+import { ScoreManager } from '../components/ScoreManager';
 import { LiveLeaderboard } from '../../shared/components/LiveLeaderboard';
 
 // Spoorthi's Round 2 Modules
@@ -185,16 +186,46 @@ export const AdminDashboardPage: React.FC = () => {
       prev.map((t) => {
         if (t.id === teamId) {
           const delta = newScore - t.score;
-          setAuditLogs((logs) => [
-            {
-              timestamp: new Date().toLocaleTimeString(),
-              teamName: t.name,
-              delta,
-              reason: 'Direct Admin Score Calibration',
-            },
-            ...logs.slice(0, 9),
-          ]);
-          return { ...t, score: newScore };
+          const auditEntry = {
+            id: `aud-${Date.now()}`,
+            timestamp: new Date().toLocaleTimeString(),
+            round: 'Manual Adjustment',
+            delta,
+            newTotal: newScore,
+            reason: 'Direct Admin Score Calibration',
+            adjustedBy: 'Dilraj (Admin)',
+          };
+          return {
+            ...t,
+            score: newScore,
+            scoreHistory: [auditEntry, ...t.scoreHistory],
+          };
+        }
+        return t;
+      })
+    );
+  };
+
+  // Comprehensive score adjustment handler with round & reason
+  const handleScoreAdjustment = (teamId: string, delta: number, round: string, reason: string) => {
+    setTeams((prev) =>
+      prev.map((t) => {
+        if (t.id === teamId) {
+          const newScore = Math.max(0, t.score + delta);
+          const auditEntry = {
+            id: `aud-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+            timestamp: new Date().toLocaleTimeString(),
+            round,
+            delta,
+            newTotal: newScore,
+            reason,
+            adjustedBy: 'Dilraj (Admin)',
+          };
+          return {
+            ...t,
+            score: newScore,
+            scoreHistory: [auditEntry, ...t.scoreHistory],
+          };
         }
         return t;
       })
@@ -695,90 +726,11 @@ export const AdminDashboardPage: React.FC = () => {
         {/* ========================================================= */}
         {activeTab === 'scores' && (
           <div className="space-y-6 animate-fadeIn">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 rounded-xl panel-card border border-accent-blue/25 bg-bg-elevated">
-              <div>
-                <div className="flex items-center gap-2 text-xs font-mono text-accent-blue font-bold uppercase tracking-wider">
-                  <ShieldCheck className="w-4 h-4" />
-                  <span>AUTHORITATIVE SCORING ENGINE</span>
-                </div>
-                <h2 className="text-xl font-display uppercase tracking-wider text-text-primary mt-1">
-                  House Calibration & Audit Trail
-                </h2>
-                <p className="text-xs text-text-secondary">
-                  Click on any score directly in the table below to adjust points, grant bonuses, or penalize teams.
-                </p>
-              </div>
-
-              <div className="flex items-center gap-2 font-mono text-xs text-text-secondary">
-                <span className="w-2 h-2 rounded-full bg-success-green animate-pulse" />
-                <span>LEDGER ONLINE</span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* Live Interactive Leaderboard with Admin Edit Capability */}
-              <div className="lg:col-span-2 space-y-4">
-                <LiveLeaderboard
-                  teams={leaderboardTeams}
-                  isAdmin={true}
-                  onUpdateScore={handleUpdateScore}
-                />
-              </div>
-
-              {/* Real-time Audit Trail & Calibration Log */}
-              <div className="space-y-4">
-                <div className="panel-card border border-accent-blue/20 bg-bg-elevated p-5">
-                  <div className="flex items-center justify-between pb-3 border-b border-accent-blue/15 mb-3">
-                    <span className="text-xs font-mono uppercase tracking-wider text-text-secondary font-bold flex items-center gap-1.5">
-                      <AlertCircle className="w-3.5 h-3.5 text-accent-blue" />
-                      Live Point Log
-                    </span>
-                    <span className="text-[10px] font-mono text-accent-blue">
-                      {auditLogs.length} events
-                    </span>
-                  </div>
-
-                  <div className="space-y-2.5">
-                    {auditLogs.map((log, idx) => (
-                      <div
-                        key={idx}
-                        className="p-2.5 rounded-lg bg-bg-primary border border-accent-blue/10 flex items-center justify-between text-xs"
-                      >
-                        <div>
-                          <div className="font-semibold text-text-primary font-mono">{log.teamName}</div>
-                          <div className="text-[10px] text-text-secondary">{log.reason}</div>
-                        </div>
-                        <div className="text-right">
-                          <span
-                            className={`font-mono font-bold ${
-                              log.delta > 0 ? 'text-success-green' : 'text-danger-red'
-                            }`}
-                          >
-                            {log.delta > 0 ? `+${log.delta}` : log.delta} pts
-                          </span>
-                          <div className="text-[9px] font-mono text-text-secondary/60">
-                            {log.timestamp}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Score Policy Reference */}
-                <div className="panel-card border border-accent-blue/15 bg-bg-elevated/60 p-4 text-xs text-text-secondary space-y-2">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-accent-blue font-bold block">
-                    // SCORING POLICY RULES
-                  </span>
-                  <ul className="list-disc list-inside space-y-1 text-[11px] text-text-secondary/80 leading-relaxed font-mono">
-                    <li>Round 1: +100 max algorithmic task</li>
-                    <li>Round 2: Captain immunity + quota pass</li>
-                    <li>Round 3: Pairing duel points & voting ratio</li>
-                    <li>Round 4: Judge rubric 100 max + penalty deductions</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+            <ScoreManager
+              teams={teams}
+              onAdjustScore={handleScoreAdjustment}
+              onDirectSetScore={handleUpdateScore}
+            />
           </div>
         )}
 
