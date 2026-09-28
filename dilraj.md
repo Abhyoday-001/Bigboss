@@ -9,7 +9,7 @@ Read `PRD.md` and `DESIGN.md` fully before starting. The admin side carries real
 risk during a live event — prioritize clarity and confirmation dialogs over visual flourish here,
 per `PRD.md` §7.
 
-## Implementation Status Summary (Branch: `feat/admin-score-management`)
+## Implementation Status Summary (Branch: `feat/admin-overview-round-controls`)
 
 | Module | Status | Key Components & Files Built |
 |---|---|---|
@@ -21,7 +21,7 @@ per `PRD.md` §7.
 | **Team Detail Drill-down Modal** | ✅ Complete | `src/admin/components/TeamDetailModal.tsx` |
 | **Score Management & Audit Logs** | ✅ Complete | `src/admin/components/ScoreManager.tsx`, `mockTeams.ts` |
 | **Live Leaderboard (Admin View)** | ✅ Complete | Embedded in `ScoreManager.tsx` with inline score editor |
-| **Admin Login** | ⏳ Next | Dedicated auth screen & role verification |
+| **Admin Login & Auth Clearance** | ✅ Complete | `src/admin/pages/AdminLoginPage.tsx`, route guard in `App.tsx` |
 
 ---
 
@@ -46,10 +46,14 @@ implementations when they're ready.
 ## Module: Admin Login
 
 **What to build:**
-- [ ] Separate auth flow/role from team login — admin role is distinguished via the API response
+- [x] Separate auth flow/role from team login (`/admin/login` with `ADMIN` role distinguish)
+- [x] Surveillance theme visual parity with participant login: `AmbientEyeBackground` + `NeuronNetworkBackground`
+- [x] Quick role selectors: Dilraj (Core Admin), Spoorthi (Tools Admin), Judge Desk
 
-**Interface contracts needed:**
-- Admin auth endpoint shape (POST body, response shape, role field)
+**Interface contracts implemented:**
+- `AdminLoginPage` component (`src/admin/pages/AdminLoginPage.tsx`)
+- `useAuth` hook with `loginAdmin` and `role === 'ADMIN'`
+- Protected routing via `AdminProtectedRoute` in `App.tsx`
 
 **Can build with:** Mock auth endpoint returning an admin token/role.
 
@@ -152,7 +156,7 @@ the state machine.
       inconsistent state — button disabling while request is in flight
 - [x] Full responsive pass — desktop-first + tablet support (`DESIGN.md` §7)
 - [x] Loading/error/empty states on team list, score management, and round controls
-- [ ] Full run-through of the event timeline from the admin side alongside Spoorthi's screens
+- [x] Full run-through of the event timeline from the admin side alongside Spoorthi's screens
 
 ---
 
