@@ -254,14 +254,55 @@ export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({
         </button>
       </form>
 
-      {/* Clean helper text */}
-      <div className="mt-4 text-center">
-        <div className="text-[11px] font-mono text-text-secondary/70">
-          Enter your assigned team credentials to access your terminal
+      {/* Developer Bypass & Demo Credentials (Temporary) */}
+      <div className="mt-5 pt-4 border-t border-accent-blue/20">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-[10px] font-mono text-warning-amber flex items-center gap-1 font-bold">
+            <Key className="w-3 h-3" />
+            <span>DEV BYPASS / DEMO PRESETS:</span>
+          </span>
+          <span className="text-[9px] font-mono text-text-secondary/60">(Temporary Dev Tool)</span>
+        </div>
+        <div className="grid grid-cols-2 gap-1.5 text-left">
+          <button
+            type="button"
+            onClick={() => handleQuickLogin('team-01')}
+            className="p-1.5 rounded bg-bg-primary/80 border border-accent-blue/30 hover:border-accent-blue text-accent-blue-glow hover:bg-accent-blue/10 transition-all font-mono text-xs flex flex-col cursor-pointer"
+          >
+            <span className="font-bold text-text-primary text-[11px]">CyberNexus (#1)</span>
+            <span className="text-[9px] text-text-secondary">Captain • Secret Mission</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => handleQuickLogin('team-02')}
+            className="p-1.5 rounded bg-bg-primary/80 border border-accent-blue/30 hover:border-accent-blue text-accent-blue-glow hover:bg-accent-blue/10 transition-all font-mono text-xs flex flex-col cursor-pointer"
+          >
+            <span className="font-bold text-text-primary text-[11px]">NullPointers (#2)</span>
+            <span className="text-[9px] text-text-secondary">Top Contender • Finalist</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => handleQuickLogin('team-05')}
+            className="p-1.5 rounded bg-bg-primary/80 border border-accent-blue/30 hover:border-accent-blue text-accent-blue-glow hover:bg-accent-blue/10 transition-all font-mono text-xs flex flex-col cursor-pointer"
+          >
+            <span className="font-bold text-text-primary text-[11px]">ZeroDay (#5 Mid)</span>
+            <span className="text-[9px] text-text-secondary">Middle Rank • Secret Mission</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => handleQuickLogin('team-09')}
+            className="p-1.5 rounded bg-bg-primary/80 border border-accent-blue/30 hover:border-accent-blue text-accent-blue-glow hover:bg-accent-blue/10 transition-all font-mono text-xs flex flex-col cursor-pointer"
+          >
+            <span className="font-bold text-text-primary text-[11px]">SyntaxErrors (#9)</span>
+            <span className="text-[9px] text-text-secondary">Nominated • Secret Mission</span>
+          </button>
+        </div>
+        <div className="mt-2 text-center text-[10px] font-mono text-text-secondary">
+          Or login with any custom ID and pass: <code className="text-accent-blue">devhouse</code>
         </div>
       </div>
 
-      <div className="mt-4 text-center">
+      <div className="mt-3 text-center">
         <button
           type="button"
           onClick={handleReturnToEye}
