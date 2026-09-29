@@ -5,6 +5,7 @@ import { useEventPhase } from '../../shared/hooks/useEventPhase';
 import { ParticipantNavbar } from '../components/ParticipantNavbar';
 import { NeuronNetworkBackground } from '../components/NeuronNetworkBackground';
 import { AmbientEyeBackground } from '../../shared/components/AmbientEyeBackground';
+import { RoundAccessGuard } from '../components/RoundAccessGuard';
 import {
   eventOperationsService,
   QuizQuestion,
@@ -150,6 +151,18 @@ export const Round0QuizPage: React.FC = () => {
   const timerPercentage = (timeLeft / timerDuration) * 100;
   const isUrgent = timeLeft <= 3;
   const isWarning = timeLeft <= 5 && timeLeft > 3;
+
+  if (!isCompleted && currentPhase !== 'ROUND_0_ACTIVE') {
+    return (
+      <RoundAccessGuard
+        requiredPhase="ROUND_0_ACTIVE"
+        roundName="Round 0: Rapid Technical Assessment"
+        roundNumber={0}
+      >
+        <div />
+      </RoundAccessGuard>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-bg-primary text-text-primary flex flex-col relative overflow-hidden">

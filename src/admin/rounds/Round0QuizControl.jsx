@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useEventPhase } from '../../shared/hooks/useEventPhase';
 import {
   eventOperationsService,
   DEFAULT_ROUND_0_QUESTIONS,
@@ -21,6 +22,7 @@ import {
 } from 'lucide-react';
 
 export default function Round0QuizControl() {
+  const { currentPhase, setPhase } = useEventPhase();
   const [r0State, setR0State] = useState(eventOperationsService.getRound0State());
   const [timerSeconds, setTimerSeconds] = useState(r0State.timerPerQuestion || 10);
   const [isEditingQuestion, setIsEditingQuestion] = useState(false);
@@ -49,8 +51,20 @@ export default function Round0QuizControl() {
   };
 
   const handleToggleActive = () => {
-    eventOperationsService.updateRound0Config({ isActive: !r0State.isActive });
-    showNotice(`Round 0 Assessment is now ${!r0State.isActive ? 'OPEN' : 'LOCKED'}.`);
+    const nextActive = !r0State.isActive;
+    eventOperationsService.updateRound0Config({ isActive: nextActive });
+    if (nextActive) {
+      setPhase('ROUND_0_ACTIVE');
+    } else {
+      setPhase('ROUND_0_RESULTS');
+    }
+    showNotice(
+      `Round 0 Assessment is now ${
+        nextActive
+          ? 'LIVE (Participants auto-navigated to /round-0)'
+          : 'LOCKED (Standby Mode)'
+      }.`
+    );
   };
 
   const handleAddQuestion = (e) => {

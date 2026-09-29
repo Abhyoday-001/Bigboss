@@ -7,6 +7,8 @@ import { Round4Features } from '../../modules/Round4Features/Round4Features';
 import { Round4Submission } from '../../modules/Round4Submission/Round4Submission';
 import { FinalResults } from '../../modules/FinalResults/FinalResults';
 import { useAuth } from '../../shared/hooks/useAuth';
+import { useEventPhase } from '../../shared/hooks/useEventPhase';
+import { RoundAccessGuard } from '../components/RoundAccessGuard';
 import { Layers, Send, Trophy, ChevronLeft, ShieldAlert } from 'lucide-react';
 
 interface Round4PageProps {
@@ -15,6 +17,7 @@ interface Round4PageProps {
 
 export const Round4Page: React.FC<Round4PageProps> = ({ initialTab = 'features' }) => {
   const { team } = useAuth();
+  const { currentPhase } = useEventPhase();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -39,6 +42,24 @@ export const Round4Page: React.FC<Round4PageProps> = ({ initialTab = 'features' 
     else if (tab === 'submission') navigate('/round-4-submission');
     else if (tab === 'results') navigate('/final-results');
   };
+
+  const isR4Active =
+    currentPhase === 'ROUND_4_FEATURES_REVEALED' ||
+    currentPhase === 'ROUND_4_SUBMISSION' ||
+    currentPhase === 'ROUND_4_JUDGING' ||
+    currentPhase === 'FINAL_RESULTS';
+
+  if (!isR4Active) {
+    return (
+      <RoundAccessGuard
+        requiredPhase={['ROUND_4_FEATURES_REVEALED', 'ROUND_4_SUBMISSION', 'ROUND_4_JUDGING', 'FINAL_RESULTS']}
+        roundName="Round 4: The Finale Build & CTF"
+        roundNumber={4}
+      >
+        <div />
+      </RoundAccessGuard>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-bg-primary text-text-primary flex flex-col relative overflow-hidden">

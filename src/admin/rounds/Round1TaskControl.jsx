@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useEventPhase } from '../../shared/hooks/useEventPhase';
 import {
   eventOperationsService,
 } from '../../shared/services/eventOperationsService';
@@ -20,9 +21,12 @@ import {
   MessageSquare,
   AlertCircle,
   Eye,
+  Play,
+  Radio,
 } from 'lucide-react';
 
 export default function Round1TaskControl() {
+  const { currentPhase, setPhase, setTargetEndTime } = useEventPhase();
   const [r1State, setR1State] = useState(eventOperationsService.getRound1State());
   const [taskForm, setTaskForm] = useState(r1State.task);
   const [newDeliverableLabel, setNewDeliverableLabel] = useState('');
@@ -164,6 +168,41 @@ export default function Round1TaskControl() {
             Assign the building task, set mandatory feature checklists, inspect participants' GitHub and
             deployment URLs, and manually score their work.
           </p>
+        </div>
+
+        <div className="flex items-center gap-3">
+          {currentPhase !== 'ROUND_1_ACTIVE' ? (
+            <button
+              type="button"
+              onClick={() => {
+                setPhase('ROUND_1_ACTIVE');
+                setTargetEndTime(Date.now() + 45 * 60 * 1000);
+                showNotice('ROUND 1 LAUNCHED: All participant panels auto-navigating to /round-1.');
+              }}
+              className="py-2.5 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-mono uppercase font-bold shadow-lg hover:shadow-emerald-600/30 flex items-center gap-2 cursor-pointer transition-all"
+            >
+              <Play className="w-3.5 h-3.5 fill-current" />
+              <span>START ROUND 1 (AUTO-LAUNCH)</span>
+            </button>
+          ) : (
+            <div className="flex items-center gap-2">
+              <span className="px-3 py-2 rounded-lg bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 font-mono text-xs font-bold flex items-center gap-1.5">
+                <Radio className="w-3.5 h-3.5 animate-pulse" />
+                LIVE ON PARTICIPANT TERMINALS
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  setPhase('ROUND_1_RESULTS');
+                  showNotice('ROUND 1 CLOSED: Submissions locked, participants returned to Standby Dashboard.');
+                }}
+                className="py-2.5 px-3 rounded-lg bg-danger-red hover:bg-red-600 text-white text-xs font-mono uppercase font-bold shadow-glow-red flex items-center gap-1.5 cursor-pointer transition-all"
+              >
+                <Square className="w-3.5 h-3.5 fill-current" />
+                <span>CLOSE ROUND 1</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
 

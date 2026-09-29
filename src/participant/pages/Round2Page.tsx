@@ -7,6 +7,8 @@ import { Round2CaptaincyPage } from './Round2CaptaincyPage';
 import { SecretMission } from '../../modules/SecretMission/SecretMission';
 import { NominationStatus } from '../../modules/NominationStatus/NominationStatus';
 import { useAuth } from '../../shared/hooks/useAuth';
+import { useEventPhase } from '../../shared/hooks/useEventPhase';
+import { RoundAccessGuard } from '../components/RoundAccessGuard';
 import { Crown, KeyRound, ShieldAlert, ChevronLeft, Lock } from 'lucide-react';
 
 interface Round2PageProps {
@@ -15,6 +17,7 @@ interface Round2PageProps {
 
 export const Round2Page: React.FC<Round2PageProps> = ({ initialTab = 'captaincy' }) => {
   const { team } = useAuth();
+  const { currentPhase } = useEventPhase();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -45,6 +48,23 @@ export const Round2Page: React.FC<Round2PageProps> = ({ initialTab = 'captaincy'
     else if (tab === 'secret-mission') navigate('/secret-mission');
     else if (tab === 'nominations') navigate('/nomination-status');
   };
+
+  const isR2Active =
+    currentPhase === 'ROUND_2_CAPTAINCY' ||
+    currentPhase === 'ROUND_2_NOMINATIONS' ||
+    currentPhase === 'ROUND_2_SECRET_TASK';
+
+  if (!isR2Active) {
+    return (
+      <RoundAccessGuard
+        requiredPhase={['ROUND_2_CAPTAINCY', 'ROUND_2_NOMINATIONS', 'ROUND_2_SECRET_TASK']}
+        roundName="Round 2: Captaincy Battle & Nominations"
+        roundNumber={2}
+      >
+        <div />
+      </RoundAccessGuard>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-bg-primary text-text-primary flex flex-col relative overflow-hidden">

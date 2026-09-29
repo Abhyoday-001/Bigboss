@@ -3,9 +3,11 @@ import { EventState, EventPhase } from '../../shared/types/event';
 import { INITIAL_EVENT_STATE, PHASE_METADATA } from '../../mocks/mockEventState';
 import { INITIAL_MOCK_TEAMS, TeamRecord, TeamStatus } from '../../mocks/mockTeams';
 import { Team } from '../../shared/state-machine/types';
+import { useEventPhase } from '../../shared/hooks/useEventPhase';
 import { AdminHeader } from '../components/AdminHeader';
 import { EventOverview } from '../components/EventOverview';
 import { RoundControls } from '../components/RoundControls';
+import { AdminRoundLauncher } from '../components/AdminRoundLauncher';
 import { TeamsTable } from '../components/TeamsTable';
 import { TeamDetailModal } from '../components/TeamDetailModal';
 import { ScoreManager } from '../components/ScoreManager';
@@ -76,6 +78,7 @@ import {
 type AdminTab = 'overview' | 'round-0' | 'round-1' | 'round-2' | 'round-3' | 'round-4' | 'round-tools' | 'teams' | 'scores';
 
 export const AdminDashboardPage: React.FC = () => {
+  const { currentPhase, setPhase } = useEventPhase();
   const [eventState, setEventState] = useState<EventState>(INITIAL_EVENT_STATE);
   const [teams, setTeams] = useState<TeamRecord[]>(INITIAL_MOCK_TEAMS);
   const [selectedTeam, setSelectedTeam] = useState<TeamRecord | null>(null);
@@ -287,6 +290,9 @@ export const AdminDashboardPage: React.FC = () => {
 
       {/* Main Admin Content Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 space-y-6">
+        {/* Central Master Mission Control: Individual Round Launcher */}
+        <AdminRoundLauncher />
+
         {/* Unified Command Navigation Tabs */}
         <div className="flex items-center gap-2 border-b border-accent-blue/20 pb-3 overflow-x-auto">
           {/* Tab 1: Command Center */}

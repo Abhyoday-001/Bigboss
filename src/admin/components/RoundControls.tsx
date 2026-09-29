@@ -3,6 +3,7 @@ import { Play, Pause, Square, PlusCircle, RotateCcw, FastForward } from 'lucide-
 import { EventState, EventPhase } from '../../shared/types/event';
 import { ConfirmationModal, ConfirmationModalProps } from '../../shared/components/ConfirmationModal';
 import { PHASE_METADATA } from '../../mocks/mockEventState';
+import { useEventPhase } from '../../shared/hooks/useEventPhase';
 
 interface RoundControlsProps {
   eventState: EventState;
@@ -15,6 +16,7 @@ export const RoundControls: React.FC<RoundControlsProps> = ({
   onUpdateState,
   onAdvancePhase,
 }) => {
+  const { currentPhase: globalPhase, setPhase, setTargetEndTime } = useEventPhase();
   const [modalConfig, setModalConfig] = useState<ConfirmationModalProps | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -38,6 +40,7 @@ export const RoundControls: React.FC<RoundControlsProps> = ({
         setIsProcessing(true);
         try {
           await new Promise((r) => setTimeout(r, 600));
+          setTargetEndTime(Date.now() + eventState.timer.remainingSeconds * 1000);
           onUpdateState({
             status: 'RUNNING',
             timer: {
@@ -88,6 +91,7 @@ export const RoundControls: React.FC<RoundControlsProps> = ({
         setIsProcessing(true);
         try {
           await new Promise((r) => setTimeout(r, 800));
+          setPhase('ROUND_0_RESULTS');
           onUpdateState({
             status: 'COMPLETED',
             timer: {

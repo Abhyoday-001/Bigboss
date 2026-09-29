@@ -5,6 +5,7 @@ import { ParticipantNavbar } from '../components/ParticipantNavbar';
 import { NeuronNetworkBackground } from '../components/NeuronNetworkBackground';
 import { AmbientEyeBackground } from '../../shared/components/AmbientEyeBackground';
 import { TimerCountdown } from '../../shared/components/TimerCountdown';
+import { RoundAccessGuard } from '../components/RoundAccessGuard';
 import {
   eventOperationsService,
   Round1TaskDef,
@@ -28,7 +29,7 @@ import {
 
 export const Round1TaskPage: React.FC = () => {
   const { team } = useAuth();
-  const { targetEndTime } = useEventPhase();
+  const { targetEndTime, currentPhase } = useEventPhase();
 
   const [r1State, setR1State] = useState(eventOperationsService.getRound1State());
   const [repoUrl, setRepoUrl] = useState('');
@@ -90,6 +91,18 @@ export const Round1TaskPage: React.FC = () => {
   };
 
   const task: Round1TaskDef = r1State.task;
+
+  if (!isSubmitted && currentPhase !== 'ROUND_1_ACTIVE') {
+    return (
+      <RoundAccessGuard
+        requiredPhase="ROUND_1_ACTIVE"
+        roundName="Round 1: Rapid Task Challenge"
+        roundNumber={1}
+      >
+        <div />
+      </RoundAccessGuard>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-bg-primary text-text-primary flex flex-col relative overflow-hidden">

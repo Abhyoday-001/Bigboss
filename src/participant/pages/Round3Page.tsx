@@ -6,6 +6,8 @@ import { AmbientEyeBackground } from '../../shared/components/AmbientEyeBackgrou
 import { ImmunityChallenge } from '../../modules/ImmunityChallenge/ImmunityChallenge';
 import { Voting } from '../../modules/Voting/Voting';
 import { EvictionReveal } from '../../modules/Eviction/EvictionReveal';
+import { useEventPhase } from '../../shared/hooks/useEventPhase';
+import { RoundAccessGuard } from '../components/RoundAccessGuard';
 import { ShieldCheck, Vote, Skull, ChevronLeft } from 'lucide-react';
 
 interface Round3PageProps {
@@ -13,6 +15,7 @@ interface Round3PageProps {
 }
 
 export const Round3Page: React.FC<Round3PageProps> = ({ initialTab = 'immunity' }) => {
+  const { currentPhase } = useEventPhase();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -34,6 +37,23 @@ export const Round3Page: React.FC<Round3PageProps> = ({ initialTab = 'immunity' 
     else if (tab === 'voting') navigate('/voting');
     else if (tab === 'eviction') navigate('/eviction-reveal');
   };
+
+  const isR3Active =
+    currentPhase === 'ROUND_3_IMMUNITY' ||
+    currentPhase === 'ROUND_3_VOTING' ||
+    currentPhase === 'ROUND_3_EVICTION_REVEAL';
+
+  if (!isR3Active) {
+    return (
+      <RoundAccessGuard
+        requiredPhase={['ROUND_3_IMMUNITY', 'ROUND_3_VOTING', 'ROUND_3_EVICTION_REVEAL']}
+        roundName="Round 3: Immunity & House Eviction"
+        roundNumber={3}
+      >
+        <div />
+      </RoundAccessGuard>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-bg-primary text-text-primary flex flex-col relative overflow-hidden">
