@@ -62,7 +62,7 @@ export function Round4FinalScoreboard() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-800/80 pb-6">
         <div>
           <span className="text-xs uppercase tracking-widest text-[#1EA7FF] font-semibold">
-            Finale Controls // The Dev House Crown
+            Finale Controls // Tech Boss Crown
           </span>
           <h2 className="text-2xl font-black tracking-wide text-white mt-1">
             <span className="text-[#1EA7FF] font-mono">[ </span>
@@ -268,7 +268,7 @@ export function Round4FinalScoreboard() {
         message={
           winnerRevealed
             ? 'This will conceal the champion announcement from participant screens.'
-            : `Are you ready to crown ${winner?.name} as the official WINNER of The Dev House and broadcast the grand finale visual sequence across all screens?`
+            : `Are you ready to crown ${winner?.name} as the official WINNER of Tech Boss and broadcast the grand finale visual sequence across all screens?`
         }
         confirmText={winnerRevealed ? 'Conceal' : 'Crown & Broadcast Winner'}
         isLoading={submitting}

@@ -1,6 +1,6 @@
-# The Dev House — Demo Credentials & Testing Guide
+# Tech Boss — Demo Credentials & Testing Guide
 
-This document lists all active demo credentials, roles, and testing shortcuts across **The Dev House** platform.
+This document lists all active demo credentials, roles, and testing shortcuts across the **Tech Boss** platform.
 
 ---
 

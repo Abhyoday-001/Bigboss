@@ -4,7 +4,7 @@ export const PHASE_CONFIG: Record<EventPhase, PhaseMetadata> = {
   LANDING: {
     id: 'LANDING',
     roundNumber: null,
-    roundTitle: 'Welcome to The Dev House',
+    roundTitle: 'Welcome to Tech Boss',
     subPhaseTitle: 'System Initialization',
     description: 'Teams enter the house. The surveillance grid is active.',
     nextPhase: 'LOGIN',
@@ -154,9 +154,9 @@ export const PHASE_CONFIG: Record<EventPhase, PhaseMetadata> = {
   FINAL_RESULTS: {
     id: 'FINAL_RESULTS',
     roundNumber: 4,
-    roundTitle: 'The Dev House: Grand Finale',
+    roundTitle: 'Tech Boss: Grand Finale',
     subPhaseTitle: 'Champions Crowned',
-    description: 'The final surviving champion of The Dev House is revealed.',
+    description: 'The final surviving champion of Tech Boss is revealed.',
     nextPhase: null,
     isTimed: false,
     participantRoute: '/final-results',

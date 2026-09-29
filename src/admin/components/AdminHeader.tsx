@@ -47,7 +47,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = () => {
         <div>
           <div className="flex items-center gap-2">
             <span className="font-display tracking-widest text-lg sm:text-xl text-text-primary uppercase metal-headline">
-              THE DEV HOUSE
+              TECH BOSS
             </span>
             <span className="px-2 py-0.5 text-[9px] font-mono uppercase bg-accent-blue/15 border border-accent-blue/30 text-accent-blue-glow rounded font-bold tracking-wider">
               CONTROL ROOM

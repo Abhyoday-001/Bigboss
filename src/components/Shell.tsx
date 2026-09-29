@@ -33,7 +33,7 @@ export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 
       {/* Header */}
       <header className="border-b border-accent-blue/20 p-4 relative z-10 flex justify-between items-center">
-        <h1 className="text-2xl distressed-text">THE DEV HOUSE</h1>
+        <h1 className="text-2xl distressed-text">TECH BOSS</h1>
         <div className="flex items-center gap-4">
           <div className="text-right">
             <div className="text-xs text-text-secondary tracking-widest uppercase">Team</div>

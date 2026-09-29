@@ -190,7 +190,7 @@ export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({
               <span>SECURITY TERMINAL</span>
             </div>
             <div className="font-display text-xl uppercase tracking-wider text-text-primary">
-              The Dev House
+              Tech Boss
             </div>
           </div>
         </div>
@@ -358,7 +358,7 @@ export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({
           <div className="w-full h-full relative">
             <img
               src={eyeHeroImg}
-              alt="The Dev House Surveillance Eye"
+              alt="Tech Boss Surveillance Eye"
               className="w-full h-full object-cover pointer-events-none"
               style={{ transform: 'translateZ(0)' }}
             />
@@ -408,7 +408,7 @@ export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({
 
           <div className="flex flex-col items-center text-center pb-6 sm:pb-8">
             <h1 className="metal-headline text-5xl sm:text-7xl md:text-8xl font-display tracking-wider uppercase mb-2">
-              THE DEV HOUSE
+              TECH BOSS
             </h1>
             <p className="font-mono text-xs sm:text-sm text-text-secondary tracking-widest uppercase mb-6 sm:mb-8 bracket-framed">
               13 STAGES • 30 CODERS • 1 ULTIMATE SURVIVOR

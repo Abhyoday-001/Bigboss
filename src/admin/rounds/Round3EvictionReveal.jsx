@@ -224,7 +224,7 @@ export function Round3EvictionReveal() {
         onClose={() => setShowConfirmModal(false)}
         onConfirm={handleTriggerEviction}
         title="HIGH-STAKES: EXECUTE EVICTION"
-        message={`WARNING: You are about to permanently EVICT ${selectedToEvict.length} team(s) from The Dev House. This will trigger a dramatic red-alert eviction sequence on the participant panels and prevent them from competing in Round 4 Finale.\n\nProceed with elimination broadcast?`}
+        message={`WARNING: You are about to permanently EVICT ${selectedToEvict.length} team(s) from Tech Boss. This will trigger a dramatic red-alert eviction sequence on the participant panels and prevent them from competing in Round 4 Finale.\n\nProceed with elimination broadcast?`}
         confirmText="Confirm Permanent Eviction"
         isDestructive={true}
         isLoading={submitting}

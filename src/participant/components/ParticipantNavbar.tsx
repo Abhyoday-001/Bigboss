@@ -24,7 +24,7 @@ export const ParticipantNavbar: React.FC = () => {
           </div>
           <div className="flex flex-col">
             <span className="font-display tracking-widest text-base text-text-primary uppercase group-hover:text-accent-blue-glow transition-all">
-              THE DEV HOUSE
+              TECH BOSS
             </span>
             <span className="text-[9px] font-mono text-accent-blue tracking-wider -mt-0.5">
               PARTICIPANT TERMINAL

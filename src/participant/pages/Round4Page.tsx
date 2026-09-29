@@ -162,7 +162,7 @@ export const Round4Page: React.FC<Round4PageProps> = ({ initialTab = 'features' 
               <div className="mb-6 pb-4 border-b border-success-green/20 flex items-center justify-between">
                 <div>
                   <span className="text-[10px] font-mono uppercase tracking-widest text-success-green">
-                    THE DEV HOUSE 2026 VERDICT
+                    TECH BOSS 2026 VERDICT
                   </span>
                   <h2 className="text-2xl font-display uppercase tracking-wider text-text-primary mt-0.5">
                     Grand Finale Podium

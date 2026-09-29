@@ -52,7 +52,7 @@ export const FinalResults: React.FC = () => {
   return (
     <div className="flex flex-col items-center pb-12">
       <div className="bracket-frame mb-12">
-        <h2 className="text-4xl md:text-5xl distressed-text font-display tracking-widest text-center">THE DEV HOUSE: FINALE</h2>
+        <h2 className="text-4xl md:text-5xl distressed-text font-display tracking-widest text-center">TECH BOSS: FINALE</h2>
       </div>
 
       <div className={`w-full max-w-4xl transition-all duration-1000 transform ${revealWinner ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>

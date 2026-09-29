@@ -124,7 +124,7 @@ export const MOCK_ROUND_1_TASK: TaskRound1 = {
   id: 'task-r1-01',
   title: 'Protocol Breach: The Surveillance Bypass',
   brief:
-    'The Dev House central system has locked all outgoing telemetry. Your team must construct a fault-tolerant heartbeat monitor service that ingests streaming node logs, filters out encrypted honeypot pings, and calculates the live system integrity index in O(N log N) or better.',
+    'The Tech Boss central system has locked all outgoing telemetry. Your team must construct a fault-tolerant heartbeat monitor service that ingests streaming node logs, filters out encrypted honeypot pings, and calculates the live system integrity index in O(N log N) or better.',
   instructions: [
     'Implement the core algorithm in your preferred stack or submission repo.',
     'Handle payload jitter and corrupted frames without unhandled exceptions.',

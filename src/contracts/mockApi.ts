@@ -168,7 +168,7 @@ export const fetchEvictionResult = async (teamId: string): Promise<EvictionRespo
       } else if (MOCK_SCENARIO_EVICTION === 'EVICTED') {
         resolve({
           status: 'EVICTED',
-          message: 'The house has spoken. Your journey in The Dev House ends here.'
+          message: 'The house has spoken. Your journey in Tech Boss ends here.'
         });
       } else {
         resolve({

@@ -15,7 +15,7 @@ export const THEME_COLORS = {
 } as const;
 
 export const EVENT_DETAILS = {
-  title: 'THE DEV HOUSE',
+  title: 'TECH BOSS',
   subtitle: 'Tech × Strategy × Survival × Build',
   tagline: "It's not just a tech event, it's a reality.",
   organizer: 'Cognito Club, JAIN (Deemed-to-be University), Faculty of Engineering and Technology',

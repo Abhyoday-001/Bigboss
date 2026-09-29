@@ -189,7 +189,7 @@ export function RoundToolsContainer({ activeRound = null, onSelectTool = null, e
               <div>
                 <div className="flex items-center gap-2">
                   <h1 className="text-lg font-black tracking-wider uppercase metal-headline">
-                    THE DEV HOUSE
+                    TECH BOSS
                   </h1>
                   <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-accent-blue/15 border border-accent-blue/40 text-accent-blue-glow font-bold">
                     ROUND OPERATIONS

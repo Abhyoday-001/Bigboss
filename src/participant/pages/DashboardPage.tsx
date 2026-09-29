@@ -128,7 +128,7 @@ export const DashboardPage: React.FC = () => {
                   SYSTEM INITIALIZED • STANDBY
                 </span>
                 <h2 className="text-2xl font-display uppercase tracking-wider text-text-primary mt-1">
-                  Welcome to The Dev House
+                  Welcome to Tech Boss
                 </h2>
                 <p className="text-xs text-text-secondary max-w-lg mx-auto mt-2 leading-relaxed">
                   Terminal connections established. The Surveillance Eye is calibrating house telemetry.
@@ -416,7 +416,7 @@ export const DashboardPage: React.FC = () => {
                     Eviction Ceremony
                   </h2>
                   <p className="text-xs text-text-secondary mt-1.5 max-w-xl leading-relaxed">
-                    The house vote is tallied. The Eye reveals who is evicted from The Dev House.
+                    The house vote is tallied. The Eye reveals who is evicted from Tech Boss.
                   </p>
                 </div>
                 <Link
@@ -479,7 +479,7 @@ export const DashboardPage: React.FC = () => {
                   CHAMPIONSHIP CONCLUDED
                 </span>
                 <h2 className="text-3xl sm:text-4xl font-display uppercase tracking-wider text-text-primary mt-1">
-                  The Dev House Champions
+                  Tech Boss Champions
                 </h2>
                 <p className="text-xs text-text-secondary max-w-lg mx-auto mt-2 leading-relaxed">
                   Final judging is complete. The ultimate winner has been crowned.
