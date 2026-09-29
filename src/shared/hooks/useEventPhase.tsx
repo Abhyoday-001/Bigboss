@@ -21,7 +21,7 @@ const TIMER_STORAGE_KEY = 'devhouse_target_end_time';
 export const EventPhaseProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [currentPhase, setCurrentPhase] = useState<EventPhase>(() => {
     const saved = localStorage.getItem(PHASE_STORAGE_KEY) as EventPhase;
-    return saved && PHASE_CONFIG[saved] ? saved : 'ROUND_1_ACTIVE';
+    return saved && PHASE_CONFIG[saved] ? saved : 'ROUND_0_ACTIVE';
   });
 
   const [targetEndTime, setTargetEndTimeState] = useState<number>(() => {

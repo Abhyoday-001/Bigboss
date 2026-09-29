@@ -37,7 +37,7 @@ export const ParticipantNavbar: React.FC = () => {
           {/* Active Phase Badge */}
           <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded bg-bg-elevated border border-accent-blue/20 text-[10px] font-mono text-accent-blue tracking-wider uppercase">
             <span className="w-1.5 h-1.5 rounded-full bg-accent-blue animate-ping" />
-            <span>{currentMetadata?.name || 'LIVE OPERATION'}</span>
+            <span>{currentMetadata?.roundTitle || 'LIVE OPERATION'}</span>
           </div>
 
           {/* Simple Clean Team Identifier */}

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../../shared/hooks/useAuth';
 import { useEventPhase } from '../../shared/hooks/useEventPhase';
 import { ParticipantNavbar } from '../components/ParticipantNavbar';
+import { DemoRoundSwitcher } from '../components/DemoRoundSwitcher';
 import { NeuronNetworkBackground } from '../components/NeuronNetworkBackground';
 import { RoundStatusBadge } from '../../shared/components/RoundStatusBadge';
 import { TimerCountdown } from '../../shared/components/TimerCountdown';
@@ -49,6 +50,9 @@ export const DashboardPage: React.FC = () => {
       <NeuronNetworkBackground />
 
       <main className="relative z-10 flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-8 space-y-6">
+        {/* Demo Round Testing Switcher (Temporary toggle to test and verify all rounds) */}
+        <DemoRoundSwitcher />
+
         {/* Top Status & Timer Bar */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
           <div className="flex-1">
