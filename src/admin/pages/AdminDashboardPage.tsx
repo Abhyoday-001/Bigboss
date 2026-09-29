@@ -7,6 +7,9 @@ import { AdminHeader } from '../components/AdminHeader';
 import { RoundTabControlBanner } from '../components/RoundTabControlBanner';
 import { LiveLeaderboard } from '../../shared/components/LiveLeaderboard';
 import { ScoreManager } from '../components/ScoreManager';
+import { TeamsTable } from '../components/TeamsTable';
+import { TeamDetailModal } from '../components/TeamDetailModal';
+import { TeamStatus } from '../../mocks/mockTeams';
 
 // Round 0 & 1 Modules
 // @ts-ignore
@@ -61,6 +64,8 @@ type AdminTab = 'round-0' | 'round-1' | 'round-2' | 'round-3' | 'round-4' | 'lea
 export const AdminDashboardPage: React.FC = () => {
   const { currentPhase, setPhase } = useEventPhase();
   const [teams, setTeams] = useState<TeamRecord[]>(INITIAL_MOCK_TEAMS);
+  const [selectedTeam, setSelectedTeam] = useState<TeamRecord | null>(null);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   
   // Clean primary round tab
   const [activeTab, setActiveTab] = useState<AdminTab>('round-0');
@@ -69,6 +74,41 @@ export const AdminDashboardPage: React.FC = () => {
   const [r2SubTab, setR2SubTab] = useState<'captaincy' | 'nominations' | 'secret-mission'>('captaincy');
   const [r3SubTab, setR3SubTab] = useState<'pairings' | 'immunity' | 'voting' | 'eviction'>('immunity');
   const [r4SubTab, setR4SubTab] = useState<'hidden' | 'submissions' | 'judging' | 'penalties' | 'scoreboard'>('hidden');
+  const [leaderboardSubTab, setLeaderboardSubTab] = useState<'standings' | 'roster'>('standings');
+
+  // Team detail and status handlers
+  const handleSelectTeam = (team: TeamRecord) => {
+    setSelectedTeam(team);
+    setIsDetailModalOpen(true);
+  };
+
+  const handleUpdateTeamStatus = (teamId: string, newStatus: TeamStatus) => {
+    setTeams((prev) =>
+      prev.map((t) => (t.id === teamId ? { ...t, status: newStatus } : t))
+    );
+    if (selectedTeam && selectedTeam.id === teamId) {
+      setSelectedTeam((prev) => (prev ? { ...prev, status: newStatus } : null));
+    }
+  };
+
+  const handleAddTeam = (newTeam: Partial<TeamRecord>) => {
+    const newId = `team-${teams.length + 1}`;
+    const newCode = `DEV-${100 + teams.length + 1}`;
+    const record: TeamRecord = {
+      id: newId,
+      teamCode: newCode,
+      name: newTeam.name || `Team ${teams.length + 1}`,
+      leader: newTeam.leader || 'Leader',
+      members: newTeam.members || ['Leader', 'Member 2', 'Member 3'],
+      status: 'ACTIVE',
+      score: 0,
+      rank: teams.length + 1,
+      registeredAt: new Date().toLocaleTimeString(),
+      roundScores: { round1: 0, round2: 0, round3: 0, round4: 0 },
+      scoreHistory: [],
+    };
+    setTeams((prev) => [...prev, record]);
+  };
 
   // Score calibration handlers
   const handleUpdateScore = (teamId: string, newScore: number) => {
@@ -115,7 +155,7 @@ export const AdminDashboardPage: React.FC = () => {
       {/* Main Content Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 space-y-6">
         {/* Global Control & Quick Standby Bar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl bg-bg-elevated border border-accent-blue/20">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 p-4 rounded-xl bg-bg-elevated border border-accent-blue/20">
           <div className="flex items-center gap-3">
             <span className="w-2.5 h-2.5 rounded-full bg-accent-blue animate-pulse" />
             <div>
@@ -129,6 +169,22 @@ export const AdminDashboardPage: React.FC = () => {
                 </span>
               </div>
             </div>
+          </div>
+
+          {/* Quick House Telemetry Stats */}
+          <div className="flex items-center gap-2 flex-wrap text-xs font-mono">
+            <span className="px-2.5 py-1 rounded bg-bg-primary border border-bg-border text-text-secondary">
+              Total: <strong className="text-text-primary">{teams.length}</strong>
+            </span>
+            <span className="px-2.5 py-1 rounded bg-success-green/10 border border-success-green/30 text-success-green">
+              Active: <strong>{teams.filter((t) => t.status !== 'EVICTED').length}</strong>
+            </span>
+            <span className="px-2.5 py-1 rounded bg-amber-500/10 border border-amber-500/30 text-amber-400">
+              Nominated: <strong>{teams.filter((t) => t.status === 'NOMINATED').length}</strong>
+            </span>
+            <span className="px-2.5 py-1 rounded bg-danger-red/10 border border-danger-red/30 text-danger-red">
+              Eliminated: <strong>{teams.filter((t) => t.status === 'EVICTED').length}</strong>
+            </span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -504,31 +560,78 @@ export const AdminDashboardPage: React.FC = () => {
           </div>
         )}
 
-        {/* ── TAB 5: LEADERBOARD ── */}
+        {/* ── TAB 5: LEADERBOARD & TEAMS ── */}
         {activeTab === 'leaderboard' && (
           <div className="space-y-6 animate-fadeIn">
-            <div className="p-5 rounded-xl panel-card border border-accent-blue/30 bg-bg-elevated flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="p-5 rounded-xl panel-card border border-accent-blue/30 bg-bg-elevated flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <span className="text-[10px] font-mono uppercase tracking-widest text-accent-blue font-bold">
                   SURVEILLANCE ROSTER & STANDINGS
                 </span>
                 <h2 className="text-2xl font-display uppercase tracking-wider text-text-primary mt-0.5">
-                  Live House Leaderboard & Scores
+                  House Leaderboard & Team Management
                 </h2>
                 <p className="text-xs text-text-secondary mt-1">
-                  Real-time scores, ranks, and operational statuses across all participating house pods.
+                  Monitor live point standings, adjust scores with audit tags, and manage table pods & operative statuses.
                 </p>
+              </div>
+
+              {/* Sub-tab toggle */}
+              <div className="flex items-center bg-bg-primary border border-accent-blue/20 rounded-lg p-1 text-xs font-mono shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setLeaderboardSubTab('standings')}
+                  className={`px-3 py-1.5 rounded transition-all cursor-pointer uppercase ${
+                    leaderboardSubTab === 'standings'
+                      ? 'bg-accent-blue text-black font-bold shadow-glow-blue'
+                      : 'text-text-secondary hover:text-text-primary'
+                  }`}
+                >
+                  1. Live Standings & Scoring
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setLeaderboardSubTab('roster')}
+                  className={`px-3 py-1.5 rounded transition-all cursor-pointer uppercase ${
+                    leaderboardSubTab === 'roster'
+                      ? 'bg-accent-blue text-black font-bold shadow-glow-blue'
+                      : 'text-text-secondary hover:text-text-primary'
+                  }`}
+                >
+                  2. House Pods Roster ({teams.length})
+                </button>
               </div>
             </div>
 
-            {/* Live Leaderboard Display */}
-            <LiveLeaderboard teams={leaderboardTeams} />
+            {/* Standings View */}
+            {leaderboardSubTab === 'standings' && (
+              <div className="space-y-6">
+                <LiveLeaderboard teams={leaderboardTeams} />
+                <ScoreManager
+                  teams={teams}
+                  onAdjustScore={handleScoreAdjustment}
+                  onDirectSetScore={handleUpdateScore}
+                />
+              </div>
+            )}
 
-            {/* Direct Score Calibration & Manual Override */}
-            <ScoreManager
-              teams={teams}
-              onAdjustScore={handleScoreAdjustment}
-              onDirectSetScore={handleUpdateScore}
+            {/* Team Roster & Pod Management View */}
+            {leaderboardSubTab === 'roster' && (
+              <div className="space-y-6">
+                <TeamsTable
+                  teams={teams}
+                  onSelectTeam={handleSelectTeam}
+                  onAddTeam={handleAddTeam}
+                />
+              </div>
+            )}
+
+            {/* Team Detail Drill-down Modal */}
+            <TeamDetailModal
+              isOpen={isDetailModalOpen}
+              team={selectedTeam}
+              onClose={() => setIsDetailModalOpen(false)}
+              onUpdateStatus={handleUpdateTeamStatus}
             />
           </div>
         )}
