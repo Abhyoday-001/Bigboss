@@ -24,7 +24,7 @@ export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({
   initialResolved = false,
 }) => {
   const navigate = useNavigate();
-  const { loginTeam, isAuthenticated } = useAuth();
+  const { loginTeam, loginAdmin, isAuthenticated } = useAuth();
 
   // Synchronous session check — zero delay on revisit
   const isInitiallyEntered = (() => {
@@ -44,9 +44,9 @@ export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({
   const loginBgMountedRef = useRef(isInitiallyEntered);
   const [showLoginBg, setShowLoginBg] = useState(isInitiallyEntered);
 
-  // Form State
-  const [teamId, setTeamId] = useState('');
-  const [passcode, setPasscode] = useState('');
+  // Form State — pre-filled with demo credentials so user never has to type
+  const [teamId, setTeamId] = useState('team-01');
+  const [passcode, setPasscode] = useState('devhouse');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -254,51 +254,66 @@ export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({
         </button>
       </form>
 
-      {/* Developer Bypass & Demo Credentials (Temporary) */}
+      {/* Demo Credentials (1-Click Login & Auto-Fill) */}
       <div className="mt-5 pt-4 border-t border-accent-blue/20">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-[10px] font-mono text-warning-amber flex items-center gap-1 font-bold">
-            <Key className="w-3 h-3" />
-            <span>DEV BYPASS / DEMO PRESETS:</span>
+        <div className="flex items-center justify-between mb-2.5">
+          <span className="text-[11px] font-mono text-accent-blue flex items-center gap-1.5 font-bold uppercase tracking-wider">
+            <Key className="w-3.5 h-3.5" />
+            <span>DEMO CREDENTIALS (CLICK TO ENTER):</span>
           </span>
-          <span className="text-[9px] font-mono text-text-secondary/60">(Temporary Dev Tool)</span>
+          <span className="text-[10px] font-mono text-text-secondary/70">No typing required</span>
         </div>
-        <div className="grid grid-cols-2 gap-1.5 text-left">
+        <div className="grid grid-cols-2 gap-2 text-left">
           <button
             type="button"
             onClick={() => handleQuickLogin('team-01')}
-            className="p-1.5 rounded bg-bg-primary/80 border border-accent-blue/30 hover:border-accent-blue text-accent-blue-glow hover:bg-accent-blue/10 transition-all font-mono text-xs flex flex-col cursor-pointer"
+            className="p-2 rounded-lg bg-bg-primary/90 border border-accent-blue/30 hover:border-accent-blue text-accent-blue-glow hover:bg-accent-blue/10 transition-all font-mono text-xs flex flex-col cursor-pointer"
           >
-            <span className="font-bold text-text-primary text-[11px]">CyberNexus (#1)</span>
-            <span className="text-[9px] text-text-secondary">Captain • Secret Mission</span>
+            <span className="font-bold text-text-primary text-[12px]">CyberNexus (#1)</span>
+            <span className="text-[10px] text-text-secondary">Captain • team-01 / devhouse</span>
           </button>
           <button
             type="button"
             onClick={() => handleQuickLogin('team-02')}
-            className="p-1.5 rounded bg-bg-primary/80 border border-accent-blue/30 hover:border-accent-blue text-accent-blue-glow hover:bg-accent-blue/10 transition-all font-mono text-xs flex flex-col cursor-pointer"
+            className="p-2 rounded-lg bg-bg-primary/90 border border-accent-blue/30 hover:border-accent-blue text-accent-blue-glow hover:bg-accent-blue/10 transition-all font-mono text-xs flex flex-col cursor-pointer"
           >
-            <span className="font-bold text-text-primary text-[11px]">NullPointers (#2)</span>
-            <span className="text-[9px] text-text-secondary">Top Contender • Finalist</span>
+            <span className="font-bold text-text-primary text-[12px]">NullPointers (#2)</span>
+            <span className="text-[10px] text-text-secondary">Finalist • team-02 / devhouse</span>
           </button>
           <button
             type="button"
             onClick={() => handleQuickLogin('team-05')}
-            className="p-1.5 rounded bg-bg-primary/80 border border-accent-blue/30 hover:border-accent-blue text-accent-blue-glow hover:bg-accent-blue/10 transition-all font-mono text-xs flex flex-col cursor-pointer"
+            className="p-2 rounded-lg bg-bg-primary/90 border border-accent-blue/30 hover:border-accent-blue text-accent-blue-glow hover:bg-accent-blue/10 transition-all font-mono text-xs flex flex-col cursor-pointer"
           >
-            <span className="font-bold text-text-primary text-[11px]">ZeroDay (#5 Mid)</span>
-            <span className="text-[9px] text-text-secondary">Middle Rank • Secret Mission</span>
+            <span className="font-bold text-text-primary text-[12px]">ZeroDay Protocol (#5)</span>
+            <span className="text-[10px] text-text-secondary">Mid-Rank • team-05 / devhouse</span>
           </button>
           <button
             type="button"
             onClick={() => handleQuickLogin('team-09')}
-            className="p-1.5 rounded bg-bg-primary/80 border border-accent-blue/30 hover:border-accent-blue text-accent-blue-glow hover:bg-accent-blue/10 transition-all font-mono text-xs flex flex-col cursor-pointer"
+            className="p-2 rounded-lg bg-bg-primary/90 border border-accent-blue/30 hover:border-accent-blue text-accent-blue-glow hover:bg-accent-blue/10 transition-all font-mono text-xs flex flex-col cursor-pointer"
           >
-            <span className="font-bold text-text-primary text-[11px]">SyntaxErrors (#9)</span>
-            <span className="text-[9px] text-text-secondary">Nominated • Secret Mission</span>
+            <span className="font-bold text-text-primary text-[12px]">SyntaxErrors (#9)</span>
+            <span className="text-[10px] text-text-secondary">Nominated • team-09 / devhouse</span>
           </button>
         </div>
-        <div className="mt-2 text-center text-[10px] font-mono text-text-secondary">
-          Or login with any custom ID and pass: <code className="text-accent-blue">devhouse</code>
+
+        {/* Control Room Admin Shortcut */}
+        <div className="mt-2 flex items-center justify-between p-2 rounded bg-accent-blue/10 border border-accent-blue/30">
+          <div className="text-[10px] font-mono">
+            <span className="text-accent-blue font-bold">CONTROL ROOM ADMIN:</span>{' '}
+            <span className="text-text-secondary">admin / admin123</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              loginAdmin();
+              navigate('/admin');
+            }}
+            className="px-2.5 py-1 rounded bg-accent-blue hover:bg-accent-blue-glow text-black font-mono text-[10px] font-bold uppercase transition-all cursor-pointer"
+          >
+            Enter Admin ➔
+          </button>
         </div>
       </div>
 

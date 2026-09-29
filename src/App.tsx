@@ -13,7 +13,6 @@ import { Round4Page } from './participant/pages/Round4Page';
 import { AdminDashboardPage } from './admin/pages/AdminDashboardPage';
 // @ts-ignore
 import { RoundToolsContainer } from './admin/rounds/RoundToolsContainer';
-import { DevBypassDrawer } from './shared/components/DevBypassDrawer';
 
 // Anjishth's Participant Panel Contracts & Modules
 import { EventProvider, useEventContext } from './contracts/EventContext';
@@ -297,8 +296,6 @@ export const App: React.FC = () => {
                 {/* Catch-all redirect to landing */}
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
-              {/* Temporary Developer Bypass & Demo Preset Drawer */}
-              <DevBypassDrawer />
             </EventProvider>
           </ContractsAuthProvider>
         </EventPhaseProvider>
