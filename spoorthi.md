@@ -18,7 +18,7 @@ implementations when they're ready.
 
 ## Shared Contracts (do first, with the whole team — 1 session)
 
-- [ ] Review the API docs provided by the backend team for Round 2/3/4-specific endpoints:
+- [x] Review the API docs provided by the backend team for Round 2/3/4-specific endpoints:
       secret task assignment, nomination list, vote tallies, judge scores
 
 > These shared items are small, fast, and done once as a team. Everything below can start
@@ -29,7 +29,7 @@ implementations when they're ready.
 ## Module: Captaincy Management
 
 **What to build:**
-- [ ] Interface to run/resolve the captaincy competition from the admin side
+- [x] Interface to run/resolve the captaincy competition from the admin side
 
 **Interface contracts needed:**
 - Captaincy admin endpoint (start competition, set result)
@@ -42,7 +42,7 @@ implementations when they're ready.
 ## Module: Captain Reveal Control
 
 **What to build:**
-- [ ] Admin-triggered reveal, should sync with Aryan's participant-side captain reveal moment —
+- [x] Admin-triggered reveal, should sync with Aryan's participant-side captain reveal moment —
       test together, not in isolation
 
 **Interface contracts needed:**
@@ -57,7 +57,7 @@ implementations when they're ready.
 ## Module: Nomination Management
 
 **What to build:**
-- [ ] Mark nominated teams; support a configurable nomination count that scales with total
+- [x] Mark nominated teams; support a configurable nomination count that scales with total
       registered teams (`PRD.md` §8 — exact formula is still open, build this as a settable number,
       not hardcoded)
 
@@ -72,10 +72,10 @@ implementations when they're ready.
 ## Module: Secret Mission Assignment/Status
 
 **What to build:**
-- [ ] Assign the secret task to the first/middle/last teams on the leaderboard (pull directly from
+- [x] Assign the secret task to the first/middle/last teams on the leaderboard (pull directly from
       live leaderboard data, don't let admin pick manually — the poster's whole mechanic depends on
       it being those exact three positions)
-- [ ] Track completion status per assigned team
+- [x] Track completion status per assigned team
 
 **Interface contracts needed:**
 - Leaderboard endpoint (to auto-identify first/middle/last teams)
@@ -91,7 +91,7 @@ secret mission assignment based on live leaderboard position.
 ## Module: Safe/Nominated Team Pairing
 
 **What to build:**
-- [ ] Pair each nominated team with a safe team for the immunity challenge
+- [x] Pair each nominated team with a safe team for the immunity challenge
 
 **Interface contracts needed:**
 - Nominated teams endpoint (list of nominated teams)
@@ -105,7 +105,7 @@ secret mission assignment based on live leaderboard position.
 ## Module: Immunity Round Control
 
 **What to build:**
-- [ ] Start/monitor/resolve the immunity challenge per pairing
+- [x] Start/monitor/resolve the immunity challenge per pairing
 
 **Interface contracts needed:**
 - Immunity admin endpoint (start, monitor status, resolve)
@@ -118,9 +118,9 @@ secret mission assignment based on live leaderboard position.
 ## Module: Voting Control & Results
 
 **What to build:**
-- [ ] Open/close the voting window — build data-driven for whoever the confirmed voter role turns
+- [x] Open/close the voting window — build data-driven for whoever the confirmed voter role turns
       out to be (`PRD.md` §8)
-- [ ] Vote results view
+- [x] Vote results view
 
 **Interface contracts needed:**
 - Voting admin endpoint (open/close window, GET results/tallies)
@@ -132,7 +132,7 @@ secret mission assignment based on live leaderboard position.
 ## Module: Eviction/Reveal Screen (Admin Side)
 
 **What to build:**
-- [ ] Must trigger and visually sync with Anjishth's participant-side eviction reveal — this is a
+- [x] Must trigger and visually sync with Anjishth's participant-side eviction reveal — this is a
       live, audience-facing moment; coordinate a joint test, don't build in isolation
 
 **Interface contracts needed:**
@@ -147,7 +147,7 @@ secret mission assignment based on live leaderboard position.
 ## Module: Hidden Feature Management
 
 **What to build:**
-- [ ] Add/edit features, reveal them on schedule or on-demand — drives Anjishth's participant-side
+- [x] Add/edit features, reveal them on schedule or on-demand — drives Anjishth's participant-side
       hidden-feature dashboard directly
 
 **Interface contracts needed:**
@@ -160,7 +160,7 @@ secret mission assignment based on live leaderboard position.
 ## Module: View Team Submissions
 
 **What to build:**
-- [ ] List of submitted builds/links per team
+- [x] List of submitted builds/links per team
 
 **Interface contracts needed:**
 - Submissions endpoint (GET all team submissions)
@@ -172,7 +172,7 @@ secret mission assignment based on live leaderboard position.
 ## Module: Judge Scoring Interface
 
 **What to build:**
-- [ ] Score per feature/task implemented correctly, per `PRD.md` §4.2
+- [x] Score per feature/task implemented correctly, per `PRD.md` §4.2
 
 **Interface contracts needed:**
 - Judge scoring endpoint (POST score per team per feature)
@@ -186,7 +186,7 @@ secret mission assignment based on live leaderboard position.
 ## Module: Penalty Interface
 
 **What to build:**
-- [ ] Deduct points for out-of-scope features (per event concept: adding features outside listed
+- [x] Deduct points for out-of-scope features (per event concept: adding features outside listed
       requirements costs points — make this explicit and clearly labeled, not just a generic
       negative-number field)
 
@@ -201,7 +201,7 @@ secret mission assignment based on live leaderboard position.
 ## Module: Final Scoreboard / Winner Screen
 
 **What to build:**
-- [ ] Highest-stakes screen in the whole build — must sync perfectly with Anjishth's participant-
+- [x] Highest-stakes screen in the whole build — must sync perfectly with Anjishth's participant-
       side final results reveal
 
 **Interface contracts needed:**
@@ -215,12 +215,12 @@ secret mission assignment based on live leaderboard position.
 
 ## Polish Checklist (after all modules are built)
 
-- [ ] Confirm nomination-count scaling logic once the organizing team locks the formula
+- [x] Confirm nomination-count scaling logic once the organizing team locks the formula
       (`PRD.md` §8) — don't ship a guessed number
-- [ ] Loading/error/empty states on every screen above, especially judging and penalty interfaces
+- [x] Loading/error/empty states on every screen above, especially judging and penalty interfaces
       (these get used under real time pressure at the event)
-- [ ] Full responsive pass (desktop-first, verify tablet doesn't break)
-- [ ] Joint end-to-end run-through of Round 2 → Round 4 with Dilraj (admin) and Aryan/Anjishth
+- [x] Full responsive pass (desktop-first, verify tablet doesn't break)
+- [x] Joint end-to-end run-through of Round 2 → Round 4 with Dilraj (admin) and Aryan/Anjishth
       (participant) all connected to the real API before the event date
 
 ## Coordination Notes

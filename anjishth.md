@@ -20,7 +20,7 @@ implementations when they're ready.
 
 ## Shared Contracts (do first, with the whole team — 1 session)
 
-- [ ] Review Aryan's state machine + polling hook once built; confirm it can express
+- [x] Review Aryan's state machine + polling hook once built; confirm it can express
       round sub-phases (e.g. "Round 3: voting open" vs "Round 3: results revealed")
 
 > These shared items are small, fast, and done once as a team. Everything below can start
@@ -31,11 +31,11 @@ implementations when they're ready.
 ## Module: Secret Mission Interface
 
 **What to build:**
-- [ ] Must be conditionally rendered/hidden for all teams except the 3 assigned (first/middle/last
+- [x] Must be conditionally rendered/hidden for all teams except the 3 assigned (first/middle/last
       on leaderboard) — this is a real access-control requirement, not just a UI nicety; design
       the screen to handle both access-control patterns gracefully (API flag that hides it
       client-side, or the endpoint returning 403 for non-assigned teams)
-- [ ] Suspenseful framing per `DESIGN.md` mood (dark reveal, not a plain form)
+- [x] Suspenseful framing per `DESIGN.md` mood (dark reveal, not a plain form)
 
 **Interface contracts needed:**
 - Secret mission endpoint shape (mission brief, assignment flag, completion status)
@@ -50,8 +50,8 @@ implementations when they're ready.
 ## Module: Nomination Status
 
 **What to build:**
-- [ ] Clear indication of nominated/not-nominated with context (why, what happens next)
-- [ ] Uses status badge styling from `DESIGN.md` §6
+- [x] Clear indication of nominated/not-nominated with context (why, what happens next)
+- [x] Uses status badge styling from `DESIGN.md` §6
 
 **Interface contracts needed:**
 - Nomination status endpoint (boolean flag + context text)
@@ -64,7 +64,7 @@ implementations when they're ready.
 ## Module: Immunity Challenge Interface
 
 **What to build:**
-- [ ] Shows the nominated team's paired safe team, the challenge itself, and outcome
+- [x] Shows the nominated team's paired safe team, the challenge itself, and outcome
 
 **Interface contracts needed:**
 - Immunity endpoint (paired team info, challenge data, outcome)
@@ -77,7 +77,7 @@ implementations when they're ready.
 ## Module: Voting Interface
 
 **What to build:**
-- [ ] Build data-driven — exact voter identity (judges/participants/audience/mix) is still an open
+- [x] Build data-driven — exact voter identity (judges/participants/audience/mix) is still an open
       question per `PRD.md` §8; don't hardcode an assumption, make the component accept whoever the
       voter role turns out to be from the API/auth context
 
@@ -94,7 +94,7 @@ flexibility is a props/config concern, not a dependency on other code.
 ## Module: Eviction/Reveal Screens
 
 **What to build:**
-- [ ] This is a key dramatic beat — use the eye motif / bracket framing / danger-red accent per
+- [x] This is a key dramatic beat — use the eye motif / bracket framing / danger-red accent per
       `DESIGN.md` for maximum impact; coordinate visually with Spoorthi's admin-side eviction
       control screen so both reveal in sync
 
@@ -115,8 +115,8 @@ not just a mocked state.
 ## Module: Round 4 Hidden-Feature Dashboard
 
 **What to build:**
-- [ ] Features/tasks appear as admin reveals them (poll-driven) — no page reload needed
-- [ ] Clearly separates "required" vs any bonus/optional items if the API distinguishes them
+- [x] Features/tasks appear as admin reveals them (poll-driven) — no page reload needed
+- [x] Clearly separates "required" vs any bonus/optional items if the API distinguishes them
 
 **Interface contracts needed:**
 - Hidden features endpoint (list of features with revealed/hidden status)
@@ -130,8 +130,8 @@ not just a mocked state.
 ## Module: Final Submission Page
 
 **What to build:**
-- [ ] Team submits their vibe-coded site link/build for judging
-- [ ] Confirmation state after submission, with ability to see submission status
+- [x] Team submits their vibe-coded site link/build for judging
+- [x] Confirmation state after submission, with ability to see submission status
 
 **Interface contracts needed:**
 - Submission endpoint (POST link/URL, GET status)
@@ -144,7 +144,7 @@ not just a mocked state.
 ## Module: Final Score/Result Page
 
 **What to build:**
-- [ ] Final standings + winner reveal, highest-impact visual moment of the whole app — go big on
+- [x] Final standings + winner reveal, highest-impact visual moment of the whole app — go big on
       the poster's cinematic mood here
 
 **Interface contracts needed:**
@@ -157,11 +157,11 @@ not just a mocked state.
 
 ## Polish Checklist (after all modules are built)
 
-- [ ] Audit every screen you own for loading/error/empty states
-- [ ] Full responsive pass (mobile-first)
-- [ ] End-to-end test: run through Round 2 → Round 4 as a test "team" against the real API,
+- [x] Audit every screen you own for loading/error/empty states
+- [x] Full responsive pass (mobile-first)
+- [x] End-to-end test: run through Round 2 → Round 4 as a test "team" against the real API,
       confirm nothing requires a manual refresh at any step
-- [ ] Confirm secret-mission access control actually blocks non-assigned teams in a real test,
+- [x] Confirm secret-mission access control actually blocks non-assigned teams in a real test,
       not just visually hides the link
 
 ## Coordination Notes

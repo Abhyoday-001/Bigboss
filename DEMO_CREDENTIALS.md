@@ -47,12 +47,26 @@ This document lists all active demo credentials, roles, and testing shortcuts ac
 
 ## 🧭 Page Routes Ready for Testing
 
-- **`/`** — Scroll-Locked Mechanical Surveillance Eye Landing Sequence + Neural Particle Travel
+### Participant Experience:
+- **`/`** — Mechanical Surveillance Eye Landing Sequence + Neural Particle Travel
 - **`/login`** — Security Terminal House Verification + Post-Login Zoom Transition
-- **`/dashboard`** — Live House Status, Leaderboard, Round 2 Captaincy Card, Secret Mission Status
-- **`/round-1`** — Round 1 Task Terminal (Protocol Breach, Test Suite runner, Repo submission)
-- **`/round-2-captaincy`** — Round 2 Captaincy Arena & Fast-Paced Speed Run Module
+- **`/dashboard`** — Live House Status, Leaderboard, Round 2-4 Quick Cards, and Secret Mission Status
 - **`/profile`** — Team Profile, Member Roles, Table Number, Performance Stats
+- **`/round-1`** — Round 1 Task Terminal (Protocol Breach, Test Suite runner, Repo submission)
+- **`/round-2`** / **`/round-2-captaincy`** — Round 2 Hub: Captaincy Arena & Speed Run Challenge
+- **`/round-2-secret-task`** / **`/secret-mission`** — Round 2 Hub: Classified Directive (restricted to #1, #5, #9)
+- **`/round-2-nominations`** / **`/nomination-status`** — Round 2 Hub: House Nomination Ledger & Explanations
+- **`/round-3`** / **`/round-3-immunity`** / **`/immunity-challenge`** — Round 3 Hub: Immunity Pairings & Duel Arena
+- **`/round-3-voting`** / **`/voting`** — Round 3 Hub: Secure Cryptographic Voting Booth
+- **`/round-3-eviction`** / **`/eviction-reveal`** — Round 3 Hub: Eviction Broadcast & Reality Reveal
+- **`/round-4`** / **`/round-4-features`** — Round 4 Hub: Dynamic Hidden Specs & Live Feature Feed
+- **`/round-4-submission`** — Round 4 Hub: Vibe-Coded Build & Repository Submission
+- **`/final-results`** — Round 4 Hub: Grand Champions Podium & Victory Telemetry
+- **`/participant-panel`** — Standalone Interactive Shell Harness for rapid testing
+
+### Admin Experience:
+- **`/admin`** — Core Admin Dashboard (Event Overview, Global Phase Machine, Timer Sync, Live Roster, Score Manager)
+- **`/admin/rounds`** — Round Operations Console (Captaincy, Nominations, Secret Missions, Pairings, Immunity, Voting, Eviction, Hidden Features, Judging, Penalties, Finale)
 
 ---
 
