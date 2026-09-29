@@ -6,15 +6,20 @@ import { AmbientEyeBackground } from '../../shared/components/AmbientEyeBackgrou
 import { Round4Features } from '../../modules/Round4Features/Round4Features';
 import { Round4Submission } from '../../modules/Round4Submission/Round4Submission';
 import { FinalResults } from '../../modules/FinalResults/FinalResults';
-import { Layers, Send, Trophy, ChevronLeft } from 'lucide-react';
+import { useAuth } from '../../shared/hooks/useAuth';
+import { Layers, Send, Trophy, ChevronLeft, ShieldAlert } from 'lucide-react';
 
 interface Round4PageProps {
   initialTab?: 'features' | 'submission' | 'results';
 }
 
 export const Round4Page: React.FC<Round4PageProps> = ({ initialTab = 'features' }) => {
+  const { team } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+
+  // Round 4 CTF is exclusively for the top 3 qualifying teams
+  const isFinalist = !team?.rank || team.rank <= 3 || team.id === 'team-01' || team.id === 'team-02' || team.id === 'team-03';
 
   const getActiveTabFromPath = (): 'features' | 'submission' | 'results' => {
     if (location.pathname.includes('submission') || location.pathname.includes('submit')) return 'submission';
@@ -117,22 +122,39 @@ export const Round4Page: React.FC<Round4PageProps> = ({ initialTab = 'features' 
           )}
 
           {activeTab === 'submission' && (
-            <div className="panel-card p-6 border-t-2 border-t-warning-amber">
-              <div className="mb-6 pb-4 border-b border-warning-amber/20 flex items-center justify-between">
-                <div>
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-warning-amber">
-                    JURY INSPECTION DISPATCH
-                  </span>
-                  <h2 className="text-2xl font-display uppercase tracking-wider text-text-primary mt-0.5">
-                    Production Build Submission
-                  </h2>
+            <>
+              {isFinalist ? (
+                <div className="panel-card p-6 border-t-2 border-t-warning-amber">
+                  <div className="mb-6 pb-4 border-b border-warning-amber/20 flex items-center justify-between">
+                    <div>
+                      <span className="text-[10px] font-mono uppercase tracking-widest text-warning-amber">
+                        FINAL STAGE SUBMISSION
+                      </span>
+                      <h2 className="text-2xl font-display uppercase tracking-wider text-text-primary mt-0.5">
+                        Transmitting Deployment Vector
+                      </h2>
+                    </div>
+                    <div className="text-xs font-mono px-3 py-1 rounded bg-warning-amber/15 border border-warning-amber/40 text-warning-amber font-bold">
+                      TOP 3 FINALIST QUALIFIED
+                    </div>
+                  </div>
+                  <Round4Submission />
                 </div>
-                <div className="text-xs font-mono px-3 py-1 rounded bg-warning-amber/10 border border-warning-amber/30 text-warning-amber">
-                  Code Freeze Gate
+              ) : (
+                <div className="panel-card p-12 text-center border-t-2 border-t-warning-amber space-y-3">
+                  <div className="w-12 h-12 rounded-full bg-warning-amber/15 border border-warning-amber/40 flex items-center justify-center mx-auto text-warning-amber">
+                    <ShieldAlert className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-xl font-display uppercase tracking-wider text-text-primary">
+                    SPECTATOR STATUS • ROUND 4 CTF FINALE
+                  </h3>
+                  <p className="text-xs text-text-secondary max-w-md mx-auto leading-relaxed">
+                    Submission vectors in Round 4 are restricted to the 3 advancing finalist teams.
+                    Monitor the live specs feed and standby for the Grand Champions Reveal!
+                  </p>
                 </div>
-              </div>
-              <Round4Submission />
-            </div>
+              )}
+            </>
           )}
 
           {activeTab === 'results' && (

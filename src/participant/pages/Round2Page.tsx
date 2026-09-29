@@ -6,15 +6,26 @@ import { AmbientEyeBackground } from '../../shared/components/AmbientEyeBackgrou
 import { Round2CaptaincyPage } from './Round2CaptaincyPage';
 import { SecretMission } from '../../modules/SecretMission/SecretMission';
 import { NominationStatus } from '../../modules/NominationStatus/NominationStatus';
-import { Crown, KeyRound, ShieldAlert, ChevronLeft } from 'lucide-react';
+import { useAuth } from '../../shared/hooks/useAuth';
+import { Crown, KeyRound, ShieldAlert, ChevronLeft, Lock } from 'lucide-react';
 
 interface Round2PageProps {
   initialTab?: 'captaincy' | 'secret-mission' | 'nominations';
 }
 
 export const Round2Page: React.FC<Round2PageProps> = ({ initialTab = 'captaincy' }) => {
+  const { team } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+
+  // Secret mission restricted strictly to 3 designated teams (1st, middle, and last place)
+  const isSecretMissionTeam =
+    team?.id === 'team-01' ||
+    team?.id === 'team-05' ||
+    team?.id === 'team-09' ||
+    team?.rank === 1 ||
+    team?.rank === 5 ||
+    team?.rank === 9;
 
   const getActiveTabFromPath = (): 'captaincy' | 'secret-mission' | 'nominations' => {
     if (location.pathname.includes('secret') || location.pathname.includes('mission')) return 'secret-mission';
@@ -70,23 +81,26 @@ export const Round2Page: React.FC<Round2PageProps> = ({ initialTab = 'captaincy'
             <span>Captaincy Duel</span>
           </button>
 
-          <button
-            onClick={() => handleTabChange('secret-mission')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-mono uppercase tracking-wider transition-all ${
-              activeTab === 'secret-mission'
-                ? 'bg-accent-blue text-black font-bold shadow-glow'
-                : 'text-text-secondary hover:text-text-primary hover:bg-white/5'
-            }`}
-          >
-            <KeyRound className="w-4 h-4" />
-            <span>Classified Secret Mission</span>
-          </button>
+          {/* Secret Mission Tab — Only rendered for the 3 designated teams */}
+          {isSecretMissionTeam && (
+            <button
+              onClick={() => handleTabChange('secret-mission')}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-mono uppercase tracking-wider transition-all ${
+                activeTab === 'secret-mission'
+                  ? 'bg-danger-red text-white font-bold shadow-glow-red'
+                  : 'text-danger-red hover:bg-danger-red/10 border border-danger-red/30'
+              }`}
+            >
+              <KeyRound className="w-4 h-4 animate-pulse" />
+              <span>Classified Secret Mission</span>
+            </button>
+          )}
 
           <button
             onClick={() => handleTabChange('nominations')}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-mono uppercase tracking-wider transition-all ${
               activeTab === 'nominations'
-                ? 'bg-danger-red text-white font-bold shadow-glow-red'
+                ? 'bg-accent-blue text-black font-bold shadow-glow'
                 : 'text-text-secondary hover:text-text-primary hover:bg-white/5'
             }`}
           >
@@ -99,42 +113,58 @@ export const Round2Page: React.FC<Round2PageProps> = ({ initialTab = 'captaincy'
         <div className="animate-in fade-in duration-300">
           {activeTab === 'captaincy' && (
             <div className="-mt-8">
-              {/* Render Captaincy duel directly */}
               <Round2CaptaincyPage />
             </div>
           )}
 
           {activeTab === 'secret-mission' && (
-            <div className="panel-card p-6 border-t-2 border-t-accent-blue">
-              <div className="mb-6 pb-4 border-b border-accent-blue/15 flex items-center justify-between">
-                <div>
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-accent-blue">
-                    RESTRICTED CLEARANCE ONLY
-                  </span>
-                  <h2 className="text-2xl font-display uppercase tracking-wider text-text-primary mt-0.5">
-                    Classified Directive Protocol
-                  </h2>
+            <>
+              {isSecretMissionTeam ? (
+                <div className="panel-card p-6 border-t-2 border-t-danger-red">
+                  <div className="mb-6 pb-4 border-b border-danger-red/20 flex items-center justify-between">
+                    <div>
+                      <span className="text-[10px] font-mono uppercase tracking-widest text-danger-red">
+                        RESTRICTED CLEARANCE ONLY
+                      </span>
+                      <h2 className="text-2xl font-display uppercase tracking-wider text-text-primary mt-0.5">
+                        Classified Directive Protocol
+                      </h2>
+                    </div>
+                    <div className="text-xs font-mono px-3 py-1 rounded bg-danger-red/10 border border-danger-red/30 text-danger-red font-bold">
+                      TOP SECRET • 3 TEAMS ONLY
+                    </div>
+                  </div>
+                  <SecretMission />
                 </div>
-                <div className="text-xs font-mono px-3 py-1 rounded bg-accent-blue/10 border border-accent-blue/30 text-accent-blue">
-                  Confidential
+              ) : (
+                <div className="panel-card p-12 text-center border-t-2 border-t-danger-red space-y-3">
+                  <div className="w-12 h-12 rounded-full bg-danger-red/15 border border-danger-red/40 flex items-center justify-center mx-auto text-danger-red">
+                    <Lock className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-xl font-display uppercase tracking-wider text-text-primary">
+                    ACCESS DENIED • RESTRICTED CLEARANCE
+                  </h3>
+                  <p className="text-xs text-text-secondary max-w-md mx-auto">
+                    Your team does not possess authorization to view this directive. Maintain your
+                    current house position.
+                  </p>
                 </div>
-              </div>
-              <SecretMission />
-            </div>
+              )}
+            </>
           )}
 
           {activeTab === 'nominations' && (
-            <div className="panel-card p-6 border-t-2 border-t-danger-red">
-              <div className="mb-6 pb-4 border-b border-danger-red/20 flex items-center justify-between">
+            <div className="panel-card p-6 border-t-2 border-t-accent-blue">
+              <div className="mb-6 pb-4 border-b border-accent-blue/20 flex items-center justify-between">
                 <div>
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-danger-red">
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-accent-blue">
                     THE HOUSE VERDICT
                   </span>
                   <h2 className="text-2xl font-display uppercase tracking-wider text-text-primary mt-0.5">
                     Eviction Risk Assessment
                   </h2>
                 </div>
-                <div className="text-xs font-mono px-3 py-1 rounded bg-danger-red/10 border border-danger-red/30 text-danger-red">
+                <div className="text-xs font-mono px-3 py-1 rounded bg-accent-blue/10 border border-accent-blue/30 text-accent-blue">
                   Official Record
                 </div>
               </div>
@@ -146,3 +176,5 @@ export const Round2Page: React.FC<Round2PageProps> = ({ initialTab = 'captaincy'
     </div>
   );
 };
+
+export default Round2Page;

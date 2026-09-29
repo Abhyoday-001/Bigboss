@@ -92,14 +92,7 @@ export const App: React.FC = () => {
                     </ProtectedRoute>
                   }
                 />
-                <Route
-                  path="/profile"
-                  element={
-                    <ProtectedRoute>
-                      <ProfilePage />
-                    </ProtectedRoute>
-                  }
-                />
+                <Route path="/profile" element={<Navigate to="/dashboard" replace />} />
 
                 {/* Round 1 Area */}
                 <Route

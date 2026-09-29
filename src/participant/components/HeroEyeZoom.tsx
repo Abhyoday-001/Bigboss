@@ -254,31 +254,10 @@ export const HeroEyeZoom: React.FC<HeroEyeZoomProps> = ({
         </button>
       </form>
 
-      <div className="mt-5 pt-4 border-t border-accent-blue/15 text-center">
-        <div className="text-[11px] font-mono text-text-secondary mb-2 flex items-center justify-center gap-1.5">
-          <Key className="w-3.5 h-3.5 text-accent-blue" />
-          <span>DEMO LOGIN (1-CLICK DIRECT ACCESS):</span>
-        </div>
-        <div className="grid grid-cols-2 gap-2 text-left">
-          {[
-            { alias: 'TEAM_ALPHA', label: 'TEAM ALPHA', sub: 'Aryan Sharma (#1)' },
-            { alias: 'TEAM_BETA',  label: 'TEAM BETA',  sub: 'Anjishth Kumar (#2)' },
-            { alias: 'TEAM_GAMMA', label: 'TEAM GAMMA', sub: 'Dilraj Singh (#3)' },
-            { alias: 'TEAM_DELTA', label: 'TEAM DELTA', sub: 'Spoorthi Gowda (#4)' },
-          ].map(({ alias, label, sub }) => (
-            <button
-              key={alias}
-              type="button"
-              onClick={() => handleQuickLogin(alias)}
-              className="p-2 text-xs font-mono rounded bg-bg-primary border border-accent-blue/30 hover:border-accent-blue hover:bg-accent-blue/10 text-accent-blue-glow transition-all flex flex-col cursor-pointer"
-            >
-              <span className="font-bold text-text-primary">{label}</span>
-              <span className="text-[10px] text-text-secondary">{sub}</span>
-            </button>
-          ))}
-        </div>
-        <div className="mt-2 text-[10px] font-mono text-text-secondary">
-          Passcode: <code className="text-accent-blue">devhouse</code> (or any text)
+      {/* Clean helper text */}
+      <div className="mt-4 text-center">
+        <div className="text-[11px] font-mono text-text-secondary/70">
+          Enter your assigned team credentials to access your terminal
         </div>
       </div>
 

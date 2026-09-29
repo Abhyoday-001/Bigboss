@@ -3,11 +3,12 @@ import { ParticipantNavbar } from '../components/ParticipantNavbar';
 import { NeuronNetworkBackground } from '../components/NeuronNetworkBackground';
 import { AmbientEyeBackground } from '../../shared/components/AmbientEyeBackground';
 import { MOCK_CAPTAINCY_STATE } from '../../shared/mocks/mockData';
-import { Crown, Shield, Users } from 'lucide-react';
+import { Crown, Shield, Users, Radio, Power } from 'lucide-react';
 
 export const Round2CaptaincyPage: React.FC = () => {
   const [captaincyData, setCaptaincyData] = useState(MOCK_CAPTAINCY_STATE);
   const [isRevealing, setIsRevealing] = useState(false);
+  const [isCaptaincyActive, setIsCaptaincyActive] = useState(true);
 
   const handleTriggerReveal = () => {
     setIsRevealing(true);
@@ -24,7 +25,7 @@ export const Round2CaptaincyPage: React.FC = () => {
       <NeuronNetworkBackground />
 
       <main className="relative z-10 flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-8 space-y-6">
-        {/* Header */}
+        {/* Header with On/Off Toggle */}
         <div className="panel-card p-6 border-l-4 border-l-warning-amber flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div className="text-[10px] font-mono uppercase tracking-widest text-warning-amber flex items-center gap-2">
@@ -39,14 +40,43 @@ export const Round2CaptaincyPage: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
-            <span className="text-[11px] font-mono px-3 py-1 rounded bg-warning-amber/10 border border-warning-amber/30 text-warning-amber uppercase font-bold">
-              High Stakes Battle
-            </span>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setIsCaptaincyActive(!isCaptaincyActive)}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-mono uppercase font-bold transition-all border ${
+                isCaptaincyActive
+                  ? 'bg-success-green/15 text-success-green border-success-green/40 hover:bg-success-green/20'
+                  : 'bg-danger-red/15 text-danger-red border-danger-red/40 hover:bg-danger-red/20'
+              }`}
+              title="Toggle Captaincy Status"
+            >
+              <Power className="w-3.5 h-3.5" />
+              <span>{isCaptaincyActive ? 'CAPTAINCY: ACTIVE (ON)' : 'CAPTAINCY: PAUSED (OFF)'}</span>
+            </button>
           </div>
         </div>
 
-        {/* Dramatic Captain Reveal Section with Bracket Framing */}
+        {/* If Inactive / OFF, show waiting state */}
+        {!isCaptaincyActive ? (
+          <div className="panel-card p-12 text-center border-t-4 border-t-warning-amber space-y-4">
+            <div className="w-16 h-16 rounded-full bg-warning-amber/15 border border-warning-amber/40 flex items-center justify-center mx-auto text-warning-amber">
+              <Radio className="w-8 h-8 animate-pulse" />
+            </div>
+            <div>
+              <span className="text-xs font-mono uppercase tracking-widest text-warning-amber font-bold">
+                CAPTAINCY PROTOCOL CONCEALED
+              </span>
+              <h2 className="text-2xl font-display uppercase tracking-wider text-text-primary mt-1">
+                Waiting for the Next Round...
+              </h2>
+              <p className="text-xs text-text-secondary max-w-md mx-auto mt-2 leading-relaxed">
+                The captaincy duel has been paused or is awaiting official host broadcast. Please stand by at your table pods.
+              </p>
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* Dramatic Captain Reveal Section with Bracket Framing */}
         <div className="panel-card p-8 text-center relative overflow-hidden border border-warning-amber/30 glow-blue">
           {/* Background glowing aura */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,179,0,0.08)_0%,transparent_70%)] pointer-events-none" />
@@ -153,6 +183,8 @@ export const Round2CaptaincyPage: React.FC = () => {
             })}
           </div>
         </div>
+        </>
+        )}
       </main>
     </div>
   );

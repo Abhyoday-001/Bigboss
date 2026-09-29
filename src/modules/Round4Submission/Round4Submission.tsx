@@ -119,29 +119,53 @@ export const Round4Submission: React.FC = () => {
           <strong className="text-danger-red uppercase tracking-widest text-xs">Warning:</strong> Once submitted, you cannot change this URL.
         </p>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="url" className="block text-xs uppercase tracking-widest text-accent-blue mb-2 font-bold">
-              Deployment Vector (URL)
+            <label htmlFor="repoUrl" className="block text-xs uppercase tracking-widest text-accent-blue mb-1.5 font-bold font-mono">
+              Source Code Repository (GitHub)
+            </label>
+            <input
+              type="url"
+              id="repoUrl"
+              placeholder="https://github.com/..."
+              className="w-full bg-bg-primary border border-accent-blue/30 rounded p-3 text-text-primary text-sm outline-none focus:border-accent-blue-glow focus:shadow-glow transition-all font-mono"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="url" className="block text-xs uppercase tracking-widest text-accent-blue mb-1.5 font-bold font-mono">
+              Live Application Vector (Deployment URL)
             </label>
             <input
               type="url"
               id="url"
               required
-              placeholder="https://..."
+              placeholder="https://your-project.vercel.app"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
-              className="w-full bg-bg-primary border border-accent-blue/50 rounded p-3 text-text-primary outline-none focus:border-accent-blue-glow focus:shadow-glow transition-all font-body"
+              className="w-full bg-bg-primary border border-accent-blue/50 rounded p-3 text-text-primary text-sm outline-none focus:border-accent-blue-glow focus:shadow-glow transition-all font-mono"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="notes" className="block text-xs uppercase tracking-widest text-text-secondary mb-1.5 font-mono">
+              Operational Notes / Feature Highlights (Manual Entry)
+            </label>
+            <textarea
+              id="notes"
+              rows={3}
+              placeholder="Specify implemented specifications, credentials, or architectural notes..."
+              className="w-full bg-bg-primary border border-accent-blue/20 rounded p-3 text-text-primary text-xs outline-none focus:border-accent-blue/50 transition-all font-mono placeholder:text-text-muted"
             />
           </div>
 
           <div className="flex justify-end pt-4 border-t border-accent-blue/20">
             <button 
               type="submit" 
-              className="btn-primary w-full sm:w-auto"
+              className="btn-primary w-full sm:w-auto font-mono text-xs uppercase tracking-wider py-2.5 px-6"
               disabled={isSubmitting || !url}
             >
-              {isSubmitting ? 'TRANSMITTING...' : 'INITIATE TRANSFER'}
+              {isSubmitting ? 'TRANSMITTING VECTORS...' : 'SUBMIT BUILD TO EVALUATION DESK'}
             </button>
           </div>
         </form>
