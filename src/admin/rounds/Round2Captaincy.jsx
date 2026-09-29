@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, Crown, Play, Eye, CheckCircle2, AlertCircle, RefreshCw } from 'lucide-react';
+import { Shield, Crown, Play, CheckCircle2, AlertCircle, RefreshCw } from 'lucide-react';
 import adminRoundService from '../services/adminRoundService';
 import ConfirmationModal from '../components/ConfirmationModal';
 import StatusBadge from '../components/StatusBadge';
@@ -20,7 +20,6 @@ export function Round2Captaincy() {
   // Modals
   const [showStartModal, setShowStartModal] = useState(false);
   const [showResolveModal, setShowResolveModal] = useState(false);
-  const [showRevealModal, setShowRevealModal] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -90,20 +89,6 @@ export function Round2Captaincy() {
     }
   };
 
-  const handleTriggerReveal = async () => {
-    setSubmitting(true);
-    try {
-      const nextState = !captaincyData?.revealedToParticipants;
-      const updated = await adminRoundService.revealCaptain(nextState);
-      setCaptaincyData(updated);
-      setShowRevealModal(false);
-    } catch (err) {
-      alert('Error toggling reveal: ' + err.message);
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
   if (loading) {
     return (
       <div className="p-8 text-center text-gray-400">
@@ -156,7 +141,7 @@ export function Round2Captaincy() {
           <Crown className="w-32 h-32 text-[#1EA7FF]" />
         </div>
 
-        <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+        <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
           <div>
             <span className="text-xs font-mono uppercase text-gray-400 tracking-wider">House Captain</span>
             <div className="flex items-center gap-3 mt-1">
@@ -177,34 +162,6 @@ export function Round2Captaincy() {
             <p className="text-xs text-gray-300 mt-1 leading-relaxed border-l-2 border-[#1EA7FF] pl-3 py-0.5">
               {captaincyData?.advantage || 'No special advantage assigned.'}
             </p>
-          </div>
-
-          <div className="bg-[#050506] p-4 rounded-xl border border-gray-800 flex flex-col justify-between gap-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-mono text-gray-400">Participant Visibility</span>
-              {captaincyData?.revealedToParticipants ? (
-                <StatusBadge status="immune" text="BROADCAST LIVE" />
-              ) : (
-                <StatusBadge status="nominated" text="CONCEALED / HIDDEN" />
-              )}
-            </div>
-
-            <button
-              onClick={() => setShowRevealModal(true)}
-              disabled={!captaincyData?.winnerId}
-              className={`w-full py-2.5 px-4 rounded-lg font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
-                !captaincyData?.winnerId
-                  ? 'bg-gray-800 text-gray-500 cursor-not-allowed border border-gray-700'
-                  : captaincyData?.revealedToParticipants
-                  ? 'bg-[#FF3B4E]/20 text-[#FF3B4E] hover:bg-[#FF3B4E]/30 border border-[#FF3B4E]/40'
-                  : 'bg-[#1EA7FF] hover:bg-[#4FC3FF] text-[#050506] shadow-[0_0_15px_rgba(30,167,255,0.4)]'
-              }`}
-            >
-              <Eye className="w-4 h-4" />
-              {captaincyData?.revealedToParticipants
-                ? 'Conceal Captain from Participants'
-                : 'Trigger Dramatic Captain Reveal'}
-            </button>
           </div>
         </div>
       </div>
@@ -386,22 +343,8 @@ export function Round2Captaincy() {
         onClose={() => setShowResolveModal(false)}
         onConfirm={handleResolveWinner}
         title="DECLARE CAPTAINCY WINNER"
-        message={`Confirm declaring ${winningTeam?.name || 'Selected Team'} as the official House Captain? You can reveal the captain to participants when ready.`}
+        message={`Confirm declaring ${winningTeam?.name || 'Selected Team'} as the official House Captain?`}
         confirmText="Confirm Captain"
-        isLoading={submitting}
-      />
-
-      <ConfirmationModal
-        isOpen={showRevealModal}
-        onClose={() => setShowRevealModal(false)}
-        onConfirm={handleTriggerReveal}
-        title={captaincyData?.revealedToParticipants ? 'CONCEAL CAPTAIN REVEAL' : 'BROADCAST CAPTAIN REVEAL'}
-        message={
-          captaincyData?.revealedToParticipants
-            ? 'This will hide the captain identity from participant screens.'
-            : `Triggering this will immediately play the dramatic captain reveal moment on all participant screens with bracket styling [ ${winningTeam?.name} ].`
-        }
-        confirmText={captaincyData?.revealedToParticipants ? 'Conceal' : 'Broadcast Live Reveal'}
         isLoading={submitting}
       />
     </div>
