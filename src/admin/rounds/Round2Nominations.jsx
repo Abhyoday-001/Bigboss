@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { UserMinus, AlertTriangle, CheckCircle, RefreshCw, Sliders, ShieldAlert, FileText } from 'lucide-react';
+import { UserMinus, AlertTriangle, CheckCircle, RefreshCw, ShieldAlert, FileText } from 'lucide-react';
 import adminRoundService from '../services/adminRoundService';
 import ConfirmationModal from '../components/ConfirmationModal';
 import StatusBadge from '../components/StatusBadge';
@@ -11,7 +11,6 @@ export function Round2Nominations() {
   const [error, setError] = useState(null);
 
   // Editable states
-  const [maxCount, setMaxCount] = useState(3);
   const [selectedNominees, setSelectedNominees] = useState([]);
   const [nominationNotes, setNominationNotes] = useState({});
 
@@ -33,7 +32,6 @@ export function Round2Nominations() {
       ]);
       setTeams(teamsList);
       setNominationConfig(nomData);
-      setMaxCount(nomData.maxCount || 3);
       setSelectedNominees(nomData.nominatedTeamIds || []);
       setNominationNotes(nomData.notes || {});
     } catch (err) {
@@ -44,29 +42,10 @@ export function Round2Nominations() {
     }
   };
 
-  const handleMaxCountChange = async (newVal) => {
-    const count = Math.max(1, Math.min(teams.length, Number(newVal)));
-    setMaxCount(count);
-    try {
-      await adminRoundService.setNominationConfig(count);
-    } catch (err) {
-      console.warn('Could not persist nomination config to server:', err);
-    }
-  };
-
   const handleToggleNominee = (teamId) => {
-    setSelectedNominees((prev) => {
-      if (prev.includes(teamId)) {
-        const next = prev.filter((id) => id !== teamId);
-        return next;
-      } else {
-        if (prev.length >= maxCount) {
-          alert(`Nomination limit reached (${maxCount}). Increase maximum count or deselect another team.`);
-          return prev;
-        }
-        return [...prev, teamId];
-      }
-    });
+    setSelectedNominees((prev) =>
+      prev.includes(teamId) ? prev.filter((id) => id !== teamId) : [...prev, teamId]
+    );
   };
 
   const handleNoteChange = (teamId, note) => {
@@ -137,59 +116,32 @@ export function Round2Nominations() {
         </div>
       )}
 
-      {/* Control Bar: Configurable Quota */}
-      <div className="p-6 bg-[#0d0f14] border border-gray-800 rounded-xl grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <Sliders className="w-4 h-4 text-[#1EA7FF]" />
-            <span className="text-xs font-mono uppercase text-gray-400 tracking-wider">
-              Nomination Scaling Formula
-            </span>
+      {/* Control Bar: Team Nominations Action */}
+      <div className="p-5 bg-[#0d0f14] border border-gray-800 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 rounded-lg bg-red-950/40 text-[#FF3B4E] border border-red-900/40">
+            <UserMinus className="w-5 h-5" />
           </div>
-          <p className="text-xs text-gray-400">
-            Per PRD §8, total nominations scale dynamically with registered participant scale.
-          </p>
-        </div>
-
-        <div className="flex items-center gap-4 bg-[#050506] p-3 rounded-xl border border-gray-800">
-          <label className="text-xs font-mono uppercase text-gray-400">Nomination Target:</label>
-          <div className="flex items-center gap-2">
-            <input
-              type="number"
-              min={1}
-              max={activeTeams.length}
-              value={maxCount}
-              onChange={(e) => handleMaxCountChange(e.target.value)}
-              className="w-16 bg-[#0d0f14] border border-gray-700 focus:border-[#1EA7FF] text-center font-mono font-bold text-white text-sm py-1 rounded-md"
-            />
-            <span className="text-xs text-gray-400 font-mono">/ {activeTeams.length} Active Teams</span>
+          <div>
+            <span className="text-xs font-mono uppercase text-gray-400">Nomination Action</span>
+            <span className="text-base font-bold text-white block">
+              {selectedNominees.length} Team{selectedNominees.length === 1 ? '' : 's'} Selected for Nomination
+            </span>
           </div>
         </div>
 
-        <div className="flex items-center justify-between md:justify-end gap-3">
-          <div className="text-right">
-            <span className="text-xs font-mono text-gray-400 block">Selected Nominees:</span>
-            <span
-              className={`font-mono text-sm font-bold ${
-                selectedNominees.length === maxCount ? 'text-[#2ED67B]' : 'text-[#FF3B4E]'
-              }`}
-            >
-              {selectedNominees.length} of {maxCount} designated
-            </span>
-          </div>
-          <button
-            onClick={() => setShowConfirmModal(true)}
-            disabled={selectedNominees.length === 0}
-            className={`px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all ${
-              selectedNominees.length === 0
-                ? 'bg-gray-800 text-gray-500 cursor-not-allowed border border-gray-700'
-                : 'bg-[#FF3B4E] hover:bg-red-600 text-white shadow-[0_0_15px_rgba(255,59,78,0.4)]'
-            }`}
-          >
-            <ShieldAlert className="w-4 h-4" />
-            Lock Nominations
-          </button>
-        </div>
+        <button
+          onClick={() => setShowConfirmModal(true)}
+          disabled={selectedNominees.length === 0}
+          className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
+            selectedNominees.length === 0
+              ? 'bg-gray-800 text-gray-500 cursor-not-allowed border border-gray-700'
+              : 'bg-[#FF3B4E] hover:bg-red-600 text-white shadow-[0_0_15px_rgba(255,59,78,0.4)]'
+          }`}
+        >
+          <ShieldAlert className="w-4 h-4" />
+          Lock Nominations ({selectedNominees.length})
+        </button>
       </div>
 
       {/* Teams Grid for Nomination Selection */}
