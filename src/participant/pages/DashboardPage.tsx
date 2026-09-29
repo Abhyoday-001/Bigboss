@@ -117,7 +117,7 @@ export const DashboardPage: React.FC = () => {
 
         {/* ── STATE-DRIVEN ACTIVE ROUND / WAITING SECTION ── */}
         <div className="space-y-4">
-          {/* 1. REGISTRATION / ROUND 0 */}
+          {/* 1. NOT STARTED / LANDING / LOGIN */}
           {((currentPhase as string) === 'REGISTRATION' || (currentPhase as string) === 'NOT_STARTED' || (currentPhase as string) === 'LANDING' || (currentPhase as string) === 'LOGIN') && (
             <div className="panel-card p-8 border-t-4 border-t-accent-blue text-center space-y-4">
               <div className="w-14 h-14 rounded-full bg-accent-blue/15 border border-accent-blue/40 flex items-center justify-center mx-auto text-accent-blue">
@@ -125,51 +125,103 @@ export const DashboardPage: React.FC = () => {
               </div>
               <div>
                 <span className="text-xs font-mono uppercase tracking-widest text-accent-blue">
-                  SYSTEM INITIALIZED • ROUND 0
+                  SYSTEM INITIALIZED • STANDBY
                 </span>
                 <h2 className="text-2xl font-display uppercase tracking-wider text-text-primary mt-1">
                   Welcome to The Dev House
                 </h2>
                 <p className="text-xs text-text-secondary max-w-lg mx-auto mt-2 leading-relaxed">
-                  Terminal connections established. The Eye is calibrating house telemetry.
+                  Terminal connections established. The Surveillance Eye is calibrating house telemetry.
                   Review event protocols and stand by at your designated table pod.
                 </p>
               </div>
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-bg-primary border border-accent-blue/20 text-xs font-mono text-accent-blue-glow">
                 <Clock className="w-3.5 h-3.5 animate-spin" />
-                <span>Waiting for Round 1 to commence...</span>
+                <span>Waiting for Round 0 (Rapid Technical Assessment) to commence...</span>
               </div>
             </div>
           )}
 
-          {/* 2. ROUND 1 ACTIVE */}
-          {currentPhase === 'ROUND_1_ACTIVE' && (
+          {/* 2. ROUND 0 ACTIVE */}
+          {currentPhase === 'ROUND_0_ACTIVE' && (
             <div className="panel-card p-8 border-t-4 border-t-accent-blue space-y-5">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <span className="text-[10px] font-mono uppercase tracking-widest text-accent-blue flex items-center gap-1.5 font-bold">
-                    <Terminal className="w-3.5 h-3.5" /> ROUND 01 • ACTIVE CHALLENGE
+                    <Terminal className="w-3.5 h-3.5" /> ROUND 00 • RAPID TECHNICAL ASSESSMENT
                   </span>
                   <h2 className="text-3xl font-display uppercase tracking-wider text-text-primary mt-1">
-                    Rapid Task Protocol Breach
+                    Speed Elimination & Calibration
                   </h2>
                   <p className="text-xs text-text-secondary mt-1.5 max-w-xl leading-relaxed">
-                    Inspect the target system, fix failing unit test assertions, and submit your
-                    solution vector to register initial points on the house ledger.
+                    10-second rapid fire questions per item to test fundamental engineering instincts.
+                    Scores and velocity directly establish the initial House Leaderboard and seed Round 2 Captaincy contenders.
                   </p>
                 </div>
                 <Link
-                  to="/round-1"
+                  to="/round-0"
                   className="px-6 py-3 rounded-lg bg-accent-blue hover:bg-accent-blue-glow text-black font-display tracking-wider text-base uppercase font-bold flex items-center justify-center gap-2 shadow-glow-blue transition-all shrink-0"
                 >
-                  <span>Launch Task Terminal</span>
+                  <span>Launch Assessment</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
             </div>
           )}
 
-          {/* 3. ROUND 1 EVALUATION / PAUSE (WAITING FOR NEXT ROUND) */}
+          {/* 3. ROUND 0 RESULTS (WAITING FOR ROUND 1) */}
+          {currentPhase === 'ROUND_0_RESULTS' && (
+            <div className="panel-card p-8 border-t-4 border-t-success-green text-center space-y-4">
+              <div className="w-14 h-14 rounded-full bg-success-green/15 border border-success-green/40 flex items-center justify-center mx-auto text-success-green">
+                <Trophy className="w-7 h-7" />
+              </div>
+              <div>
+                <span className="text-xs font-mono uppercase tracking-widest text-success-green">
+                  ROUND 0 COMPLETE • ROSTER SEEDED
+                </span>
+                <h2 className="text-2xl font-display uppercase tracking-wider text-text-primary mt-1">
+                  Initial Leaderboard Locked
+                </h2>
+                <p className="text-xs text-text-secondary max-w-lg mx-auto mt-2 leading-relaxed">
+                  Assessment velocity scores have been computed by the Control Room. Ranks #1 through #N
+                  are officially seeded for the upcoming Build Challenge.
+                </p>
+              </div>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-bg-primary border border-success-green/30 text-xs font-mono text-success-green">
+                <span className="w-2 h-2 rounded-full bg-success-green animate-ping" />
+                <span>Standing by for Round 1 Build Challenge...</span>
+              </div>
+            </div>
+          )}
+
+          {/* 4. ROUND 1 ACTIVE */}
+          {currentPhase === 'ROUND_1_ACTIVE' && (
+            <div className="panel-card p-8 border-t-4 border-t-accent-blue space-y-5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-accent-blue flex items-center gap-1.5 font-bold">
+                    <Terminal className="w-3.5 h-3.5" /> ROUND 01 • BUILD CHALLENGE
+                  </span>
+                  <h2 className="text-3xl font-display uppercase tracking-wider text-text-primary mt-1">
+                    System Architecture & Deliverables
+                  </h2>
+                  <p className="text-xs text-text-secondary mt-1.5 max-w-xl leading-relaxed">
+                    Construct your application against the mandatory checklist specifications. Submit your
+                    GitHub repository and live hosted URL for manual checking and grading by the evaluation team.
+                  </p>
+                </div>
+                <Link
+                  to="/round-1"
+                  className="px-6 py-3 rounded-lg bg-accent-blue hover:bg-accent-blue-glow text-black font-display tracking-wider text-base uppercase font-bold flex items-center justify-center gap-2 shadow-glow-blue transition-all shrink-0"
+                >
+                  <span>Open Build Terminal</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+          )}
+
+          {/* 5. ROUND 1 EVALUATION / PAUSE (WAITING FOR NEXT ROUND) */}
           {(currentPhase === 'ROUND_1_RESULTS' || (currentPhase as string) === 'ROUND_1_EVALUATION') && (
             <div className="panel-card p-8 border-t-4 border-t-warning-amber text-center space-y-4">
               <div className="w-14 h-14 rounded-full bg-warning-amber/15 border border-warning-amber/40 flex items-center justify-center mx-auto text-warning-amber">
@@ -177,7 +229,7 @@ export const DashboardPage: React.FC = () => {
               </div>
               <div>
                 <span className="text-xs font-mono uppercase tracking-widest text-warning-amber">
-                  ROUND 01 EVALUATION IN PROGRESS
+                  ROUND 01 MANUAL AUDIT IN PROGRESS
                 </span>
                 <h2 className="text-2xl font-display uppercase tracking-wider text-text-primary mt-1">
                   Scores Under Audit

@@ -122,6 +122,7 @@ export const DevBypassDrawer: React.FC = () => {
               <div className="grid grid-cols-3 gap-1.5 font-mono text-[10px]">
                 {[
                   { label: 'Dashboard', path: '/dashboard' },
+                  { label: 'R0 Quiz', path: '/round-0' },
                   { label: 'Round 1', path: '/round-1' },
                   { label: 'R2 Captaincy', path: '/round-2-captaincy' },
                   { label: 'R2 Secret', path: '/secret-mission' },

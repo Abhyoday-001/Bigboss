@@ -5,7 +5,7 @@ import { EventPhaseProvider } from './shared/hooks/useEventPhase';
 
 import { LandingPage } from './participant/pages/LandingPage';
 import { DashboardPage } from './participant/pages/DashboardPage';
-import { ProfilePage } from './participant/pages/ProfilePage';
+import { Round0QuizPage } from './participant/pages/Round0QuizPage';
 import { Round1TaskPage } from './participant/pages/Round1TaskPage';
 import { Round2Page } from './participant/pages/Round2Page';
 import { Round3Page } from './participant/pages/Round3Page';
@@ -93,7 +93,15 @@ export const App: React.FC = () => {
                     </ProtectedRoute>
                   }
                 />
-                <Route path="/profile" element={<Navigate to="/dashboard" replace />} />
+                {/* Round 0 Area (Rapid Quiz) */}
+                <Route
+                  path="/round-0"
+                  element={
+                    <ProtectedRoute>
+                      <Round0QuizPage />
+                    </ProtectedRoute>
+                  }
+                />
 
                 {/* Round 1 Area */}
                 <Route

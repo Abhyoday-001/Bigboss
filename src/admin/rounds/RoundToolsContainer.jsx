@@ -14,8 +14,12 @@ import {
   Trophy,
   RotateCcw,
   SlidersHorizontal,
+  HelpCircle,
+  Terminal,
 } from 'lucide-react';
 
+import Round0QuizControl from './Round0QuizControl';
+import Round1TaskControl from './Round1TaskControl';
 import Round2Captaincy from './Round2Captaincy';
 import Round2Nominations from './Round2Nominations';
 import Round2SecretMission from './Round2SecretMission';
@@ -36,6 +40,26 @@ export function RoundToolsContainer({ activeRound = null, onSelectTool = null, e
   const [selectedRoundFilter, setSelectedRoundFilter] = useState('all');
 
   const tools = [
+    // Round 0 Module
+    {
+      id: 'r0-quiz',
+      round: 'Round 0',
+      title: 'Rapid Quiz & 10s Timer',
+      icon: HelpCircle,
+      badge: 'R0',
+      component: Round0QuizControl,
+    },
+
+    // Round 1 Module
+    {
+      id: 'r1-task',
+      round: 'Round 1',
+      title: 'Build Task & Manual Scoring',
+      icon: Terminal,
+      badge: 'R1',
+      component: Round1TaskControl,
+    },
+
     // Round 2 Modules
     {
       id: 'r2-captaincy',
@@ -202,7 +226,7 @@ export function RoundToolsContainer({ activeRound = null, onSelectTool = null, e
             Filter Round:
           </span>
           <div className="flex items-center bg-bg-primary border border-accent-blue/20 rounded-lg p-1 text-xs font-mono">
-            {['all', 'Round 2', 'Round 3', 'Round 4'].map((rf) => (
+            {['all', 'Round 0', 'Round 1', 'Round 2', 'Round 3', 'Round 4'].map((rf) => (
               <button
                 key={rf}
                 onClick={() => setSelectedRoundFilter(rf)}

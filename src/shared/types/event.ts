@@ -1,5 +1,7 @@
 export type EventPhase =
   | 'NOT_STARTED'
+  | 'ROUND_0_ACTIVE'
+  | 'ROUND_0_RESULTS'
   | 'ROUND_1_TASK'
   | 'ROUND_2_CAPTAINCY'
   | 'ROUND_2_SECRET_TASK'

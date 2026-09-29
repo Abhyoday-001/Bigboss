@@ -1,6 +1,8 @@
 export type EventPhase =
   | 'LANDING'
   | 'LOGIN'
+  | 'ROUND_0_ACTIVE'
+  | 'ROUND_0_RESULTS'
   | 'ROUND_1_ACTIVE'
   | 'ROUND_1_RESULTS'
   | 'ROUND_2_CAPTAINCY'

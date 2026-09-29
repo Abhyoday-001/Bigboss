@@ -11,6 +11,12 @@ import { TeamDetailModal } from '../components/TeamDetailModal';
 import { ScoreManager } from '../components/ScoreManager';
 import { LiveLeaderboard } from '../../shared/components/LiveLeaderboard';
 
+// Round 0 & 1 Modules
+// @ts-ignore
+import Round0QuizControl from '../rounds/Round0QuizControl';
+// @ts-ignore
+import Round1TaskControl from '../rounds/Round1TaskControl';
+
 // Spoorthi's Round 2 Modules
 // @ts-ignore
 import Round2Captaincy from '../rounds/Round2Captaincy';
@@ -63,9 +69,11 @@ import {
   Globe,
   MinusCircle,
   RotateCcw,
+  HelpCircle,
+  Terminal,
 } from 'lucide-react';
 
-type AdminTab = 'overview' | 'round-2' | 'round-3' | 'round-4' | 'round-tools' | 'teams' | 'scores';
+type AdminTab = 'overview' | 'round-0' | 'round-1' | 'round-2' | 'round-3' | 'round-4' | 'round-tools' | 'teams' | 'scores';
 
 export const AdminDashboardPage: React.FC = () => {
   const [eventState, setEventState] = useState<EventState>(INITIAL_EVENT_STATE);
@@ -292,7 +300,35 @@ export const AdminDashboardPage: React.FC = () => {
             }`}
           >
             <LayoutDashboard className="w-4 h-4 text-accent-blue" />
-            <span>[ 01 · COMMAND CENTER ]</span>
+            <span>[ 00 · COMMAND CENTER ]</span>
+          </button>
+
+          {/* Tab 0: Round 0 Rapid Quiz */}
+          <button
+            type="button"
+            onClick={() => setActiveTab('round-0')}
+            className={`px-4 py-2.5 rounded-lg text-xs font-mono uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
+              activeTab === 'round-0'
+                ? 'bg-accent-blue/15 text-accent-blue-glow border border-accent-blue/40 shadow-glow-blue font-bold'
+                : 'text-text-secondary hover:text-text-primary hover:bg-bg-elevated border border-transparent'
+            }`}
+          >
+            <HelpCircle className="w-4 h-4 text-accent-blue" />
+            <span>[ R0 · RAPID QUIZ ]</span>
+          </button>
+
+          {/* Tab 1: Round 1 Build Challenge */}
+          <button
+            type="button"
+            onClick={() => setActiveTab('round-1')}
+            className={`px-4 py-2.5 rounded-lg text-xs font-mono uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
+              activeTab === 'round-1'
+                ? 'bg-accent-blue/15 text-accent-blue-glow border border-accent-blue/40 shadow-glow-blue font-bold'
+                : 'text-text-secondary hover:text-text-primary hover:bg-bg-elevated border border-transparent'
+            }`}
+          >
+            <Terminal className="w-4 h-4 text-accent-blue" />
+            <span>[ R1 · BUILD CHALLENGE ]</span>
           </button>
 
           {/* Tab 2: Round 2 Operations */}
@@ -415,7 +451,35 @@ export const AdminDashboardPage: React.FC = () => {
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
+                <div
+                  onClick={() => setActiveTab('round-0')}
+                  className="p-4 rounded-lg bg-bg-primary/80 border border-accent-blue/20 hover:border-accent-blue hover:bg-accent-blue/10 cursor-pointer transition-all space-y-2 group"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono font-bold text-accent-blue">ROUND 0</span>
+                    <HelpCircle className="w-4 h-4 text-accent-blue group-hover:scale-110 transition-transform" />
+                  </div>
+                  <h4 className="font-semibold text-sm text-text-primary">Rapid Quiz</h4>
+                  <p className="text-[11px] text-text-secondary leading-relaxed">
+                    10s question bank, anti-cheat surveillance, and initial leaderboard lock.
+                  </p>
+                </div>
+
+                <div
+                  onClick={() => setActiveTab('round-1')}
+                  className="p-4 rounded-lg bg-bg-primary/80 border border-accent-blue/20 hover:border-accent-blue hover:bg-accent-blue/10 cursor-pointer transition-all space-y-2 group"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono font-bold text-accent-blue">ROUND 1</span>
+                    <Terminal className="w-4 h-4 text-accent-blue group-hover:scale-110 transition-transform" />
+                  </div>
+                  <h4 className="font-semibold text-sm text-text-primary">Build Challenge</h4>
+                  <p className="text-[11px] text-text-secondary leading-relaxed">
+                    Assign building task, set mandatory checklists, inspect URLs & manual grading.
+                  </p>
+                </div>
+
                 <div
                   onClick={() => setActiveTab('round-2')}
                   className="p-4 rounded-lg bg-bg-primary/80 border border-accent-blue/20 hover:border-accent-blue hover:bg-accent-blue/10 cursor-pointer transition-all space-y-2 group"
@@ -459,6 +523,24 @@ export const AdminDashboardPage: React.FC = () => {
                 </div>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* ========================================================= */}
+        {/* TAB 0: ROUND 0 RAPID QUIZ CONTROL                         */}
+        {/* ========================================================= */}
+        {activeTab === 'round-0' && (
+          <div className="space-y-6 animate-fadeIn">
+            <Round0QuizControl />
+          </div>
+        )}
+
+        {/* ========================================================= */}
+        {/* TAB 1: ROUND 1 BUILD CHALLENGE & MANUAL AUDIT             */}
+        {/* ========================================================= */}
+        {activeTab === 'round-1' && (
+          <div className="space-y-6 animate-fadeIn">
+            <Round1TaskControl />
           </div>
         )}
 
