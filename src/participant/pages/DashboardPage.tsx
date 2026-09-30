@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../../shared/hooks/useAuth';
 import { useEventPhase } from '../../shared/hooks/useEventPhase';
 import { ParticipantNavbar } from '../components/ParticipantNavbar';
@@ -6,6 +6,7 @@ import { NeuronNetworkBackground } from '../components/NeuronNetworkBackground';
 import { RoundStatusBadge } from '../../shared/components/RoundStatusBadge';
 import { TimerCountdown } from '../../shared/components/TimerCountdown';
 import { AmbientEyeBackground } from '../../shared/components/AmbientEyeBackground';
+import { DemoRoundSwitcher } from '../components/DemoRoundSwitcher';
 import {
   Crown,
   ShieldAlert,
@@ -13,11 +14,15 @@ import {
   UserCheck,
   Radio,
   Clock,
+  FlaskConical,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 
 export const DashboardPage: React.FC = () => {
   const { team } = useAuth();
   const { currentMetadata, targetEndTime } = useEventPhase();
+  const [isDevOpen, setIsDevOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-bg-primary text-text-primary flex flex-col relative overflow-hidden">
@@ -113,6 +118,34 @@ export const DashboardPage: React.FC = () => {
             <Clock className="w-3.5 h-3.5 animate-spin" style={{ animationDuration: '3s' }} />
             <span>Listening for Control Room broadcast...</span>
           </div>
+        </div>
+
+        {/* ── DEV TOGGLE: Remove before live event ── */}
+        <div className="rounded-xl border border-orange-500/30 overflow-hidden">
+          <button
+            type="button"
+            onClick={() => setIsDevOpen((p) => !p)}
+            className="w-full flex items-center justify-between px-4 py-3 bg-orange-950/40 hover:bg-orange-900/30 transition-all cursor-pointer"
+          >
+            <div className="flex items-center gap-2">
+              <FlaskConical className="w-4 h-4 text-orange-400" />
+              <span className="text-xs font-mono font-bold text-orange-400 uppercase tracking-widest">
+                Dev Tools · Round Switcher
+              </span>
+              <span className="text-[10px] font-mono text-orange-600/60 hidden sm:inline">
+                (⚠ Temporary — remove before live)
+              </span>
+            </div>
+            {isDevOpen
+              ? <ChevronUp className="w-4 h-4 text-orange-500" />
+              : <ChevronDown className="w-4 h-4 text-orange-500" />
+            }
+          </button>
+          {isDevOpen && (
+            <div className="p-3 border-t border-orange-500/20 bg-orange-950/20">
+              <DemoRoundSwitcher />
+            </div>
+          )}
         </div>
       </main>
     </div>

@@ -77,6 +77,7 @@ export const DemoRoundSwitcher: React.FC = () => {
 
   const handleSelectRound = (option: RoundOption) => {
     setPhase(option.phase);
+    navigate(option.route);
   };
 
   const handleResetToRound0 = () => {
