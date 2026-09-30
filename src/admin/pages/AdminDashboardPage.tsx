@@ -37,8 +37,6 @@ import Round3EvictionReveal from '../rounds/Round3EvictionReveal';
 
 // Round 4 Modules
 // @ts-ignore
-import Round4HiddenFeatures from '../rounds/Round4HiddenFeatures';
-// @ts-ignore
 import Round4Submissions from '../rounds/Round4Submissions';
 // @ts-ignore
 import Round4JudgeScoring from '../rounds/Round4JudgeScoring';
@@ -73,7 +71,7 @@ export const AdminDashboardPage: React.FC = () => {
   // Sub-tabs for complex rounds
   const [r2SubTab, setR2SubTab] = useState<'captaincy' | 'nominations' | 'secret-mission'>('captaincy');
   const [r3SubTab, setR3SubTab] = useState<'pairings' | 'immunity' | 'voting' | 'eviction'>('immunity');
-  const [r4SubTab, setR4SubTab] = useState<'hidden' | 'submissions' | 'judging' | 'penalties' | 'scoreboard'>('hidden');
+  const [r4SubTab, setR4SubTab] = useState<'submissions' | 'judging' | 'scoreboard'>('submissions');
   const [leaderboardSubTab, setLeaderboardSubTab] = useState<'standings' | 'roster'>('standings');
 
   // Team detail and status handlers
@@ -489,20 +487,6 @@ export const AdminDashboardPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => {
-                  setR4SubTab('hidden');
-                  setPhase('ROUND_4_FEATURES_REVEALED');
-                }}
-                className={`flex-1 py-2 px-3 rounded-lg text-xs font-mono uppercase font-bold whitespace-nowrap transition-all cursor-pointer ${
-                  r4SubTab === 'hidden'
-                    ? 'bg-accent-blue text-black shadow-glow-blue'
-                    : 'text-text-secondary hover:text-text-primary'
-                }`}
-              >
-                1. Hidden Feature Specs
-              </button>
-              <button
-                type="button"
-                onClick={() => {
                   setR4SubTab('submissions');
                   setPhase('ROUND_4_SUBMISSION');
                 }}
@@ -512,7 +496,7 @@ export const AdminDashboardPage: React.FC = () => {
                     : 'text-text-secondary hover:text-text-primary'
                 }`}
               >
-                2. Finalist Submissions
+                1. Finalist Submissions
               </button>
               <button
                 type="button"
@@ -526,7 +510,7 @@ export const AdminDashboardPage: React.FC = () => {
                     : 'text-text-secondary hover:text-text-primary'
                 }`}
               >
-                3. Jury Scoring & Deductions
+                2. Jury Scoring & Deductions
               </button>
               <button
                 type="button"
@@ -540,13 +524,12 @@ export const AdminDashboardPage: React.FC = () => {
                     : 'text-text-secondary hover:text-text-primary'
                 }`}
               >
-                4. Final Champion Reveal
+                3. Final Champion Reveal
               </button>
             </div>
 
             {/* Active Sub-module */}
             <div>
-              {r4SubTab === 'hidden' && <Round4HiddenFeatures />}
               {r4SubTab === 'submissions' && <Round4Submissions />}
               {r4SubTab === 'judging' && (
                 <div className="space-y-6">
