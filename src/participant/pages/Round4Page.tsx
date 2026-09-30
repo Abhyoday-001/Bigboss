@@ -190,10 +190,29 @@ export const Round4Page: React.FC<Round4PageProps> = ({ initialTab = 'features' 
                   </h2>
                 </div>
                 <div className="text-xs font-mono px-3 py-1 rounded bg-success-green/10 border border-success-green/30 text-success-green">
-                  Final Standings
+                  {currentPhase === 'FINAL_RESULTS' ? 'Final Standings' : 'Jury Deliberation'}
                 </div>
               </div>
-              <FinalResults />
+              {currentPhase === 'FINAL_RESULTS' ? (
+                <FinalResults />
+              ) : (
+                <div className="py-12 text-center space-y-4">
+                  <div className="w-14 h-14 rounded-full bg-success-green/15 border border-success-green/40 flex items-center justify-center mx-auto text-success-green">
+                    <Trophy className="w-7 h-7 animate-pulse" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-mono uppercase tracking-widest text-success-green font-bold">
+                      JURY EVALUATION IN PROGRESS
+                    </span>
+                    <h3 className="text-xl font-display uppercase tracking-wider text-text-primary mt-1">
+                      Final Podium Concealed
+                    </h3>
+                    <p className="text-xs text-text-secondary max-w-md mx-auto mt-2 leading-relaxed">
+                      Jury scoring and code audit audits are actively underway in the Control Room. The Grand Championship podium and victor proclamation will unlock here the moment judging concludes.
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>

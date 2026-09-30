@@ -489,28 +489,7 @@ class EventOperationsService {
       isActive: false,
       timerPerQuestion: 10, // 10 seconds per question requirement
       questions: [...DEFAULT_ROUND_0_QUESTIONS],
-      submissions: {
-        'team-01': {
-          teamId: 'team-01',
-          teamName: 'CyberNexus',
-          answers: { q1: 0, q2: 1, q3: 1, q4: 2, q5: 1, q6: 1 },
-          correctCount: 6,
-          totalQuestions: 6,
-          score: 120,
-          timeTakenSeconds: 38,
-          submittedAt: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
-        },
-        'team-02': {
-          teamId: 'team-02',
-          teamName: 'NullPointers',
-          answers: { q1: 0, q2: 1, q3: 1, q4: 2, q5: 0, q6: 1 },
-          correctCount: 5,
-          totalQuestions: 6,
-          score: 100,
-          timeTakenSeconds: 44,
-          submittedAt: new Date(Date.now() - 1000 * 60 * 14).toISOString(),
-        },
-      },
+      submissions: {},
       initialLeaderboardLocked: false,
     };
   }
@@ -536,36 +515,7 @@ class EventOperationsService {
     }
     return {
       task: { ...DEFAULT_ROUND_1_TASK },
-      submissions: {
-        'team-01': {
-          teamId: 'team-01',
-          teamName: 'CyberNexus',
-          repoUrl: 'https://github.com/cybernexus/devhouse-telemetry-grid',
-          liveUrl: 'https://cybernexus-grid.vercel.app',
-          notes: 'Built with React 18, Tailwind, Lucide icons, and simulated WebSockets telemetry pump. Passes all security checks.',
-          submittedAt: new Date(Date.now() - 1000 * 60 * 20).toISOString(),
-          status: 'SCORED',
-          evaluation: {
-            checkedDeliverableIds: ['del-1', 'del-2', 'del-3', 'del-4', 'del-5'],
-            codeQualityScore: 25,
-            functionalityScore: 40,
-            bonusScore: 15,
-            totalPoints: 100,
-            feedback: 'Exceptional clean code structure, smooth dark neon aesthetic, and proper fallback state handling.',
-            evaluatedAt: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
-            evaluatorName: 'Lead Auditor Aryan',
-          },
-        },
-        'team-02': {
-          teamId: 'team-02',
-          teamName: 'NullPointers',
-          repoUrl: 'https://github.com/nullpointers/telemetry-breach-r1',
-          liveUrl: 'https://nullpointers-r1.netlify.app',
-          notes: 'Implemented using Vite + TypeScript. Includes error boundary fallbacks and responsive layouts.',
-          submittedAt: new Date(Date.now() - 1000 * 60 * 10).toISOString(),
-          status: 'SUBMITTED',
-        },
-      },
+      submissions: {},
       allEvaluationsPublished: false,
     };
   }

@@ -1,52 +1,50 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useEventPhase } from '../../shared/hooks/useEventPhase';
-import { useAuth } from '../../shared/hooks/useAuth';
-import { PHASE_CONFIG } from '../../shared/state-machine/eventPhases';
-import { EventPhase } from '../../shared/state-machine/types';
+
+// Routes that participants are always allowed to be on
+const PARTICIPANT_SAFE_ROUTES = ['/', '/landing', '/home', '/dashboard', '/login'];
+
+// Round routes that participants should NOT be able to access directly (frontend-only guard)
+const ROUND_ROUTES = [
+  '/round-0',
+  '/round-1',
+  '/round-2',
+  '/round-2-captaincy',
+  '/round-2-secret-task',
+  '/round-2-nominations',
+  '/round-3',
+  '/round-3-immunity',
+  '/round-3-voting',
+  '/round-3-eviction',
+  '/round-4',
+  '/round-4-features',
+  '/round-4-submission',
+  '/final-results',
+  '/secret-mission',
+  '/nomination-status',
+  '/immunity-challenge',
+  '/voting',
+  '/eviction-reveal',
+];
 
 export const ParticipantSyncNavigator: React.FC = () => {
   const { currentPhase } = useEventPhase();
-  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const prevPhaseRef = useRef<EventPhase>(currentPhase);
-  const isFirstMount = useRef(true);
-
   useEffect(() => {
-    // Skip if user is on admin route
-    if (location.pathname.startsWith('/admin')) {
-      return;
+    // Never interfere with Admin routes
+    if (location.pathname.startsWith('/admin')) return;
+
+    // If a participant manually navigates to a round URL, bounce them back to dashboard.
+    // Rounds are only accessible once backend integration is live.
+    const isOnRoundRoute = ROUND_ROUTES.some((r) => location.pathname === r);
+    if (isOnRoundRoute) {
+      navigate('/dashboard', { replace: true });
     }
+  }, [location.pathname, navigate]);
 
-    const previousPhase = prevPhaseRef.current;
-    prevPhaseRef.current = currentPhase;
-
-    // Determine target route according to event state machine
-    const meta = PHASE_CONFIG[currentPhase];
-    if (!meta) return;
-
-    const targetRoute = meta.participantRoute;
-
-    // Only auto-navigate when the Admin actually starts or changes the phase from Admin panel
-    if (!isFirstMount.current && previousPhase !== currentPhase) {
-      // Don't auto-redirect landing/login if not authenticated
-      if ((currentPhase === 'LANDING' || currentPhase === 'LOGIN') && !isAuthenticated) {
-        return;
-      }
-
-      // If user is on dashboard or waiting, smoothly route them to the active round without annoying popups
-      if (location.pathname === '/dashboard' || location.pathname === '/') {
-        if (targetRoute && targetRoute !== '/dashboard') {
-          navigate(targetRoute);
-        }
-      }
-    }
-
-    isFirstMount.current = false;
-  }, [currentPhase, location.pathname, isAuthenticated, navigate]);
-
-  // Completely eliminate the popup window on tab switching
+  // Silent — no UI, no popups
   return null;
 };
