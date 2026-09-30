@@ -384,15 +384,28 @@ export default function Round0QuizControl() {
                       </div>
                     </div>
 
-                    <div className="text-right">
+                    <div className="text-right space-y-0.5">
                       {isSubmitted ? (
                         <>
                           <div className="font-mono text-sm font-bold text-accent-blue-glow">
                             {sub.score} PTS
                           </div>
                           <div className="text-[10px] font-mono text-text-secondary">
-                            {sub.correctCount}/{sub.totalQuestions} • {sub.timeTakenSeconds}s
+                            {sub.correctCount}/{sub.totalQuestions} • Duration: {sub.timeTakenSeconds}s
                           </div>
+                          {sub.submittedAt && (
+                            <div className="text-[10px] font-mono text-accent-blue flex items-center justify-end gap-1 font-semibold">
+                              <Clock className="w-3 h-3 text-accent-blue" />
+                              <span>
+                                {new Date(sub.submittedAt).toLocaleTimeString([], {
+                                  hour: '2-digit',
+                                  minute: '2-digit',
+                                  second: '2-digit',
+                                  hour12: true,
+                                })}
+                              </span>
+                            </div>
+                          )}
                         </>
                       ) : (
                         <div className="text-[10px] font-mono text-text-secondary">

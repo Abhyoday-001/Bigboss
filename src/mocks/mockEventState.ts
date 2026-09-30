@@ -30,6 +30,18 @@ export const PHASE_METADATA: Record<EventPhase, { label: string; name: string; d
     description: 'Participants are arriving and logging into their terminals. Awaiting Admin activation.',
     roundNumber: 0,
   },
+  ROUND_0_ACTIVE: {
+    label: 'ROUND 00 // RAPID-FIRE QUIZ',
+    name: 'Rapid-Fire Elimination Quiz',
+    description: '15 quick CS & tech questions with a strict per-question countdown timer.',
+    roundNumber: 0,
+  },
+  ROUND_0_RESULTS: {
+    label: 'ROUND 00 // QUIZ STANDBY & RESULTS',
+    name: 'Quiz Standby & Results',
+    description: 'Quiz concluded. Reviewing rankings and qualifying teams before Round 1.',
+    roundNumber: 0,
+  },
   ROUND_1_TASK: {
     label: 'ROUND 01 // TASK ROUND',
     name: 'Task Round: Hack the House',

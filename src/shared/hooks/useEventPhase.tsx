@@ -21,12 +21,12 @@ const TIMER_STORAGE_KEY = 'devhouse_target_end_time';
 export const EventPhaseProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [currentPhase, setCurrentPhase] = useState<EventPhase>(() => {
     const saved = localStorage.getItem(PHASE_STORAGE_KEY) as EventPhase;
-    return saved && PHASE_CONFIG[saved] ? saved : 'ROUND_0_ACTIVE';
+    return saved && PHASE_CONFIG[saved] ? saved : 'LOGIN';
   });
 
   const [targetEndTime, setTargetEndTimeState] = useState<number>(() => {
     const saved = localStorage.getItem(TIMER_STORAGE_KEY);
-    return saved ? Number(saved) : Date.now() + 20 * 60 * 1000;
+    return saved ? Number(saved) : 0;
   });
 
   // Cross-tab real-time synchronization via BroadcastChannel & Storage Event

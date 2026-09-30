@@ -108,11 +108,21 @@ export function Round4Submissions() {
                     <h3 className="text-lg font-bold text-white tracking-wide">{sub.teamName}</h3>
                     <StatusBadge status="safe" text="SUBMITTED" />
                   </div>
-                  <div className="flex items-center gap-4 text-xs text-gray-400 font-mono">
-                    <span className="flex items-center gap-1">
+                  <div className="flex items-center gap-4 text-xs font-mono">
+                    <span className="flex items-center gap-1.5 text-accent-blue bg-[#1EA7FF]/10 border border-[#1EA7FF]/30 px-2.5 py-1 rounded">
                       <Clock className="w-3.5 h-3.5 text-[#1EA7FF]" />
-                      Submitted: {new Date(sub.submittedAt).toLocaleTimeString()} (
-                      {new Date(sub.submittedAt).toLocaleDateString()})
+                      <span>
+                        Submitted at:{' '}
+                        <strong className="text-white">
+                          {new Date(sub.submittedAt).toLocaleTimeString([], {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit',
+                            hour12: true,
+                          })}
+                        </strong>{' '}
+                        <span className="text-gray-400">({new Date(sub.submittedAt).toLocaleDateString()})</span>
+                      </span>
                     </span>
                   </div>
                 </div>

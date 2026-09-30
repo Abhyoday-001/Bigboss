@@ -28,7 +28,7 @@ export interface PhaseMetadata {
 }
 
 export interface TeamMember {
-  id: string;
+  id?: string;
   name: string;
   role?: string;
   usn?: string;
@@ -41,7 +41,7 @@ export interface Team {
   members: TeamMember[];
   score: number;
   rank: number;
-  previousRank: number;
+  previousRank?: number;
   isCaptain?: boolean;
   isNominated?: boolean;
   isEliminated?: boolean;

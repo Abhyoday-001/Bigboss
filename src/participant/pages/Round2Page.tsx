@@ -132,8 +132,8 @@ export const Round2Page: React.FC<Round2PageProps> = ({ initialTab = 'captaincy'
         {/* Tab Content Display */}
         <div className="animate-in fade-in duration-300">
           {activeTab === 'captaincy' && (
-            <div className="-mt-8">
-              <Round2CaptaincyPage />
+            <div>
+              <Round2CaptaincyPage embedded />
             </div>
           )}
 

@@ -486,7 +486,7 @@ class EventOperationsService {
       }
     }
     return {
-      isActive: true,
+      isActive: false,
       timerPerQuestion: 10, // 10 seconds per question requirement
       questions: [...DEFAULT_ROUND_0_QUESTIONS],
       submissions: {

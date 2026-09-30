@@ -128,16 +128,15 @@ export const AdminDashboardPage: React.FC = () => {
     id: t.id,
     teamName: t.name,
     score: t.score,
-    status:
-      t.status === 'EVICTED'
-        ? 'ELIMINATED'
-        : t.status === 'NOMINATED'
-        ? 'NOMINATED'
-        : t.status === 'IMMUNE' || t.status === 'CAPTAIN'
-        ? 'SAFE'
-        : 'ACTIVE',
     rank: t.rank,
+    previousRank: t.rank,
+    isCaptain: t.status === 'CAPTAIN',
+    isNominated: t.status === 'NOMINATED',
+    isEliminated: t.status === 'EVICTED',
+    isImmune: t.status === 'IMMUNE',
+    avatarUrl: t.avatarUrl,
     members: t.members.map((m, idx) => ({
+      id: `${t.id}-${idx}`,
       name: m,
       role: idx === 0 ? 'CAPTAIN' : 'MEMBER',
     })),

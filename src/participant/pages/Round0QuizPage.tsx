@@ -63,25 +63,30 @@ export const Round0QuizPage: React.FC = () => {
     }
   }, [team?.id]);
 
-  // Anti-cheat window blur/tab-switch detection
+  const isRoundActive = currentPhase === 'ROUND_0_ACTIVE' && r0State.isActive;
+
+  // Anti-cheat window blur/tab-switch detection (only active during live quiz)
   useEffect(() => {
     const handleVisibilityChange = () => {
-      if (document.hidden && !isCompleted) {
+      if (document.hidden && !isCompleted && isRoundActive) {
         setTabSwitchCount((prev) => prev + 1);
         setShowTabWarning(true);
       }
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-  }, [isCompleted]);
+  }, [isCompleted, isRoundActive]);
 
   const questions = r0State.questions;
   const currentQuestion: QuizQuestion | undefined = questions[currentIndex];
   const timerDuration = r0State.timerPerQuestion || 10;
 
-  // Question countdown tick
+  // Question countdown tick (only active during live quiz)
   useEffect(() => {
-    if (isCompleted || !currentQuestion) return;
+    if (!isRoundActive || isCompleted || !currentQuestion) {
+      if (timerRef.current) clearInterval(timerRef.current);
+      return;
+    }
 
     setTimeLeft(timerDuration);
     setCurrentSelectedOption(selectedAnswers[currentQuestion.id] ?? null);
@@ -102,7 +107,7 @@ export const Round0QuizPage: React.FC = () => {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [currentIndex, isCompleted, currentQuestion?.id]);
+  }, [currentIndex, isCompleted, isRoundActive, currentQuestion?.id]);
 
   const handleSelectOption = (index: number) => {
     if (!currentQuestion || isCompleted) return;
@@ -152,7 +157,7 @@ export const Round0QuizPage: React.FC = () => {
   const isUrgent = timeLeft <= 3;
   const isWarning = timeLeft <= 5 && timeLeft > 3;
 
-  if (!isCompleted && currentPhase !== 'ROUND_0_ACTIVE') {
+  if (!isCompleted && !isRoundActive) {
     return (
       <RoundAccessGuard
         requiredPhase="ROUND_0_ACTIVE"

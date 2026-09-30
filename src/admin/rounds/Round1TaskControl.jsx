@@ -420,6 +420,25 @@ export default function Round1TaskControl() {
                         </div>
                       )}
 
+                      {/* Submission Timestamp with Seconds */}
+                      {isSubmitted && sub.submittedAt && (
+                        <div className="flex items-center gap-1.5 mt-2 text-[11px] font-mono text-accent-blue bg-accent-blue/10 border border-accent-blue/30 px-2.5 py-1 rounded w-fit font-semibold">
+                          <Clock className="w-3.5 h-3.5 text-accent-blue shrink-0" />
+                          <span>
+                            Submitted at:{' '}
+                            <strong className="text-white">
+                              {new Date(sub.submittedAt).toLocaleTimeString([], {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                second: '2-digit',
+                                hour12: true,
+                              })}
+                            </strong>{' '}
+                            <span className="text-text-secondary">({new Date(sub.submittedAt).toLocaleDateString()})</span>
+                          </span>
+                        </div>
+                      )}
+
                       {sub?.notes && (
                         <div className="text-[11px] text-text-secondary mt-1 max-w-md line-clamp-1 italic">
                           "{sub.notes}"
@@ -496,6 +515,24 @@ export default function Round1TaskControl() {
                 <ExternalLink className="w-3 h-3" />
               </a>
             </div>
+
+            {selectedTeamSubmission?.submittedAt && (
+              <div className="flex items-center gap-2 p-2.5 rounded-lg bg-accent-blue/10 border border-accent-blue/30 text-xs font-mono text-accent-blue font-semibold">
+                <Clock className="w-4 h-4 text-accent-blue shrink-0" />
+                <span>
+                  Official Submission Timestamp:{' '}
+                  <strong className="text-white">
+                    {new Date(selectedTeamSubmission.submittedAt).toLocaleTimeString([], {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      second: '2-digit',
+                      hour12: true,
+                    })}
+                  </strong>{' '}
+                  <span className="text-text-secondary">({new Date(selectedTeamSubmission.submittedAt).toLocaleDateString()})</span>
+                </span>
+              </div>
+            )}
 
             <form onSubmit={handleSubmitEvaluation} className="space-y-5">
               {/* Deliverables Checklist Verification */}

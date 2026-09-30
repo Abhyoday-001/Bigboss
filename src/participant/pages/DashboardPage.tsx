@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../../shared/hooks/useAuth';
 import { useEventPhase } from '../../shared/hooks/useEventPhase';
 import { ParticipantNavbar } from '../components/ParticipantNavbar';
-import { DemoRoundSwitcher } from '../components/DemoRoundSwitcher';
 import { NeuronNetworkBackground } from '../components/NeuronNetworkBackground';
 import { RoundStatusBadge } from '../../shared/components/RoundStatusBadge';
 import { TimerCountdown } from '../../shared/components/TimerCountdown';
@@ -50,9 +49,6 @@ export const DashboardPage: React.FC = () => {
       <NeuronNetworkBackground />
 
       <main className="relative z-10 flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-8 space-y-6">
-        {/* Demo Round Testing Switcher (Temporary toggle to test and verify all rounds) */}
-        <DemoRoundSwitcher />
-
         {/* Top Status & Timer Bar */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
           <div className="flex-1">
@@ -500,6 +496,231 @@ export const DashboardPage: React.FC = () => {
               </div>
             </div>
           )}
+        </div>
+
+        {/* ── HOUSE ARENA PROTOCOL DIRECTORY ── */}
+        <div className="panel-card p-6 border border-accent-blue/20 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/5 pb-3">
+            <div>
+              <div className="text-[10px] font-mono uppercase tracking-widest text-accent-blue flex items-center gap-1.5 font-bold">
+                <Layers className="w-3.5 h-3.5" />
+                <span>HOUSE STAGES & PROTOCOL DIRECTORY</span>
+              </div>
+              <h3 className="text-lg font-display uppercase tracking-wider text-text-primary mt-0.5">
+                Surveillance Arena Progression
+              </h3>
+            </div>
+            <div className="text-[11px] font-mono text-text-secondary">
+              Synchronized with Control Room Host Terminal
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {/* Round 0 Card */}
+            <div
+              className={`p-4 rounded-xl border transition-all flex flex-col justify-between ${
+                currentPhase === 'ROUND_0_ACTIVE'
+                  ? 'bg-accent-blue/10 border-accent-blue shadow-glow-blue'
+                  : 'bg-bg-elevated/60 border-white/5 opacity-80'
+              }`}
+            >
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-accent-blue/20 text-accent-blue font-bold">
+                    Round 00
+                  </span>
+                  {currentPhase === 'ROUND_0_ACTIVE' ? (
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-success-green/20 text-success-green font-bold flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-success-green animate-ping" />
+                      LIVE NOW
+                    </span>
+                  ) : (
+                    <span className="text-[10px] font-mono text-text-muted flex items-center gap-1">
+                      <Lock className="w-3 h-3" /> Standby
+                    </span>
+                  )}
+                </div>
+                <h4 className="text-sm font-bold text-text-primary">Rapid Assessment</h4>
+                <p className="text-[11px] text-text-secondary mt-1 line-clamp-2">
+                  10s rapid technical calibration to seed initial house standing.
+                </p>
+              </div>
+              <div className="pt-3 mt-3 border-t border-white/5 flex items-center justify-between">
+                <span className="text-[10px] font-mono text-accent-blue">Speed Calibration</span>
+                <Link
+                  to="/round-0"
+                  className="text-xs font-mono text-accent-blue hover:text-white flex items-center gap-1"
+                >
+                  <span>Enter</span>
+                  <ArrowRight className="w-3 h-3" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Round 1 Card */}
+            <div
+              className={`p-4 rounded-xl border transition-all flex flex-col justify-between ${
+                currentPhase === 'ROUND_1_ACTIVE'
+                  ? 'bg-accent-blue/10 border-accent-blue shadow-glow-blue'
+                  : 'bg-bg-elevated/60 border-white/5 opacity-80'
+              }`}
+            >
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-accent-blue/20 text-accent-blue font-bold">
+                    Round 01
+                  </span>
+                  {currentPhase === 'ROUND_1_ACTIVE' ? (
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-success-green/20 text-success-green font-bold flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-success-green animate-ping" />
+                      LIVE NOW
+                    </span>
+                  ) : (
+                    <span className="text-[10px] font-mono text-text-muted flex items-center gap-1">
+                      <Lock className="w-3 h-3" /> Standby
+                    </span>
+                  )}
+                </div>
+                <h4 className="text-sm font-bold text-text-primary">Build Challenge</h4>
+                <p className="text-[11px] text-text-secondary mt-1 line-clamp-2">
+                  System architecture, code delivery, and manual evaluation.
+                </p>
+              </div>
+              <div className="pt-3 mt-3 border-t border-white/5 flex items-center justify-between">
+                <span className="text-[10px] font-mono text-accent-blue">Manual Checking</span>
+                <Link
+                  to="/round-1"
+                  className="text-xs font-mono text-accent-blue hover:text-white flex items-center gap-1"
+                >
+                  <span>Enter</span>
+                  <ArrowRight className="w-3 h-3" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Round 2 Card */}
+            <div
+              className={`p-4 rounded-xl border transition-all flex flex-col justify-between ${
+                currentPhase === 'ROUND_2_CAPTAINCY' || currentPhase === 'ROUND_2_NOMINATIONS' || currentPhase === 'ROUND_2_SECRET_TASK'
+                  ? 'bg-warning-amber/10 border-warning-amber shadow-glow'
+                  : 'bg-bg-elevated/60 border-white/5 opacity-80'
+              }`}
+            >
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-warning-amber/20 text-warning-amber font-bold">
+                    Round 02
+                  </span>
+                  {currentPhase === 'ROUND_2_CAPTAINCY' || currentPhase === 'ROUND_2_NOMINATIONS' || currentPhase === 'ROUND_2_SECRET_TASK' ? (
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-warning-amber/20 text-warning-amber font-bold flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-warning-amber animate-ping" />
+                      LIVE NOW
+                    </span>
+                  ) : (
+                    <span className="text-[10px] font-mono text-text-muted flex items-center gap-1">
+                      <Lock className="w-3 h-3" /> Standby
+                    </span>
+                  )}
+                </div>
+                <h4 className="text-sm font-bold text-text-primary">Captaincy & Secrets</h4>
+                <p className="text-[11px] text-text-secondary mt-1 line-clamp-2">
+                  Top contender duel, covert missions (#1, #5, #9), and house nominations.
+                </p>
+              </div>
+              <div className="pt-3 mt-3 border-t border-white/5 flex items-center justify-between">
+                <span className="text-[10px] font-mono text-warning-amber">Duel Arena</span>
+                <Link
+                  to="/round-2-captaincy"
+                  className="text-xs font-mono text-warning-amber hover:text-white flex items-center gap-1"
+                >
+                  <span>Enter</span>
+                  <ArrowRight className="w-3 h-3" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Round 3 Card */}
+            <div
+              className={`p-4 rounded-xl border transition-all flex flex-col justify-between ${
+                currentPhase === 'ROUND_3_IMMUNITY' || currentPhase === 'ROUND_3_VOTING' || currentPhase === 'ROUND_3_EVICTION_REVEAL'
+                  ? 'bg-danger-red/10 border-danger-red shadow-glow-red'
+                  : 'bg-bg-elevated/60 border-white/5 opacity-80'
+              }`}
+            >
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-danger-red/20 text-danger-red font-bold">
+                    Round 03
+                  </span>
+                  {currentPhase === 'ROUND_3_IMMUNITY' || currentPhase === 'ROUND_3_VOTING' || currentPhase === 'ROUND_3_EVICTION_REVEAL' ? (
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-danger-red/20 text-danger-red font-bold flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-danger-red animate-ping" />
+                      LIVE NOW
+                    </span>
+                  ) : (
+                    <span className="text-[10px] font-mono text-text-muted flex items-center gap-1">
+                      <Lock className="w-3 h-3" /> Standby
+                    </span>
+                  )}
+                </div>
+                <h4 className="text-sm font-bold text-text-primary">Immunity & Eviction</h4>
+                <p className="text-[11px] text-text-secondary mt-1 line-clamp-2">
+                  Immunity pairing battles, house ballots, and live elimination ceremony.
+                </p>
+              </div>
+              <div className="pt-3 mt-3 border-t border-white/5 flex items-center justify-between">
+                <span className="text-[10px] font-mono text-danger-red">Survival Protocol</span>
+                <Link
+                  to="/immunity-challenge"
+                  className="text-xs font-mono text-danger-red hover:text-white flex items-center gap-1"
+                >
+                  <span>Enter</span>
+                  <ArrowRight className="w-3 h-3" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Round 4 Card */}
+            <div
+              className={`p-4 rounded-xl border transition-all flex flex-col justify-between ${
+                currentPhase.includes('ROUND_4')
+                  ? 'bg-accent-blue/10 border-accent-blue shadow-glow-blue'
+                  : 'bg-bg-elevated/60 border-white/5 opacity-80'
+              }`}
+            >
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-accent-blue/20 text-accent-blue font-bold">
+                    Round 04
+                  </span>
+                  {currentPhase.includes('ROUND_4') ? (
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-accent-blue/20 text-accent-blue font-bold flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-accent-blue animate-ping" />
+                      LIVE NOW
+                    </span>
+                  ) : (
+                    <span className="text-[10px] font-mono text-text-muted flex items-center gap-1">
+                      <Lock className="w-3 h-3" /> Standby
+                    </span>
+                  )}
+                </div>
+                <h4 className="text-sm font-bold text-text-primary">Grand Finale Build</h4>
+                <p className="text-[11px] text-text-secondary mt-1 line-clamp-2">
+                  Surprise hidden specifications, deployment submission, and jury scoring.
+                </p>
+              </div>
+              <div className="pt-3 mt-3 border-t border-white/5 flex items-center justify-between">
+                <span className="text-[10px] font-mono text-accent-blue">Championship</span>
+                <Link
+                  to="/round-4-submission"
+                  className="text-xs font-mono text-accent-blue hover:text-white flex items-center gap-1"
+                >
+                  <span>Enter</span>
+                  <ArrowRight className="w-3 h-3" />
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </main>
     </div>

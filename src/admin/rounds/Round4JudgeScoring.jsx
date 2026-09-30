@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Award, CheckSquare, Save, RefreshCw, AlertTriangle, FileText, Calculator } from 'lucide-react';
+import { Award, CheckSquare, Save, RefreshCw, AlertTriangle, FileText, Calculator, Clock } from 'lucide-react';
 import adminRoundService from '../services/adminRoundService';
 import ConfirmationModal from '../components/ConfirmationModal';
 import StatusBadge from '../components/StatusBadge';
@@ -201,12 +201,31 @@ export function Round4JudgeScoring() {
         </div>
       </div>
 
-      {/* Selected Team Project Preview Links */}
+      {/* Selected Team Project Preview Links & Timestamp */}
       {selectedSubmission && (
         <div className="p-4 bg-[#050506] border border-gray-800 rounded-xl flex flex-wrap items-center justify-between gap-4 text-xs">
-          <div className="flex items-center gap-2 text-gray-300">
-            <span className="font-mono text-gray-500">Evaluating Submission:</span>
-            <strong className="text-white">{selectedSubmission.teamName}</strong>
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-gray-300">
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-gray-500">Evaluating Submission:</span>
+              <strong className="text-white">{selectedSubmission.teamName}</strong>
+            </div>
+            {selectedSubmission.submittedAt && (
+              <span className="flex items-center gap-1.5 font-mono text-[11px] text-[#1EA7FF] bg-[#1EA7FF]/10 border border-[#1EA7FF]/30 px-2.5 py-1 rounded font-semibold">
+                <Clock className="w-3.5 h-3.5 text-[#1EA7FF]" />
+                <span>
+                  Submitted at:{' '}
+                  <strong className="text-white">
+                    {new Date(selectedSubmission.submittedAt).toLocaleTimeString([], {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      second: '2-digit',
+                      hour12: true,
+                    })}
+                  </strong>{' '}
+                  <span className="text-gray-400">({new Date(selectedSubmission.submittedAt).toLocaleDateString()})</span>
+                </span>
+              </span>
+            )}
           </div>
           <div className="flex items-center gap-4">
             {selectedSubmission.repoUrl && (

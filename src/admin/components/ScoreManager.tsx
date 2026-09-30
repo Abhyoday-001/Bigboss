@@ -156,12 +156,20 @@ export const ScoreManager: React.FC<ScoreManagerProps> = ({
   // Convert TeamRecord to Leaderboard Team shape
   const leaderboardTeams: Team[] = teams.map((t) => ({
     id: t.id,
-    name: t.name,
+    teamName: t.name,
     score: t.score,
-    status: t.status === 'EVICTED' ? 'EVICTED' : t.status === 'NOMINATED' ? 'NOMINATED' : t.status === 'IMMUNE' ? 'IMMUNE' : 'ACTIVE',
     rank: t.rank,
-    members: t.members,
-    avatar: t.avatarUrl,
+    previousRank: t.rank,
+    isCaptain: t.status === 'CAPTAIN',
+    isNominated: t.status === 'NOMINATED',
+    isEliminated: t.status === 'EVICTED',
+    isImmune: t.status === 'IMMUNE',
+    avatarUrl: t.avatarUrl,
+    members: t.members.map((m, idx) => ({
+      id: `${t.id}-${idx}`,
+      name: m,
+      role: idx === 0 ? 'CAPTAIN' : 'MEMBER',
+    })),
   }));
 
   return (

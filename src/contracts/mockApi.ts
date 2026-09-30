@@ -242,6 +242,7 @@ export interface SubmissionStatusResponse {
   submitted: boolean;
   url?: string;
   status?: 'SUBMITTED' | 'UNDER_REVIEW' | 'SCORED';
+  submittedAt?: string;
 }
 
 let mockSubmissionStatus: SubmissionStatusResponse = {
@@ -262,7 +263,8 @@ export const submitFinalBuild = async (teamId: string, url: string): Promise<{ s
       mockSubmissionStatus = {
         submitted: true,
         url,
-        status: 'SUBMITTED'
+        status: 'SUBMITTED',
+        submittedAt: new Date().toISOString(),
       };
       resolve({ success: true });
     }, 1500);

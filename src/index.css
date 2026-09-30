@@ -46,6 +46,7 @@ body {
   letter-spacing: 0.05em;
   background: linear-gradient(180deg, #FFFFFF 0%, #C9CDD3 45%, #6E7278 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -59,6 +60,7 @@ body {
   font-family: 'Bebas Neue', 'Anton', sans-serif;
   background: linear-gradient(180deg, #F2F3F5 0%, #C9CDD3 45%, #6E7278 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   filter: drop-shadow(0 2px 8px rgba(30, 167, 255, 0.2));
   text-transform: uppercase;
