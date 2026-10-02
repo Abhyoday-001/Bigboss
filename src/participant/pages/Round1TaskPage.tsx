@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../shared/hooks/useAuth';
 import { useEventPhase } from '../../shared/hooks/useEventPhase';
 import { ParticipantNavbar } from '../components/ParticipantNavbar';
@@ -29,6 +30,7 @@ import {
 
 export const Round1TaskPage: React.FC = () => {
   const { team } = useAuth();
+  const navigate = useNavigate();
   const { targetEndTime, currentPhase } = useEventPhase();
 
   const [r1State, setR1State] = useState(eventOperationsService.getRound1State());
@@ -43,6 +45,14 @@ export const Round1TaskPage: React.FC = () => {
   useEffect(() => {
     if (!liveUrl) setLiveUrl('https://dummy.com');
   }, [liveUrl]);
+
+  useEffect(() => {
+    if (currentPhase === 'ROUND_1_RESULTS') {
+      navigate('/dashboard');
+    } else if (currentPhase.startsWith('ROUND_2')) {
+      navigate('/round-2');
+    }
+  }, [currentPhase, navigate]);
 
   useEffect(() => {
     if (typeof liveUrl === 'string' && !liveUrl.trim()) {
@@ -450,12 +460,14 @@ export const Round1TaskPage: React.FC = () => {
       {showWaitingModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
           <div className="bg-bg-primary border border-accent-blue/40 p-6 rounded-xl max-w-md w-full mx-4 shadow-2xl relative glow-blue-sm">
+            {/*
             <button 
               onClick={() => setShowWaitingModal(false)}
               className="absolute top-4 right-4 text-text-secondary hover:text-text-primary cursor-pointer"
             >
               ✕
             </button>
+            */}
             <div className="flex flex-col items-center text-center space-y-4">
               <div className="w-12 h-12 rounded-full bg-accent-blue/20 flex items-center justify-center text-accent-blue">
                 <Clock className="w-6 h-6 animate-pulse" />
@@ -466,12 +478,14 @@ export const Round1TaskPage: React.FC = () => {
               <p className="text-sm text-text-secondary">
                 Waiting for the host to begin the round 2.
               </p>
+              {/*
               <button 
                 onClick={() => setShowWaitingModal(false)}
                 className="mt-4 px-6 py-2 bg-accent-blue text-black font-bold font-mono text-xs rounded hover:bg-accent-blue-glow w-full uppercase tracking-wider cursor-pointer"
               >
                 Close
               </button>
+              */}
             </div>
           </div>
         </div>
