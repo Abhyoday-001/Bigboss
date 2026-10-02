@@ -38,6 +38,11 @@ export const Round1TaskPage: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successNotice, setSuccessNotice] = useState<string | null>(null);
+  const [showWaitingModal, setShowWaitingModal] = useState(false);
+
+  useEffect(() => {
+    if (!liveUrl) setLiveUrl('https://dummy.com');
+  }, [liveUrl]);
 
   // Subscribe to service updates (e.g. when Admin evaluates or changes task)
   useEffect(() => {
@@ -86,6 +91,7 @@ export const Round1TaskPage: React.FC = () => {
     });
 
     setIsSubmitting(false);
+    if (isSubmitted) setShowWaitingModal(true);
     setSuccessNotice('Build submission recorded! The checking team has received your deliverable links for manual evaluation.');
     setTimeout(() => setSuccessNotice(null), 5000);
   };
@@ -106,6 +112,21 @@ export const Round1TaskPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-bg-primary text-text-primary flex flex-col relative overflow-hidden">
+      <style>{`
+        /* Hide Live URL and Notes inputs */
+        form > div.space-y-3\\.5 > div:nth-child(2),
+        form > div.space-y-3\\.5 > div:nth-child(3) {
+          display: none !important;
+        }
+        /* Hide mention of deployment endpoints in description */
+        .lg\\:col-span-1 .text-xs.text-text-secondary.mt-1 {
+          font-size: 0;
+        }
+        .lg\\:col-span-1 .text-xs.text-text-secondary.mt-1::before {
+          content: "Provide your repository for the manual evaluation team.";
+          font-size: 0.75rem;
+        }
+      `}</style>
       <ParticipantNavbar />
       <AmbientEyeBackground position="bottom-right" />
       <NeuronNetworkBackground />
@@ -417,6 +438,36 @@ export const Round1TaskPage: React.FC = () => {
           </div>
         </div>
       </main>
+
+      {showWaitingModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+          <div className="bg-bg-primary border border-accent-blue/40 p-6 rounded-xl max-w-md w-full mx-4 shadow-2xl relative glow-blue-sm">
+            <button 
+              onClick={() => setShowWaitingModal(false)}
+              className="absolute top-4 right-4 text-text-secondary hover:text-text-primary cursor-pointer"
+            >
+              ✕
+            </button>
+            <div className="flex flex-col items-center text-center space-y-4">
+              <div className="w-12 h-12 rounded-full bg-accent-blue/20 flex items-center justify-center text-accent-blue">
+                <Clock className="w-6 h-6 animate-pulse" />
+              </div>
+              <h3 className="text-xl font-display uppercase tracking-wide text-text-primary">
+                Submission Updated
+              </h3>
+              <p className="text-sm text-text-secondary">
+                Waiting for the host to begin the round 2.
+              </p>
+              <button 
+                onClick={() => setShowWaitingModal(false)}
+                className="mt-4 px-6 py-2 bg-accent-blue text-black font-bold font-mono text-xs rounded hover:bg-accent-blue-glow w-full uppercase tracking-wider cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
