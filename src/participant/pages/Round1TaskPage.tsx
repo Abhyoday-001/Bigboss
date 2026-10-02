@@ -79,10 +79,12 @@ export const Round1TaskPage: React.FC = () => {
       setErrorMsg('Please provide a valid GitHub repository URL.');
       return;
     }
+    /*
     if (!liveUrl.trim()) {
       setErrorMsg('Please provide a live deployment URL (e.g. Vercel, Netlify, or Render).');
       return;
     }
+    */
 
     setIsSubmitting(true);
     setErrorMsg(null);
