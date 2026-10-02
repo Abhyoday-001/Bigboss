@@ -44,6 +44,12 @@ export const Round1TaskPage: React.FC = () => {
     if (!liveUrl) setLiveUrl('https://dummy.com');
   }, [liveUrl]);
 
+  useEffect(() => {
+    if (typeof liveUrl === 'string' && !liveUrl.trim()) {
+      setLiveUrl('https://dummy.com');
+    }
+  }, [liveUrl]);
+
   // Subscribe to service updates (e.g. when Admin evaluates or changes task)
   useEffect(() => {
     const unsub = eventOperationsService.subscribe(() => {
