@@ -1,0 +1,38 @@
+{
+  "round0": {
+    "questions": [
+      {
+        "id": "q1",
+        "text": "What is the Big-O time complexity of searching in a balanced BST?",
+        "options": ["O(1)", "O(n)", "O(log n)", "O(n log n)"],
+        "answer": "O(log n)"
+      },
+      {
+        "id": "q2",
+        "text": "Which port is standard for HTTPS?",
+        "options": ["80", "443", "22", "8080"],
+        "answer": "443"
+      }
+    ]
+  },
+  "round1": {
+    "problemStatement": "Build a real-time chat application.",
+    "features": [
+      "User authentication",
+      "Real-time message sending",
+      "Typing indicators"
+    ]
+  },
+  "round2": {
+    "problemStatement": "Implement a task management kanban board.",
+    "features": [
+      "Drag and drop tasks",
+      "Column creation",
+      "Task assignment"
+    ]
+  },
+  "secretMission": {
+    "riddle": "I speak without a mouth and hear without ears. I have no body, but I come alive with wind. What am I?",
+    "answer": "echo"
+  }
+}

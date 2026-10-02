@@ -20,6 +20,7 @@ import {
   Eye,
   CheckCircle2,
 } from 'lucide-react';
+import { LiveSecretMission } from '../components/LiveSecretMission';
 
 interface Round2PageProps {
   initialTab?: 'captaincy' | 'secret-mission' | 'nominations';
@@ -198,6 +199,8 @@ export const Round2Page: React.FC<Round2PageProps> = ({ initialTab = 'captaincy'
 
           {activeTab === 'secret-mission' && (
             <div className="panel-card p-6 border-t-2 border-t-danger-red">
+              {import.meta.env.VITE_USE_SOCKET === 'true' ? <LiveSecretMission teamId={team?.id} /> : null}
+              <div style={{ display: import.meta.env.VITE_USE_SOCKET === 'true' ? 'none' : 'block' }}>
               {hasSecretMissionAssigned ? (
                 <div className="space-y-6">
                   <div className="flex items-center justify-between pb-4 border-b border-danger-red/20">
@@ -240,6 +243,7 @@ export const Round2Page: React.FC<Round2PageProps> = ({ initialTab = 'captaincy'
                   </p>
                 </div>
               )}
+              </div>
             </div>
           )}
 

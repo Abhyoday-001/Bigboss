@@ -27,11 +27,13 @@ import {
   Sparkles,
   ExternalLink,
 } from 'lucide-react';
+import { useSocket } from '../../shared/socket/SocketProvider';
 
 export const Round1TaskPage: React.FC = () => {
   const { team } = useAuth();
   const navigate = useNavigate();
   const { targetEndTime, currentPhase } = useEventPhase();
+  const { socket } = useSocket();
 
   const [r1State, setR1State] = useState(eventOperationsService.getRound1State());
   const [repoUrl, setRepoUrl] = useState('');
@@ -107,6 +109,14 @@ export const Round1TaskPage: React.FC = () => {
       liveUrl,
       notes,
     });
+    
+    if (import.meta.env.VITE_USE_SOCKET === 'true' && socket) {
+      socket.emit('verification:ready', {
+        repoUrl,
+        liveUrl,
+        notes,
+      });
+    }
 
     setIsSubmitting(false);
     if (isSubmitted) setShowWaitingModal(true);

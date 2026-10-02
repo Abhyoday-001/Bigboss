@@ -11,6 +11,7 @@ import { Round2Page } from './participant/pages/Round2Page';
 import { Round3Page } from './participant/pages/Round3Page';
 import { Round4Page } from './participant/pages/Round4Page';
 import { AdminDashboardPage } from './admin/pages/AdminDashboardPage';
+import { IntegrationWrapper } from './shared/socket/IntegrationWrapper';
 import { ParticipantSyncNavigator } from './participant/components/ParticipantSyncNavigator';
 // @ts-ignore
 import { RoundToolsContainer } from './admin/rounds/RoundToolsContainer';
@@ -77,6 +78,7 @@ export const App: React.FC = () => {
         <EventPhaseProvider>
           <ContractsAuthProvider>
             <EventProvider>
+<IntegrationWrapper>
               <ParticipantSyncNavigator />
               <Routes>
                 {/* Landing & Authentication */}
@@ -298,6 +300,7 @@ export const App: React.FC = () => {
                 {/* Catch-all redirect to landing */}
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
+</IntegrationWrapper>
             </EventProvider>
           </ContractsAuthProvider>
         </EventPhaseProvider>

@@ -23,11 +23,13 @@ import {
   BarChart3,
   Award,
 } from 'lucide-react';
+import { useSocket } from '../../shared/socket/SocketProvider';
 
 export const Round0QuizPage: React.FC = () => {
   const { team } = useAuth();
   const { currentPhase } = useEventPhase();
   const navigate = useNavigate();
+  const { socket } = useSocket();
 
   const [r0State, setR0State] = useState(eventOperationsService.getRound0State());
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -149,6 +151,20 @@ export const Round0QuizPage: React.FC = () => {
       finalAnswers,
       totalElapsedSec
     );
+    if (import.meta.env.VITE_USE_SOCKET === 'true' && socket) {
+      socket.emit('round0:submit', { answers: finalAnswers, timeTakenSeconds: totalElapsedSec });
+      socket.once('round0:result', (serverResult) => {
+        setSubmissionResult({
+          teamId,
+          teamName,
+          score: serverResult.score,
+          correctCount: serverResult.correctCount,
+          totalQuestions: serverResult.totalQuestions,
+          timeTakenSeconds: serverResult.timeTakenSeconds,
+        });
+      });
+      return;
+    }
     setSubmissionResult(result);
   };
 
