@@ -32,6 +32,8 @@ import { FinalResults } from './modules/FinalResults/FinalResults';
 
 // Route guard for participant screens
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { team } = useAuth();
+  if (!team) return <Navigate to="/" replace />;
   return <>{children}</>;
 };
 

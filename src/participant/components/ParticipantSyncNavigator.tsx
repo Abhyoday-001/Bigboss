@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../shared/hooks/useAuth';
 import { useEventPhase } from '../../shared/hooks/useEventPhase';
 import { PHASE_CONFIG } from '../../shared/state-machine/eventPhases';
 
 export const ParticipantSyncNavigator: React.FC = () => {
   const { currentPhase } = useEventPhase();
+  const { team } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -26,11 +28,11 @@ export const ParticipantSyncNavigator: React.FC = () => {
 
     if (isPreEvent && !isOnRootOrDashboard) {
       navigate('/dashboard', { replace: true });
-    } else if (!isPreEvent && meta.participantRoute && location.pathname !== meta.participantRoute) {
+    } else if (team && !isPreEvent && meta.participantRoute && location.pathname !== meta.participantRoute) {
       // Automatically sync the participant's view to the route specified by the current event phase
       navigate(meta.participantRoute, { replace: true });
     }
-  }, [currentPhase, location.pathname, navigate]);
+  }, [currentPhase, location.pathname, navigate, team]);
 
   return null;
 };
