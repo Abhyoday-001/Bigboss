@@ -226,7 +226,7 @@ export const Round2Page: React.FC<Round2PageProps> = ({ initialTab = 'captaincy'
                     </p>
                     <div className="pt-3 border-t border-white/5 flex items-center justify-between text-xs font-mono">
                       <span className="text-text-secondary">Execution Stakes:</span>
-                      <span className="text-success-green font-bold">+25 House Points</span>
+                      <span className="text-success-green font-bold">Confidential Reward</span>
                     </div>
                   </div>
                 </div>

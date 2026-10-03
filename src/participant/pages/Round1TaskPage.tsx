@@ -48,13 +48,7 @@ export const Round1TaskPage: React.FC = () => {
     if (!liveUrl) setLiveUrl('https://dummy.com');
   }, [liveUrl]);
 
-  useEffect(() => {
-    if (currentPhase === 'ROUND_1_RESULTS') {
-      navigate('/dashboard');
-    } else if (currentPhase.startsWith('ROUND_2')) {
-      navigate('/round-2');
-    }
-  }, [currentPhase, navigate]);
+
 
   useEffect(() => {
     if (typeof liveUrl === 'string' && !liveUrl.trim()) {
@@ -173,7 +167,7 @@ export const Round1TaskPage: React.FC = () => {
             <div className="text-xs text-text-secondary mt-1 flex items-center gap-2">
               <span className="font-mono text-accent-blue">{task.category}</span>
               <span>•</span>
-              <span>Max Value: {task.maxPoints} Points</span>
+              <span>Max Value: Confidential</span>
             </div>
           </div>
 
@@ -186,7 +180,7 @@ export const Round1TaskPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Evaluation Banner (If Graded by Admin Checking Team) */}
+        {/* Evaluation Banner */}
         {isEvaluated && submission.evaluation && (
           <div className="p-5 rounded-xl bg-success-green/15 border border-success-green/50 space-y-3 glow-green animate-in fade-in">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-success-green/20">
@@ -199,54 +193,11 @@ export const Round1TaskPage: React.FC = () => {
                     Manual Evaluation Complete
                   </div>
                   <div className="text-xs text-success-green">
-                    Audited by {submission.evaluation.evaluatorName} • Points officially credited to House Leaderboard.
+                    Audited by {submission.evaluation.evaluatorName}
                   </div>
                 </div>
               </div>
-              <div className="text-right">
-                <span className="font-mono text-2xl font-bold text-success-green">
-                  +{submission.evaluation.totalPoints} / {task.maxPoints}
-                </span>
-                <span className="text-xs font-mono text-text-secondary block">POINTS AWARDED</span>
-              </div>
             </div>
-
-            {/* Rubric Breakdown */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
-              <div className="p-2 rounded bg-bg-primary/80 border border-success-green/30">
-                <span className="text-text-secondary block text-[10px]">DELIVERABLES CHECKED</span>
-                <span className="text-text-primary font-bold">
-                  {submission.evaluation.checkedDeliverableIds.length} / {task.deliverables.length} Verified
-                </span>
-              </div>
-              <div className="p-2 rounded bg-bg-primary/80 border border-success-green/30">
-                <span className="text-text-secondary block text-[10px]">CODE QUALITY</span>
-                <span className="text-accent-blue-glow font-bold">
-                  +{submission.evaluation.codeQualityScore} pts
-                </span>
-              </div>
-              <div className="p-2 rounded bg-bg-primary/80 border border-success-green/30">
-                <span className="text-text-secondary block text-[10px]">FUNCTIONALITY</span>
-                <span className="text-accent-blue-glow font-bold">
-                  +{submission.evaluation.functionalityScore} pts
-                </span>
-              </div>
-              <div className="p-2 rounded bg-bg-primary/80 border border-success-green/30">
-                <span className="text-text-secondary block text-[10px]">BONUS & SPEED</span>
-                <span className="text-warning-amber font-bold">
-                  +{submission.evaluation.bonusScore} pts
-                </span>
-              </div>
-            </div>
-
-            {submission.evaluation.feedback && (
-              <div className="text-xs text-text-primary bg-bg-primary/60 p-3 rounded border border-success-green/20">
-                <span className="font-mono text-success-green uppercase font-bold text-[10px] block mb-1">
-                  Evaluator Remarks:
-                </span>
-                {submission.evaluation.feedback}
-              </div>
-            )}
           </div>
         )}
 
@@ -260,7 +211,7 @@ export const Round1TaskPage: React.FC = () => {
                   Build Submitted — Awaiting Manual Evaluation
                 </div>
                 <div className="text-xs text-text-secondary">
-                  The checking team has received your URLs. Points will be assigned manually based on your code and live deliverables.
+                  The checking team has received your URLs. Performance will be evaluated manually based on your code and live deliverables.
                 </div>
               </div>
             </div>
@@ -323,7 +274,7 @@ export const Round1TaskPage: React.FC = () => {
                       <div className="flex-1">
                         <div className="text-xs text-text-primary font-medium">{item.label}</div>
                         <div className="text-[10px] font-mono text-text-secondary mt-0.5">
-                          Value: {item.points} pts • {item.required ? 'Mandatory' : 'Optional Bonus'}
+                          {item.required ? 'Mandatory' : 'Optional Bonus'}
                         </div>
                       </div>
                       {isCheckedByAdmin && (

@@ -295,7 +295,7 @@ export const Round0QuizPage: React.FC = () => {
               </h2>
               <div className="mt-2 text-[11px] font-mono text-text-secondary flex items-center gap-1.5">
                 <Zap className="w-3.5 h-3.5 text-warning-amber" />
-                <span>Value: {currentQuestion.points} House Points</span>
+                <span>Value: Confidential</span>
               </div>
             </div>
 
@@ -367,11 +367,11 @@ export const Round0QuizPage: React.FC = () => {
             </div>
 
             {/* Scorecard Metrics */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-xl mx-auto pt-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl mx-auto pt-2">
               <div className="p-4 rounded-lg bg-bg-primary border border-accent-blue/30 text-center">
-                <div className="text-[10px] font-mono uppercase text-text-secondary">POINTS EARNED</div>
-                <div className="font-mono text-2xl font-bold text-accent-blue-glow mt-0.5">
-                  {submissionResult.score} PTS
+                <div className="text-[10px] font-mono uppercase text-text-secondary">PERFORMANCE</div>
+                <div className="font-mono text-xl font-bold text-accent-blue-glow mt-0.5">
+                  EVALUATION PENDING
                 </div>
                 <div className="text-[10px] text-text-secondary mt-1">
                   {submissionResult.correctCount} of {submissionResult.totalQuestions} Correct

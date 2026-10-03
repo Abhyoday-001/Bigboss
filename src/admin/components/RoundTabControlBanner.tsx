@@ -35,7 +35,7 @@ export const RoundTabControlBanner: React.FC<RoundTabControlBannerProps> = ({
   activePhases,
   defaultMinutes = 30,
 }) => {
-  const { currentPhase, setPhase, targetEndTime, setTargetEndTime } = useEventPhase();
+  const { currentPhase, setPhase, targetEndTime, setTargetEndTime, startRound, endRound } = useEventPhase();
   const [toastNotice, setToastNotice] = useState<string | null>(null);
 
   const isLive = activePhases
@@ -48,7 +48,7 @@ export const RoundTabControlBanner: React.FC<RoundTabControlBannerProps> = ({
   };
 
   const handleStartRound = () => {
-    setPhase(startPhase);
+    startRound(roundNumber, startPhase);
 
     if (startPhase === 'ROUND_0_ACTIVE') {
       eventOperationsService.updateRound0Config({ isActive: true });
@@ -61,7 +61,7 @@ export const RoundTabControlBanner: React.FC<RoundTabControlBannerProps> = ({
   };
 
   const handleEndRound = () => {
-    setPhase(endPhase);
+    endRound(roundNumber, endPhase);
 
     if (startPhase === 'ROUND_0_ACTIVE') {
       eventOperationsService.updateRound0Config({ isActive: false });

@@ -108,7 +108,7 @@ const ROUNDS_CATALOG: RoundDef[] = [
 ];
 
 export const AdminRoundLauncher: React.FC = () => {
-  const { currentPhase, setPhase, setTargetEndTime } = useEventPhase();
+  const { currentPhase, setPhase, setTargetEndTime, startRound, endRound } = useEventPhase();
   const [broadcastNotice, setBroadcastNotice] = useState<string | null>(null);
 
   const showNotice = (msg: string) => {
@@ -118,7 +118,7 @@ export const AdminRoundLauncher: React.FC = () => {
 
   const handleStartRound = (round: RoundDef) => {
     // 1. Activate phase
-    setPhase(round.startPhase);
+    startRound(round.number, round.startPhase);
 
     // 2. Extra sync for R0 or R1
     if (round.startPhase === 'ROUND_0_ACTIVE') {
@@ -134,7 +134,7 @@ export const AdminRoundLauncher: React.FC = () => {
   };
 
   const handleEndRound = (round: RoundDef) => {
-    setPhase(round.endPhase);
+    endRound(round.number, round.endPhase);
 
     if (round.startPhase === 'ROUND_0_ACTIVE') {
       eventOperationsService.updateRound0Config({ isActive: false });

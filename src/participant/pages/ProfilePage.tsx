@@ -45,18 +45,7 @@ export const ProfilePage: React.FC = () => {
               </div>
             </div>
 
-            {/* Overall Score Badge */}
-            <div className="bg-bg-primary p-4 rounded-lg border border-accent-blue/30 text-center sm:text-right min-w-37.5">
-              <div className="text-[10px] font-mono uppercase text-text-secondary">ACCUMULATED SCORE</div>
-              <div className="font-mono text-3xl font-bold text-text-primary mt-1">
-                {activeTeam.score.toLocaleString()}
-                <span className="text-xs text-accent-blue ml-1">pts</span>
-              </div>
-              <div className="text-xs font-display text-accent-blue-glow mt-0.5">
-                RANK #{activeTeam.rank} OVERALL
-              </div>
-            </div>
-          </div>
+            
 
           {/* Members Roster */}
           <div className="mt-6">

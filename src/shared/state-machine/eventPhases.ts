@@ -181,3 +181,8 @@ export const ORDERED_PHASES: EventPhase[] = [
   'ROUND_4_JUDGING',
   'FINAL_RESULTS',
 ];
+
+/** Maps a phase to the round it belongs to (null for LANDING / LOGIN). */
+export const getRoundForPhase = (phase: EventPhase): number | null =>
+  PHASE_CONFIG[phase]?.roundNumber ?? null;
+

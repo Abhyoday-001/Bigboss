@@ -34,19 +34,37 @@ export const ParticipantNavbar: React.FC = () => {
 
         {/* Minimal Right Section: Status Pill, Team Name & Logout */}
         <div className="flex items-center gap-3">
-          {/* Active Phase Badge */}
-          <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded bg-bg-elevated border border-accent-blue/20 text-[10px] font-mono text-accent-blue tracking-wider uppercase">
-            <span className="w-1.5 h-1.5 rounded-full bg-accent-blue animate-ping" />
-            <span>{currentMetadata?.roundTitle || 'LIVE OPERATION'}</span>
-          </div>
-
-          {/* Simple Clean Team Identifier */}
+          {/* Simple Clean Team Identifier with Popover */}
           {team && (
-            <div className="flex items-center gap-2 px-3 py-1 rounded bg-bg-elevated border border-accent-blue/30">
-              <span className="w-2 h-2 rounded-full bg-success-green animate-pulse" />
-              <span className="text-xs font-mono font-bold text-text-primary uppercase tracking-wider">
-                {team.teamName}
-              </span>
+            <div className="relative group">
+              <button 
+                type="button" 
+                className="flex items-center gap-2 px-3 py-1 rounded bg-bg-elevated hover:bg-bg-border border border-accent-blue/30 cursor-pointer"
+              >
+                <span className="w-2 h-2 rounded-full bg-success-green animate-pulse" />
+                <span className="text-xs font-mono font-bold text-text-primary uppercase tracking-wider">
+                  {team.teamName}
+                </span>
+              </button>
+              
+              <div className="absolute right-0 mt-2 w-48 bg-bg-elevated border border-accent-blue/30 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 p-3">
+                <div className="text-[10px] font-mono text-text-muted mb-1 uppercase">Team Name</div>
+                <div className="text-sm font-bold text-accent-blue mb-3">{team.teamName}</div>
+                
+                <div className="text-[10px] font-mono text-text-muted mb-1 uppercase">Team Members</div>
+                <ul className="text-xs text-text-primary space-y-1">
+                  {team.members && team.members.length > 0 ? (
+                    team.members.map((member, i) => (
+                      <li key={i} className="flex items-center gap-2">
+                        <span className="w-1 h-1 rounded-full bg-accent-blue/50" />
+                        {member.name}
+                      </li>
+                    ))
+                  ) : (
+                    <li className="text-text-secondary italic">No members</li>
+                  )}
+                </ul>
+              </div>
             </div>
           )}
 

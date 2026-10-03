@@ -26,6 +26,9 @@ export const ParticipantSyncNavigator: React.FC = () => {
 
     if (isPreEvent && !isOnRootOrDashboard) {
       navigate('/dashboard', { replace: true });
+    } else if (!isPreEvent && meta.participantRoute && location.pathname !== meta.participantRoute) {
+      // Automatically sync the participant's view to the route specified by the current event phase
+      navigate(meta.participantRoute, { replace: true });
     }
   }, [currentPhase, location.pathname, navigate]);
 

@@ -68,7 +68,7 @@ export const FinalResults: React.FC = () => {
               {data.winner.name}
             </h3>
             <div className="text-xl md:text-2xl font-body text-text-secondary mt-4">
-              Final Score: <span className="text-accent-blue font-bold">{data.winner.score}</span>
+              
             </div>
           </div>
         </div>
