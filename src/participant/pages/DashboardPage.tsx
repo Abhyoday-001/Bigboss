@@ -3,7 +3,6 @@ import { useAuth } from '../../shared/hooks/useAuth';
 import { useEventPhase } from '../../shared/hooks/useEventPhase';
 import { ParticipantNavbar } from '../components/ParticipantNavbar';
 import { NeuronNetworkBackground } from '../components/NeuronNetworkBackground';
-import { RoundStatusBadge } from '../../shared/components/RoundStatusBadge';
 import { TimerCountdown } from '../../shared/components/TimerCountdown';
 import { AmbientEyeBackground } from '../../shared/components/AmbientEyeBackground';
 import { DemoRoundSwitcher } from '../components/DemoRoundSwitcher';
@@ -33,16 +32,13 @@ export const DashboardPage: React.FC = () => {
       <main className="relative z-10 flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-8 space-y-6">
         {/* Top Status & Timer Bar */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
-          <div className="flex-1">
-            <RoundStatusBadge />
-          </div>
           <div className="flex items-center justify-between sm:justify-end gap-3 panel-card px-5 py-3">
             <div className="text-right">
               <div className="text-[10px] font-mono uppercase tracking-widest text-text-secondary">
                 ROUND TIMER
               </div>
               <div className="text-xs text-accent-blue font-medium">
-                {currentMetadata.isTimed ? 'Synchronized' : 'Host Controlled'}
+                {currentMetadata.isTimed ? 'Synchronized' : 'Tech Boss Controlled'}
               </div>
             </div>
             <TimerCountdown targetTimestamp={targetEndTime} size="md" />
@@ -63,10 +59,6 @@ export const DashboardPage: React.FC = () => {
                 <span className="flex items-center gap-1.5">
                   <UserCheck className="w-3.5 h-3.5 text-accent-blue" />
                   <span>{team?.members?.length || 0} Operatives</span>
-                </span>
-                <span className="text-text-secondary/40">•</span>
-                <span className="font-mono text-accent-blue font-bold">
-                  {team?.score ? team.score.toLocaleString() : 0} PTS
                 </span>
               </div>
             </div>
@@ -107,47 +99,19 @@ export const DashboardPage: React.FC = () => {
               SURVEILLANCE EYE • STANDBY MODE
             </span>
             <h2 className="text-2xl font-display uppercase tracking-wider text-text-primary mt-1">
-              Awaiting Host Signal
+              Waiting for Tech Boss to start the next round.
             </h2>
             <p className="text-xs text-text-secondary max-w-md mx-auto mt-2 leading-relaxed">
               You're connected to the house network. Stay at your designated table pod and keep this tab open.
-              The host will launch each round from the Control Room — your screen will update automatically.
+              The Tech Boss will launch each round — your screen will update automatically.
             </p>
           </div>
           <div className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-bg-primary border border-accent-blue/25 text-xs font-mono text-accent-blue-glow">
             <Clock className="w-3.5 h-3.5 animate-spin" style={{ animationDuration: '3s' }} />
-            <span>Listening for Control Room broadcast...</span>
+            <span>Listening for Tech Boss broadcast...</span>
           </div>
         </div>
-
-        {/* ── DEV TOGGLE: Remove before live event ── */}
-        <div className="rounded-xl border border-orange-500/30 overflow-hidden">
-          <button
-            type="button"
-            onClick={() => setIsDevOpen((p) => !p)}
-            className="w-full flex items-center justify-between px-4 py-3 bg-orange-950/40 hover:bg-orange-900/30 transition-all cursor-pointer"
-          >
-            <div className="flex items-center gap-2">
-              <FlaskConical className="w-4 h-4 text-orange-400" />
-              <span className="text-xs font-mono font-bold text-orange-400 uppercase tracking-widest">
-                Dev Tools · Round Switcher
-              </span>
-              <span className="text-[10px] font-mono text-orange-600/60 hidden sm:inline">
-                (⚠ Temporary — remove before live)
-              </span>
-            </div>
-            {isDevOpen
-              ? <ChevronUp className="w-4 h-4 text-orange-500" />
-              : <ChevronDown className="w-4 h-4 text-orange-500" />
-            }
-          </button>
-          {isDevOpen && (
-            <div className="p-3 border-t border-orange-500/20 bg-orange-950/20">
-              <DemoRoundSwitcher />
-            </div>
-          )}
-        </div>
-      </main>
+        </main>
     </div>
   );
 };
